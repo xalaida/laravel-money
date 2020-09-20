@@ -30,4 +30,13 @@ class Product extends Model
      * @var array|bool
      */
     protected $guarded = [];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'price' => Money::class,
+    ];
 }
