@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jeka\Money;
 
+use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Models\Currency;
 
 class Money
@@ -68,7 +69,7 @@ class Money
      */
     public function format(): string
     {
-        return '$1.00';
+        return $this->getFormatter()->format($this);
     }
 
     /**
@@ -79,5 +80,13 @@ class Money
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * Get the money formatter.
+     */
+    protected function getFormatter(): Formatter
+    {
+        return app(Formatter::class);
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Jeka\Money\Formatter\Formatter;
+use Jeka\Money\Formatter\IntlFormatter;
 use Jeka\Money\Listeners\UpdateFormatterLocale;
 use Jeka\Money\Models\Currency;
 
@@ -35,6 +37,7 @@ class MoneyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerConfig();
+        $this->registerFormatter();
     }
 
     /**
@@ -46,6 +49,16 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootEvents();
         $this->bootMigrations();
         $this->bootMorphMap();
+    }
+
+    /**
+     * Register any module formatter.
+     */
+    private function registerFormatter(): void
+    {
+        $this->app->bind(Formatter::class, function () {
+            return new IntlFormatter($this->app->getLocale());
+        });
     }
 
     /**

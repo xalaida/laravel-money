@@ -14,7 +14,6 @@ class MoneyTest extends TestCase
     public function it_can_be_instantiated_with_amount_in_subunits_and_currency(): void
     {
         $currency = CurrencyFactory::new()->create();
-
         $money = new Money(100, $currency);
 
         self::assertEquals(100, $money->getSubunits());
@@ -25,7 +24,6 @@ class MoneyTest extends TestCase
     public function it_can_be_formatted_to_string_according_to_current_locale(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD']);
-
         $money = new Money(100, $currency);
 
         self::assertEquals('$1.00', $money->format());
@@ -35,19 +33,17 @@ class MoneyTest extends TestCase
     public function it_can_be_formatted_to_string_according_to_new_locale(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD']);
+        $money = new Money(100, $currency);
 
         $this->app->setLocale('ru');
 
-        $money = new Money(100, $currency);
-
-        self::assertEquals('1.00 USD', $money->format());
+        self::assertEquals('1,00 $', $money->format());
     }
 
     /** @test */
     public function it_can_determine_super_units_amount(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD', 'precision' => 3]);
-
         $money = new Money(3000, $currency);
 
         self::assertEquals(3, $money->getSuperUnits());
