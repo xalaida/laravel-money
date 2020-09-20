@@ -7,6 +7,7 @@ namespace Jeka\Money;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Jeka\Money\Models\Currency;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -109,6 +110,7 @@ class MoneyServiceProvider extends ServiceProvider
     private function bootMorphMap(): void
     {
         Relation::morphMap([
+            'currencies' => Currency::class,
         ]);
     }
 }
