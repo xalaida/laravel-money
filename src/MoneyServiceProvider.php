@@ -6,7 +6,9 @@ namespace Jeka\Money;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Jeka\Money\Listeners\UpdateFormatterLocale;
 use Jeka\Money\Models\Currency;
 
 class MoneyServiceProvider extends ServiceProvider
@@ -22,7 +24,9 @@ class MoneyServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // Events...
+        LocaleUpdated::class => [
+            UpdateFormatterLocale::class,
+        ]
     ];
 
     /**
@@ -41,8 +45,6 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootCommands();
         $this->bootEvents();
         $this->bootMigrations();
-        $this->bootViews();
-        $this->bootTranslations();
         $this->bootMorphMap();
     }
 
@@ -86,22 +88,6 @@ class MoneyServiceProvider extends ServiceProvider
     private function bootMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-    }
-
-    /**
-     * Boot any module views.
-     */
-    private function bootViews(): void
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', self::NAME);
-    }
-
-    /**
-     * Boot any module translations.
-     */
-    private function bootTranslations(): void
-    {
-        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
     }
 
     /**
