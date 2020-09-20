@@ -48,4 +48,13 @@ class MoneyTest extends TestCase
 
         self::assertEquals(3, $money->getSuperUnits());
     }
+
+    /** @test */
+    public function it_calculates_super_units_correctly_if_precision_is_zero(): void
+    {
+        $currency = CurrencyFactory::new()->create(['code' => 'MRU', 'precision' => 0]);
+        $money = new Money(3500, $currency);
+
+        self::assertEquals(3500, $money->getSuperUnits());
+    }
 }
