@@ -16,6 +16,7 @@ class CreateCurrenciesTable extends Migration
         Schema::create('currencies', static function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('code', 3)->unique()->comment('ISO 4217');
+            $table->tinyInteger('precision');
             $table->timestamps();
         });
     }

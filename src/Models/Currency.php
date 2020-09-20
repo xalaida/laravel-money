@@ -11,6 +11,8 @@ use Nevadskiy\Uuid\Uuid;
 
 /**
  * @property string id
+ * @property string code
+ * @property int precision
  * @property Carbon created_at
  * @property Carbon updated_at
  */
