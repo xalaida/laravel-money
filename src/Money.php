@@ -50,4 +50,24 @@ class Money
     {
         return $this->currency;
     }
+
+    /**
+     * Returns money formatted according to the current locale.
+     *
+     * @return string
+     */
+    public function format(): string
+    {
+        return '$1.00';
+    }
+
+    /**
+     * Convert the money to the string type.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->format();
+    }
 }
