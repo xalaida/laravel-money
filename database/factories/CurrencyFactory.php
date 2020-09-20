@@ -26,4 +26,17 @@ class CurrencyFactory extends Factory
             'precision' => 2,
         ];
     }
+
+    /**
+     * Create the USD currency.
+     *
+     * @return Currency
+     */
+    public static function USD(): Currency
+    {
+        return static::new()->create([
+            'code' => 'USD',
+            'precision' => 2,
+        ]);
+    }
 }
