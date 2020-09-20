@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jeka\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -26,11 +28,8 @@ class MoneyCast implements CastsAttributes
     /**
      * Cast the given value.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
-     * @return Money|null
+     * @param Model $model
+     * @param mixed $value
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
@@ -47,11 +46,8 @@ class MoneyCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param  Model  $model
-     * @param  string  $key
+     * @param Model $model
      * @param Money|null $value
-     * @param  array  $attributes
-     * @return array
      */
     public function set($model, string $key, $value, array $attributes): array
     {

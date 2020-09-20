@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jeka\Money\Tests;
 
 use Illuminate\Foundation\Application;
@@ -23,9 +25,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * Get package providers.
      *
-     * @param  Application  $app
-     *
-     * @return array
+     * @param Application $app
      */
     protected function getPackageProviders($app): array
     {
@@ -33,18 +33,17 @@ abstract class TestCase extends OrchestraTestCase
     }
 
     /**
-     * Define environment setup
+     * Define environment setup.
      *
-     * @param  Application  $app
-     * @return void
+     * @param Application $app
      */
     protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 }

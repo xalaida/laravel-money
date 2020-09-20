@@ -26,9 +26,6 @@ class UpdateFormatterLocale
 
     /**
      * Handle the event.
-     *
-     * @param  LocaleUpdated  $event
-     * @return void
      */
     public function handle(LocaleUpdated $event): void
     {

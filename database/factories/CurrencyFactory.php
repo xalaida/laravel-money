@@ -29,8 +29,6 @@ class CurrencyFactory extends Factory
 
     /**
      * Create the USD currency.
-     *
-     * @return Currency
      */
     public static function USD(): Currency
     {

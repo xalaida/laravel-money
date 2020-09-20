@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jeka\Money\Formatter;
 
 use Jeka\Money\Money;
@@ -16,8 +18,6 @@ class IntlFormatter implements Formatter
 
     /**
      * IntlFormatter constructor.
-     *
-     * @param string $locale
      */
     public function __construct(string $locale)
     {
@@ -43,8 +43,6 @@ class IntlFormatter implements Formatter
 
     /**
      * Get the number formatter.
-     *
-     * @return NumberFormatter
      */
     private function getNumberFormatter(): NumberFormatter
     {
