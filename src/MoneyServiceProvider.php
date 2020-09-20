@@ -12,6 +12,9 @@ use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Formatter\IntlFormatter;
 use Jeka\Money\Listeners\UpdateFormatterLocale;
 use Jeka\Money\Models\Currency;
+use Jeka\Money\Queries\CurrencyCacheQueries;
+use Jeka\Money\Queries\CurrencyEloquentQueries;
+use Jeka\Money\Queries\CurrencyQueries;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -28,7 +31,7 @@ class MoneyServiceProvider extends ServiceProvider
     protected $listen = [
         LocaleUpdated::class => [
             UpdateFormatterLocale::class,
-        ]
+        ],
     ];
 
     /**
@@ -38,6 +41,7 @@ class MoneyServiceProvider extends ServiceProvider
     {
         $this->registerConfig();
         $this->registerFormatter();
+        $this->registerCurrencyQueries();
     }
 
     /**
@@ -56,8 +60,20 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerFormatter(): void
     {
-        $this->app->bind(Formatter::class, function () {
+        $this->app->singleton(Formatter::class, function () {
             return new IntlFormatter($this->app->getLocale());
+        });
+    }
+
+    /**
+     * Register any module currency queries.
+     */
+    private function registerCurrencyQueries(): void
+    {
+        $this->app->singleton(CurrencyQueries::class, CurrencyEloquentQueries::class);
+
+        $this->app->extend(CurrencyQueries::class, static function (CurrencyQueries $queries) {
+            return new CurrencyCacheQueries($queries);
         });
     }
 
