@@ -15,8 +15,6 @@ abstract class TestCase extends OrchestraTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/Support/migrations');
-
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
     }
 
@@ -27,7 +25,7 @@ abstract class TestCase extends OrchestraTestCase
      *
      * @return array
      */
-    protected function getPackageProviders(Application $app): array
+    protected function getPackageProviders($app): array
     {
         return [MoneyServiceProvider::class];
     }
