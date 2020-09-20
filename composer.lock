@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e3c0ac56b1080d689af3b3d8887088b",
+    "content-hash": "40deb34e329259418a2fb22dc8bce41a",
     "packages": [
         {
             "name": "brick/math",
@@ -978,6 +978,54 @@
                 }
             ],
             "time": "2020-09-11T19:00:58+00:00"
+        },
+        {
+            "name": "nevadskiy/laravel-uuid",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nevadskiy/laravel-uuid.git",
+                "reference": "2f59b5d84073b4304a5ba55fc871ea1d98666d14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nevadskiy/laravel-uuid/zipball/2f59b5d84073b4304a5ba55fc871ea1d98666d14",
+                "reference": "2f59b5d84073b4304a5ba55fc871ea1d98666d14",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^6.0|^7.0|^8.0",
+                "php": "^7.3",
+                "ramsey/uuid": "^3.7|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "orchestra/testbench": "^5.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nevadskiy\\Uuid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nevadskiy",
+                    "email": "nevadskiy@gmail.com"
+                }
+            ],
+            "description": "The package provides UUID keys functionality for Eloquent models.",
+            "homepage": "https://github.com/nevadskiy/laravel-uuid",
+            "keywords": [
+                "laravel",
+                "uuid"
+            ],
+            "time": "2020-09-18T15:42:28+00:00"
         },
         {
             "name": "opis/closure",
