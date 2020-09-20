@@ -20,4 +20,14 @@ class MoneyTest extends TestCase
         self::assertEquals(100, $money->getAmount());
         self::assertTrue($money->getCurrency()->is($currency));
     }
+
+    /** @test */
+    public function it_can_be_formatted_to_the_string_according_to_current_locale(): void
+    {
+        $currency = CurrencyFactory::new()->create(['code' => 'USD']);
+
+        $money = new Money(100, $currency);
+
+        self::assertEquals('$1.00', $money->format());
+    }
 }
