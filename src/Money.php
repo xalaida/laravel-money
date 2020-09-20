@@ -13,7 +13,7 @@ class Money
      *
      * @return int
      */
-    private $amount;
+    private $subunits;
 
     /**
      * The money currency.
@@ -25,9 +25,9 @@ class Money
     /**
      * Money constructor.
      */
-    public function __construct(int $amount, Currency $currency)
+    public function __construct(int $subunits, Currency $currency)
     {
-        $this->amount = $amount;
+        $this->subunits = $subunits;
         $this->currency = $currency;
     }
 
@@ -36,9 +36,19 @@ class Money
      *
      * @return int
      */
-    public function getAmount(): int
+    public function getSubunits(): int
     {
-        return $this->amount;
+        return $this->subunits;
+    }
+
+    /**
+     * Get the money amount in super units.
+     *
+     * @return float|int
+     */
+    public function getSuperUnits()
+    {
+        return $this->getSubunits() / (10 ** $this->currency->precision);
     }
 
     /**
