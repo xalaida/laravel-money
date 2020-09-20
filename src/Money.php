@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Jeka\Money;
 
+use Illuminate\Contracts\Database\Eloquent\Castable;
+use Jeka\Money\Casts\MoneyCast;
 use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Models\Currency;
 
-class Money
+class Money implements Castable
 {
     /**
      * The money amount in subunits.
@@ -34,8 +36,6 @@ class Money
 
     /**
      * Get the money amount in subunits.
-     *
-     * @return int
      */
     public function getSubunits(): int
     {
@@ -54,8 +54,6 @@ class Money
 
     /**
      * Get the money currency.
-     *
-     * @return Currency
      */
     public function getCurrency(): Currency
     {
@@ -64,8 +62,6 @@ class Money
 
     /**
      * Returns money formatted according to the current locale.
-     *
-     * @return string
      */
     public function format(): string
     {
@@ -74,8 +70,6 @@ class Money
 
     /**
      * Convert the money to the string type.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -88,5 +82,13 @@ class Money
     protected function getFormatter(): Formatter
     {
         return app(Formatter::class);
+    }
+
+    /**
+     * Get the name of the caster class to use when casting from / to this cast target.
+     */
+    public static function castUsing(array $arguments): MoneyCast
+    {
+        return app(MoneyCast::class);
     }
 }
