@@ -35,6 +35,8 @@ class Money implements Castable
     }
 
     /**
+     * TODO: rename into getAmount() to be consistent with database fields
+     * TODO: keep getSubunits method as alias (for usability)
      * Get the money amount in subunits.
      */
     public function getSubunits(): int
