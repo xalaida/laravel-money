@@ -27,9 +27,16 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function getById(string $id): Currency
     {
-        // TODO: Replace Cache facade using DI
-        return Cache::rememberForever("currency:{$id}", function () use ($id) {
+        return Cache::tags('currency')->rememberForever("currency:{$id}", function () use ($id) {
             return $this->queries->getById($id);
         });
+    }
+
+    /**
+     * Invalidate the currency cache.
+     */
+    public function invalidate(): void
+    {
+        Cache::tags('currency')->flush();
     }
 }

@@ -10,11 +10,13 @@ use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Formatter\IntlFormatter;
+use Jeka\Money\Listeners\InvalidateCurrencyCache;
 use Jeka\Money\Listeners\UpdateFormatterLocale;
 use Jeka\Money\Models\Currency;
 use Jeka\Money\Queries\CurrencyCacheQueries;
 use Jeka\Money\Queries\CurrencyEloquentQueries;
 use Jeka\Money\Queries\CurrencyQueries;
+use Jeka\Money\Events;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,18 @@ class MoneyServiceProvider extends ServiceProvider
     protected $listen = [
         LocaleUpdated::class => [
             UpdateFormatterLocale::class,
+        ],
+
+        Events\CurrencyCreated::class => [
+            InvalidateCurrencyCache::class,
+        ],
+
+        Events\CurrencyUpdated::class => [
+            InvalidateCurrencyCache::class,
+        ],
+
+        Events\CurrencyDeleted::class => [
+            InvalidateCurrencyCache::class,
         ],
     ];
 
