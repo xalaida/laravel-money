@@ -16,7 +16,6 @@ use Jeka\Money\Models\Currency;
 use Jeka\Money\Queries\CurrencyCacheQueries;
 use Jeka\Money\Queries\CurrencyEloquentQueries;
 use Jeka\Money\Queries\CurrencyQueries;
-use Jeka\Money\Events;
 
 class MoneyServiceProvider extends ServiceProvider
 {

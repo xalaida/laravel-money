@@ -24,7 +24,7 @@ class CurrencySeeder extends Seeder
     /**
      * Default currencies to be seeded.
      * TODO: refactor using config or CLI command for seeding
-     * TODO: extract currencies into resources/currencies.php file
+     * TODO: extract currencies into resources/currencies.php file.
      *
      * @return string[]
      */

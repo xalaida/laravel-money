@@ -7,8 +7,8 @@ namespace Jeka\Money\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Nevadskiy\Uuid\Uuid;
 use Jeka\Money\Events;
+use Nevadskiy\Uuid\Uuid;
 
 /**
  * @property string id
