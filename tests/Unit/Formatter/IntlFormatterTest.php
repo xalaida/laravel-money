@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Unit;
+namespace Jeka\Money\Tests\Unit\Formatter;
 
 use Jeka\Money\Database\Factories\CurrencyFactory;
 use Jeka\Money\Formatter\IntlFormatter;
