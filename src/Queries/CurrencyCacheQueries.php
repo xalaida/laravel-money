@@ -27,8 +27,18 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function getById(string $id): Currency
     {
-        return Cache::tags('currency')->rememberForever("currency:{$id}", function () use ($id) {
+        return Cache::tags('currency')->rememberForever("currency:id:{$id}", function () use ($id) {
             return $this->queries->getById($id);
+        });
+    }
+
+    /**
+     * Get a currency by the given code.
+     */
+    public function getByCode(string $code): Currency
+    {
+        return Cache::tags('currency')->rememberForever("currency:code:{$code}", function () use ($code) {
+            return $this->queries->getByCode($code);
         });
     }
 

@@ -15,4 +15,12 @@ class CurrencyEloquentQueries implements CurrencyQueries
     {
         return Currency::findOrFail($id);
     }
+
+    /**
+     * Get a currency by the given code.
+     */
+    public function getByCode(string $code): Currency
+    {
+        return Currency::where('code', $code)->firstOrFail();
+    }
 }

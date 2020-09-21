@@ -12,4 +12,9 @@ interface CurrencyQueries
      * Get a currency by the given ID.
      */
     public function getById(string $id): Currency;
+
+    /**
+     * Get a currency by the given code.
+     */
+    public function getByCode(string $code): Currency;
 }
