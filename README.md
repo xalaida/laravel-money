@@ -29,6 +29,22 @@ Schema::create('products', static function (Blueprint $table) {
 
 Now the price field will be casted into Money value object.
 
+Also, register currency seeder.
+```
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            \Jeka\Money\Database\Seeders\CurrencySeeder::class,
+        ]);
+    }
+}
+```
+
 
 ## TODO
 - [ ] add possibility to disable locale tracking for formatter 
