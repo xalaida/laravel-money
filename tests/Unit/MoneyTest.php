@@ -57,4 +57,12 @@ class MoneyTest extends TestCase
 
         self::assertEquals(3500, $money->getMajorUnits());
     }
+
+    /** @test */
+    public function it_can_be_converted_into_string(): void
+    {
+        $money = new Money(100, CurrencyFactory::USD());
+
+        self::assertEquals($money->format(), (string) $money);
+    }
 }
