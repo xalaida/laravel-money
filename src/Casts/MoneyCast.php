@@ -33,14 +33,14 @@ class MoneyCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        if (is_null($attributes["{$key}_amount"]) && is_null($attributes["{$key}_currency_id"])) {
+        $amountKeyName = $this->getAmountKeyName($key);
+        $currencyIdKeyName = $this->getCurrencyIdKeyName($key);
+
+        if (is_null($attributes[$amountKeyName]) && is_null($attributes[$currencyIdKeyName])) {
             return null;
         }
 
-        return new Money(
-            $attributes["{$key}_amount"],
-            $this->queries->getById($attributes["{$key}_currency_id"])
-        );
+        return new Money($attributes[$amountKeyName], $this->queries->getById($attributes[$currencyIdKeyName]));
     }
 
     /**
@@ -58,8 +58,8 @@ class MoneyCast implements CastsAttributes
         $this->assertValueIsMoneyInstance($value);
 
         return [
-            "{$key}_amount" => $value->getSubunits(),
-            "{$key}_currency_id" => $value->getCurrency()->id,
+            $this->getAmountKeyName($key) => $value->getAmount(),
+            $this->getCurrencyIdKeyName($key) => $value->getCurrency()->id,
         ];
     }
 
@@ -73,5 +73,27 @@ class MoneyCast implements CastsAttributes
         if (! $value instanceof Money) {
             throw new InvalidArgumentException('The given value is not a Money instance.');
         }
+    }
+
+    /**
+     * Get the money amount key name.
+     *
+     * @param string $key
+     * @return string
+     */
+    private function getAmountKeyName(string $key): string
+    {
+        return "{$key}_amount";
+    }
+
+    /**
+     * Get the money currency ID key name.
+     *
+     * @param string $key
+     * @return string
+     */
+    private function getCurrencyIdKeyName(string $key): string
+    {
+        return "{$key}_currency_id";
     }
 }

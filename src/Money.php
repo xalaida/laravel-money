@@ -12,11 +12,11 @@ use Jeka\Money\Models\Currency;
 class Money implements Castable
 {
     /**
-     * The money amount in subunits.
+     * The money amount in minor units.
      *
      * @return int
      */
-    private $subunits;
+    private $amount;
 
     /**
      * The money currency.
@@ -28,30 +28,36 @@ class Money implements Castable
     /**
      * Money constructor.
      */
-    public function __construct(int $subunits, Currency $currency)
+    public function __construct(int $amount, Currency $currency)
     {
-        $this->subunits = $subunits;
+        $this->amount = $amount;
         $this->currency = $currency;
     }
 
     /**
-     * TODO: rename into getAmount() to be consistent with database fields
-     * TODO: keep getSubunits method as alias (for usability)
-     * Get the money amount in subunits.
+     * Get the money amount in minor units.
      */
-    public function getSubunits(): int
+    public function getAmount(): int
     {
-        return $this->subunits;
+        return $this->amount;
     }
 
     /**
-     * Get the money amount in super units.
+     * Alias for getter of the money amount in minor units.
+     */
+    public function getMinorUnits(): int
+    {
+        return $this->getAmount();
+    }
+
+    /**
+     * Get the money amount in major units.
      *
      * @return float|int
      */
-    public function getSuperUnits()
+    public function getMajorUnits()
     {
-        return $this->getSubunits() / (10 ** $this->currency->precision);
+        return $this->getMinorUnits() / (10 ** $this->currency->precision);
     }
 
     /**
