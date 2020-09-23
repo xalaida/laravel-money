@@ -17,6 +17,7 @@ class CreateCurrenciesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('code', 3)->unique()->comment('ISO 4217');
             $table->tinyInteger('precision');
+            $table->float('rate')->default(1);
             $table->timestamps();
         });
     }

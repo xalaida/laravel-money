@@ -8,6 +8,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Jeka\Money\Converter\Converter;
+use Jeka\Money\Converter\DefaultConverter;
 use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Formatter\IntlFormatter;
 use Jeka\Money\Listeners\InvalidateCurrencyCache;
@@ -20,7 +22,7 @@ use Jeka\Money\Queries\CurrencyQueries;
 class MoneyServiceProvider extends ServiceProvider
 {
     /**
-     * The module's name.
+     * The package's name.
      */
     private const NAME = 'money';
 
@@ -48,17 +50,18 @@ class MoneyServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Register any module services.
+     * Register any package services.
      */
     public function register(): void
     {
         $this->registerConfig();
         $this->registerFormatter();
+        $this->registerConverter();
         $this->registerCurrencyQueries();
     }
 
     /**
-     * Bootstrap any module services.
+     * Bootstrap any package services.
      */
     public function boot(): void
     {
@@ -69,7 +72,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any module formatter.
+     * Register any package formatter.
      */
     private function registerFormatter(): void
     {
@@ -79,7 +82,17 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any module currency queries.
+     * Register any package converter.
+     */
+    private function registerConverter(): void
+    {
+        $this->app->singleton(Converter::class, static function () {
+            return new DefaultConverter();
+        });
+    }
+
+    /**
+     * Register any package currency queries.
      */
     private function registerCurrencyQueries(): void
     {
@@ -93,7 +106,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any module configurations.
+     * Register any package configurations.
      */
     private function registerConfig(): void
     {
@@ -101,7 +114,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot any module console commands.
+     * Boot any package console commands.
      */
     private function bootCommands(): void
     {
@@ -113,7 +126,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot any module events.
+     * Boot any package events.
      */
     private function bootEvents(): void
     {
@@ -127,7 +140,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot any module migrations.
+     * Boot any package migrations.
      */
     private function bootMigrations(): void
     {
@@ -135,7 +148,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot module morph map.
+     * Boot package morph map.
      */
     private function bootMorphMap(): void
     {

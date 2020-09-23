@@ -6,6 +6,7 @@ namespace Jeka\Money;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Jeka\Money\Casts\MoneyCast;
+use Jeka\Money\Converter\Converter;
 use Jeka\Money\Formatter\Formatter;
 use Jeka\Money\Models\Currency;
 
@@ -77,6 +78,14 @@ class Money implements Castable
     }
 
     /**
+     * Returns money converted according to the given currency.
+     */
+    public function convert(Currency $currency): Money
+    {
+        return $this->getConverter()->convert($this, $currency);
+    }
+
+    /**
      * Convert the money to the string type.
      */
     public function __toString(): string
@@ -90,6 +99,14 @@ class Money implements Castable
     protected function getFormatter(): Formatter
     {
         return app(Formatter::class);
+    }
+
+    /**
+     * Get the money converter.
+     */
+    protected function getConverter(): Converter
+    {
+        return app(Converter::class);
     }
 
     /**

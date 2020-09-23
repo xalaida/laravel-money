@@ -65,4 +65,15 @@ class MoneyTest extends TestCase
 
         self::assertEquals($money->format(), (string) $money);
     }
+
+    /** @test */
+    public function it_can_be_converted_into_money_with_another_currency(): void
+    {
+        $currencySource = CurrencyFactory::new()->create(['code' => 'USD', 'rate' => 1]);
+        $currencyTarget = CurrencyFactory::new()->create(['code' => 'EUR', 'rate' => 3]);
+
+        $money = new Money(100, $currencySource);
+
+        self::assertEquals(300, $money->convert($currencyTarget)->getAmount());
+    }
 }

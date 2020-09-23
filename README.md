@@ -52,3 +52,6 @@ class DatabaseSeeder extends Seeder
 - [ ] add possibility to specify concrete formatter format
 - [ ] add possibility to render money without decimals 
 - [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%') 
+- [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year')
+- [ ] feature formatting money into different locale
+- [ ] feature formatting money using given formatter (add `formatUsing()` method)
