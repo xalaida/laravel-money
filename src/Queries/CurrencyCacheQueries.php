@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Jeka\Money\Queries;
 
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Cache\Repository as Cache;
 use Jeka\Money\Models\Currency;
 
 class CurrencyCacheQueries implements CurrencyQueries
@@ -15,11 +15,17 @@ class CurrencyCacheQueries implements CurrencyQueries
     private $queries;
 
     /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * CurrencyCacheQueries constructor.
      */
-    public function __construct(CurrencyQueries $queries)
+    public function __construct(CurrencyQueries $queries, Cache $cache)
     {
         $this->queries = $queries;
+        $this->cache = $cache;
     }
 
     /**
@@ -27,7 +33,7 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function getById(string $id): Currency
     {
-        return Cache::tags('currency')->rememberForever("currency:id:{$id}", function () use ($id) {
+        return $this->cache->tags('currency')->rememberForever("currency:id:{$id}", function () use ($id) {
             return $this->queries->getById($id);
         });
     }
@@ -37,7 +43,7 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function getByCode(string $code): Currency
     {
-        return Cache::tags('currency')->rememberForever("currency:code:{$code}", function () use ($code) {
+        return $this->cache->tags('currency')->rememberForever("currency:code:{$code}", function () use ($code) {
             return $this->queries->getByCode($code);
         });
     }
@@ -47,6 +53,6 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function invalidate(): void
     {
-        Cache::tags('currency')->flush();
+        $this->cache->tags('currency')->flush();
     }
 }

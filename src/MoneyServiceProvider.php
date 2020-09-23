@@ -85,8 +85,10 @@ class MoneyServiceProvider extends ServiceProvider
     {
         $this->app->singleton(CurrencyQueries::class, CurrencyEloquentQueries::class);
 
-        $this->app->extend(CurrencyQueries::class, static function (CurrencyQueries $queries) {
-            return new CurrencyCacheQueries($queries);
+        $this->app->extend(CurrencyQueries::class, function (CurrencyQueries $queries) {
+            return $this->app->make(CurrencyCacheQueries::class, [
+                'queries' => $queries
+            ]);
         });
     }
 
