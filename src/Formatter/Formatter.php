@@ -9,6 +9,7 @@ use Jeka\Money\Money;
 interface Formatter
 {
     /**
+     * TODO: think about handling this as separate LocaleFormatter
      * Set the formatter locale.
      */
     public function setLocale(string $locale): void;
