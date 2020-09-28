@@ -55,3 +55,5 @@ class DatabaseSeeder extends Seeder
 - [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year')
 - [ ] feature formatting money into different locale
 - [ ] feature formatting money using given formatter (add `formatUsing()` method)
+- [ ] add install instruction about cron registration for rates
+- [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate}
