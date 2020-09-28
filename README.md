@@ -3,12 +3,12 @@
 ## Installation
 
 You can install the package via composer:
-```
+```bash
 composer require jeka/laravel-money
 ```
 
 Add cast to a model.
-```
+```php
 /**
  * The attributes that should be cast.
  *
@@ -20,7 +20,7 @@ protected $casts = [
 ``` 
 
 Add money attributes to according table.
-```
+```php
 Schema::create('products', static function (Blueprint $table) {
     $table->bigInteger('price_amount')->unsigned();
     $table->foreignUuid('price_currency_id')->constrained('currencies')->onDelete('cascade');
@@ -30,7 +30,7 @@ Schema::create('products', static function (Blueprint $table) {
 Now the price field will be casted into Money value object.
 
 Also, register currency seeder.
-```
+```php
 class DatabaseSeeder extends Seeder
 {
     /**
