@@ -57,3 +57,5 @@ class DatabaseSeeder extends Seeder
 - [ ] feature formatting money using given formatter (add `formatUsing()` method)
 - [ ] add install instruction about cron registration for rates
 - [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate}
+- [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
+- [ ] add config parameter as currency (default converter currency)
