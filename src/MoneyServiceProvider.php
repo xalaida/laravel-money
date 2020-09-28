@@ -8,16 +8,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
-use Jeka\Money\Converter\Converter;
-use Jeka\Money\Converter\DefaultConverter;
-use Jeka\Money\Formatter\Formatter;
-use Jeka\Money\Formatter\IntlFormatter;
-use Jeka\Money\Listeners\InvalidateCurrencyCache;
-use Jeka\Money\Listeners\UpdateFormatterLocale;
-use Jeka\Money\Models\Currency;
-use Jeka\Money\Queries\CurrencyCacheQueries;
-use Jeka\Money\Queries\CurrencyEloquentQueries;
-use Jeka\Money\Queries\CurrencyQueries;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -33,19 +23,19 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected $listen = [
         LocaleUpdated::class => [
-            UpdateFormatterLocale::class,
+            Listeners\UpdateFormatterLocale::class,
         ],
 
         Events\CurrencyCreated::class => [
-            InvalidateCurrencyCache::class,
+            Listeners\InvalidateCurrencyCache::class,
         ],
 
         Events\CurrencyUpdated::class => [
-            InvalidateCurrencyCache::class,
+            Listeners\InvalidateCurrencyCache::class,
         ],
 
         Events\CurrencyDeleted::class => [
-            InvalidateCurrencyCache::class,
+            Listeners\InvalidateCurrencyCache::class,
         ],
     ];
 
@@ -57,6 +47,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerFormatter();
         $this->registerConverter();
+        $this->registerRateProviders();
         $this->registerCurrencyQueries();
     }
 
@@ -76,8 +67,8 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerFormatter(): void
     {
-        $this->app->singleton(Formatter::class, function () {
-            return new IntlFormatter($this->app->getLocale());
+        $this->app->singleton(Formatter\Formatter::class, function () {
+            return new Formatter\IntlFormatter($this->app->getLocale());
         });
     }
 
@@ -86,8 +77,20 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
-        $this->app->singleton(Converter::class, static function () {
-            return new DefaultConverter();
+        $this->app->singleton(Converter\Converter::class, static function () {
+            return new Converter\DefaultConverter();
+        });
+    }
+
+    /**
+     * Register any package rate providers.
+     */
+    private function registerRateProviders(): void
+    {
+        $this->registerOpenExchangeProvider();
+
+        $this->app->singleton(RateProvider\RateProvider::class, function () {
+            return $this->app[$this->app['config']['money']['default_rate_provider']];
         });
     }
 
@@ -96,10 +99,10 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerCurrencyQueries(): void
     {
-        $this->app->singleton(CurrencyQueries::class, CurrencyEloquentQueries::class);
+        $this->app->singleton(Queries\CurrencyQueries::class, Queries\CurrencyEloquentQueries::class);
 
-        $this->app->extend(CurrencyQueries::class, function (CurrencyQueries $queries) {
-            return $this->app->make(CurrencyCacheQueries::class, [
+        $this->app->extend(Queries\CurrencyQueries::class, function (Queries\CurrencyQueries $queries) {
+            return $this->app->make(Queries\CurrencyCacheQueries::class, [
                 'queries' => $queries
             ]);
         });
@@ -120,7 +123,7 @@ class MoneyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                //
+                Console\UpdateRatesCommand::class,
             ]);
         }
     }
@@ -153,7 +156,19 @@ class MoneyServiceProvider extends ServiceProvider
     private function bootMorphMap(): void
     {
         Relation::morphMap([
-            'currencies' => Currency::class,
+            'currencies' => Models\Currency::class,
         ]);
+    }
+
+    /**
+     * Register the open exchange rate provider.
+     */
+    private function registerOpenExchangeProvider(): void
+    {
+        $this->app->bind('open_exchange_rates', RateProvider\Providers\OpenExchangeProvider::class);
+
+        $this->app->when(RateProvider\Providers\OpenExchangeProvider::class)
+            ->needs('$appId')
+            ->give($this->app['config']['money']['rate_providers']['open_exchange_rates']['app_id']);
     }
 }
