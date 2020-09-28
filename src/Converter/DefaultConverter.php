@@ -11,7 +11,7 @@ use Jeka\Money\Money;
 class DefaultConverter implements Converter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setDefaultCurrency(Currency $currency): void
     {
@@ -19,7 +19,7 @@ class DefaultConverter implements Converter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function convert(Money $money, Currency $currency): Money
     {
@@ -31,8 +31,6 @@ class DefaultConverter implements Converter
     /**
      * Get the converted money amount.
      *
-     * @param Money $money
-     * @param Currency $currency
      * @return float|int
      */
     private function getConvertedAmount(Money $money, Currency $currency)
@@ -42,9 +40,6 @@ class DefaultConverter implements Converter
 
     /**
      * Assert that currency rates don't equal to zero.
-     *
-     * @param Currency $sourceCurrency
-     * @param Currency $targetCurrency
      */
     private function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
     {

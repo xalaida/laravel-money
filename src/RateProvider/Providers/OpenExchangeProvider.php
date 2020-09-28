@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Jeka\Money\RateProvider\Providers;
 
+use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
 use Jeka\Money\RateProvider\Rate;
 use Jeka\Money\RateProvider\RateProvider;
 use Jeka\Money\RateProvider\RatesCollection;
-use Illuminate\Http\Client\Factory as Http;
 
 class OpenExchangeProvider implements RateProvider
 {
@@ -32,7 +32,7 @@ class OpenExchangeProvider implements RateProvider
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRates(): RatesCollection
     {
@@ -50,7 +50,6 @@ class OpenExchangeProvider implements RateProvider
     /**
      * Fetch the currency rates.
      *
-     * @return array
      * @throws RequestException
      */
     private function fetchRates(): array
@@ -62,8 +61,6 @@ class OpenExchangeProvider implements RateProvider
 
     /**
      * Get the final URL.
-     *
-     * @return string
      */
     private function url(): string
     {
@@ -74,8 +71,6 @@ class OpenExchangeProvider implements RateProvider
 
     /**
      * Get the base URL.
-     *
-     * @return string
      */
     private function baseUrl(): string
     {

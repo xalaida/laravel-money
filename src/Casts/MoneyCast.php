@@ -77,9 +77,6 @@ class MoneyCast implements CastsAttributes
 
     /**
      * Get the money amount key name.
-     *
-     * @param string $key
-     * @return string
      */
     private function getAmountKeyName(string $key): string
     {
@@ -88,9 +85,6 @@ class MoneyCast implements CastsAttributes
 
     /**
      * Get the money currency ID key name.
-     *
-     * @param string $key
-     * @return string
      */
     private function getCurrencyIdKeyName(string $key): string
     {

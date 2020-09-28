@@ -25,7 +25,7 @@ class RatesCollection implements IteratorAggregate
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIterator(): ArrayIterator
     {
@@ -34,8 +34,6 @@ class RatesCollection implements IteratorAggregate
 
     /**
      * Map rates by their codes.
-     *
-     * @return array
      */
     public function mapByCodes(): array
     {

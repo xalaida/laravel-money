@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jeka\Money\Console;
 
 use Illuminate\Console\Command;
@@ -27,29 +29,29 @@ class UpdateRatesCommand extends Command
     protected $description = 'Update rates for currencies';
 
     /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
      * @var RateProvider
      */
     private $provider;
+
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(Dispatcher $dispatcher, RateProvider $provider)
+    public function __construct(RateProvider $provider, Dispatcher $dispatcher)
     {
         parent::__construct();
-        $this->dispatcher = $dispatcher;
         $this->provider = $provider;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
-     * Execute the console command
+     * Execute the console command.
      *
      * @return mixed|void
      */
@@ -61,14 +63,11 @@ class UpdateRatesCommand extends Command
             $this->updateRate($currency, $rates[$currency->code]);
         }
 
-        $this->info("Currency rates have been updated!");
+        $this->info('Currency rates have been updated!');
     }
 
     /**
      * Get currencies by the given codes.
-     *
-     * @param array $codes
-     * @return Collection
      */
     private function getCurrenciesByCodes(array $codes): Collection
     {
@@ -77,9 +76,6 @@ class UpdateRatesCommand extends Command
 
     /**
      * Update the rate for the given currency.
-     *
-     * @param Currency $currency
-     * @param Rate $rate
      */
     private function updateRate(Currency $currency, Rate $rate): void
     {

@@ -37,8 +37,6 @@ class Currency extends Model
 
     /**
      * Update rate of the currency.
-     *
-     * @param float $rate
      */
     public function updateRate(float $rate): void
     {
@@ -50,8 +48,6 @@ class Currency extends Model
 
     /**
      * Assert that the given rate is more than zero.
-     *
-     * @param float $rate
      */
     private function assertPositiveRate(float $rate): void
     {

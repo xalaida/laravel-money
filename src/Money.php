@@ -80,7 +80,7 @@ class Money implements Castable
     /**
      * Returns money converted according to the given currency.
      */
-    public function convert(Currency $currency): Money
+    public function convert(Currency $currency): self
     {
         return $this->getConverter()->convert($this, $currency);
     }

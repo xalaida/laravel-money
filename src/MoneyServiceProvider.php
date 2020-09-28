@@ -103,7 +103,7 @@ class MoneyServiceProvider extends ServiceProvider
 
         $this->app->extend(Queries\CurrencyQueries::class, function (Queries\CurrencyQueries $queries) {
             return $this->app->make(Queries\CurrencyCacheQueries::class, [
-                'queries' => $queries
+                'queries' => $queries,
             ]);
         });
     }
