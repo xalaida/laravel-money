@@ -31,4 +31,20 @@ class RatesCollection implements IteratorAggregate
     {
         return new ArrayIterator($this->rates);
     }
+
+    /**
+     * Map rates by their codes.
+     *
+     * @return array
+     */
+    public function mapByCodes(): array
+    {
+        $rates = [];
+
+        foreach ($this->rates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
+
+        return $rates;
+    }
 }

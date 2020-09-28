@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Jeka\Money\Events;
+use Jeka\Money\Exceptions\InvalidRateException;
 use Nevadskiy\Uuid\Uuid;
 
 /**
@@ -33,4 +34,29 @@ class Currency extends Model
         'updated' => Events\CurrencyUpdated::class,
         'deleted' => Events\CurrencyDeleted::class,
     ];
+
+    /**
+     * Update rate of the currency.
+     *
+     * @param float $rate
+     */
+    public function updateRate(float $rate): void
+    {
+        $this->assertPositiveRate($rate);
+
+        $this->rate = $rate;
+        $this->save();
+    }
+
+    /**
+     * Assert that the given rate is more than zero.
+     *
+     * @param float $rate
+     */
+    private function assertPositiveRate(float $rate): void
+    {
+        if ($rate > 0) {
+            throw new InvalidRateException();
+        }
+    }
 }
