@@ -110,7 +110,7 @@ class Money implements Castable
     }
 
     /**
-     * Get the name of the caster class to use when casting from / to this cast target.
+     * {@inheritDoc}
      */
     public static function castUsing(array $arguments): MoneyCast
     {
