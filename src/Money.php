@@ -17,14 +17,14 @@ class Money implements Castable
      *
      * @return int
      */
-    private $amount;
+    protected $amount;
 
     /**
      * The money currency.
      *
      * @return Currency
      */
-    private $currency;
+    protected $currency;
 
     /**
      * Money constructor.
