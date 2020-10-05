@@ -66,9 +66,6 @@ class UpdateRatesCommand extends Command
 
     /**
      * Get currencies by rates collection.
-     *
-     * @param array $rates
-     * @return Collection
      */
     private function getCurrencies(array $rates): Collection
     {

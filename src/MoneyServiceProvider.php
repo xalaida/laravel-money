@@ -63,6 +63,14 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register any package configurations.
+     */
+    private function registerConfig(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/money.php', self::NAME);
+    }
+
+    /**
      * Register any package formatter.
      */
     private function registerFormatter(): void
@@ -109,14 +117,6 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package configurations.
-     */
-    private function registerConfig(): void
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/money.php', self::NAME);
-    }
-
-    /**
      * Boot any package console commands.
      */
     private function bootCommands(): void
@@ -124,6 +124,7 @@ class MoneyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\UpdateRatesCommand::class,
+                Console\SeedCurrenciesCommand::class,
             ]);
         }
     }
