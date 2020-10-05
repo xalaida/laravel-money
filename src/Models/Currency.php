@@ -14,6 +14,8 @@ use Nevadskiy\Uuid\Uuid;
 /**
  * @property string id
  * @property string code
+ * @property string name
+ * @property string symbol
  * @property int precision
  * @property float rate
  * @property Carbon created_at
@@ -23,6 +25,13 @@ class Currency extends Model
 {
     use HasFactory,
         Uuid;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * The event map for the model.

@@ -23,6 +23,8 @@ class CurrencyFactory extends Factory
     {
         return [
             'code' => $this->faker->unique()->currencyCode,
+            'name' => $this->faker->word,
+            'symbol' => '$',
             'precision' => 2,
             'rate' => 1,
         ];
