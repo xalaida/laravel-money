@@ -60,3 +60,4 @@ class DatabaseSeeder extends Seeder
 - [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
 - [ ] add config parameter as currency (default converter currency)
 - [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`)
+- [ ] add auto transformer for upper-cased currency code
