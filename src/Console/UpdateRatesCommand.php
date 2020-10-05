@@ -84,6 +84,6 @@ class UpdateRatesCommand extends Command
 
         $this->dispatcher->dispatch(new CurrencyRateUpdated($currency));
 
-        $this->line("Rate has been updated for the currency {$rate->getCode()} with a value {$rate->getValue()}");
+        $this->line("Rate has been updated for the currency {$rate->getCode()} with the value {$rate->getValue()}");
     }
 }
