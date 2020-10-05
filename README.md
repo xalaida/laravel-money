@@ -62,3 +62,4 @@ class DatabaseSeeder extends Seeder
 - [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`)
 - [ ] add auto transformer for upper-cased currency code
 - [ ] add possibility to extend migration
+- [ ] add command to show outdated rates
