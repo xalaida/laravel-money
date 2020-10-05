@@ -57,7 +57,7 @@ class UpdateRatesCommand extends Command
     {
         $rates = $this->provider->getRates()->mapByCodes();
 
-        foreach ($this->getCurrencies($rates) as $currency) {
+        foreach ($this->currencies($rates) as $currency) {
             $this->updateRate($currency, $rates[$currency->code]);
         }
 
@@ -67,7 +67,7 @@ class UpdateRatesCommand extends Command
     /**
      * Get currencies by rates collection.
      */
-    private function getCurrencies(array $rates): Collection
+    private function currencies(array $rates): Collection
     {
         return Currency::whereIn('code', array_keys($rates))->get();
     }

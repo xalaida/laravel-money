@@ -34,7 +34,7 @@ class SeedCurrenciesCommand extends Command
         $this->truncateAttempt();
 
         foreach ($this->currencies() as $currency) {
-            $this->seedCurrency($currency);
+            $this->seed($currency);
         }
 
         $this->info('Currencies have been seeded!');
@@ -116,7 +116,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Seed the currency data.
      */
-    private function seedCurrency(array $currency): void
+    private function seed(array $currency): void
     {
         Currency::query()->updateOrCreate(['code' => $currency['code']], $currency);
         $this->line("Currency {$currency['code']} has been seeded!");
