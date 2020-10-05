@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Jeka\Money\RateProvider;
 
-use ArrayIterator;
-use IteratorAggregate;
-
-class RatesCollection implements IteratorAggregate
+class RatesCollection
 {
     /**
      * @var Rate[]
@@ -22,14 +19,6 @@ class RatesCollection implements IteratorAggregate
     public function __construct(Rate ...$rates)
     {
         $this->rates = $rates;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->rates);
     }
 
     /**

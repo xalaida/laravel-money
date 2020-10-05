@@ -40,8 +40,6 @@ class UpdateRatesCommand extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct(RateProvider $provider, Dispatcher $dispatcher)
     {
@@ -59,7 +57,7 @@ class UpdateRatesCommand extends Command
     {
         $rates = $this->provider->getRates()->mapByCodes();
 
-        foreach ($this->getCurrenciesByCodes(array_keys($rates)) as $currency) {
+        foreach ($this->getCurrencies($rates) as $currency) {
             $this->updateRate($currency, $rates[$currency->code]);
         }
 
@@ -67,11 +65,14 @@ class UpdateRatesCommand extends Command
     }
 
     /**
-     * Get currencies by the given codes.
+     * Get currencies by rates collection.
+     *
+     * @param array $rates
+     * @return Collection
      */
-    private function getCurrenciesByCodes(array $codes): Collection
+    private function getCurrencies(array $rates): Collection
     {
-        return Currency::whereIn('code', $codes)->get();
+        return Currency::whereIn('code', array_keys($rates))->get();
     }
 
     /**
