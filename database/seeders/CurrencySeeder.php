@@ -14,31 +14,16 @@ class CurrencySeeder extends Seeder
      */
     public function run(): void
     {
-        Currency::query()->truncate();
-
-        foreach ($this->currencies() as $category) {
-            Currency::query()->create($category);
+        foreach ($this->currencies() as $currency) {
+            Currency::query()->updateOrCreate(['code' => $currency['code'], $currency]);
         }
     }
 
     /**
-     * Default currencies to be seeded.
-     * TODO: refactor using config or CLI command for seeding
-     * TODO: extract currencies into resources/currencies.php file.
-     *
-     * @return string[]
+     * Get currencies list.
      */
     protected function currencies(): array
     {
-        return [
-            [
-                'code' => 'USD',
-                'precision' => 2,
-            ],
-            [
-                'code' => 'EUR',
-                'precision' => 2,
-            ],
-        ];
+        return require __DIR__.'/../../resources/currencies.php';
     }
 }
