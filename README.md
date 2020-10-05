@@ -59,3 +59,4 @@ class DatabaseSeeder extends Seeder
 - [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate}
 - [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
 - [ ] add config parameter as currency (default converter currency)
+- [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`)
