@@ -15,7 +15,7 @@ class CurrencySeeder extends Seeder
     public function run(): void
     {
         foreach ($this->currencies() as $currency) {
-            Currency::query()->updateOrCreate(['code' => $currency['code'], $currency]);
+            Currency::query()->updateOrCreate(['code' => $currency['code']], $currency);
         }
     }
 
