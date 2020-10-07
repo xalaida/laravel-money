@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7be1f4074e5aa8396fe2dacc8ce7c108",
+    "content-hash": "ccfc607a8c1d54578325cbc1022aa90d",
     "packages": [
         {
             "name": "brick/math",
@@ -4410,6 +4410,39 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
+            "name": "jeka/cs-fixer-rules",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../cs-fixer-rules",
+                "reference": "3f9004b3642e91eadfe1a2000a25757a943f167b"
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nevadskiy",
+                    "email": "nevadskiy@gmail.com"
+                }
+            ],
+            "description": "The package provides useful PHP-CS-Fixer rules.",
+            "keywords": [
+                "code",
+                "fixer",
+                "rules",
+                "style"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "mockery/mockery",
             "version": "1.4.2",
             "source": {
@@ -6285,9 +6318,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3",
