@@ -9,7 +9,7 @@ use InvalidArgumentException;
 class InvalidRateException extends InvalidArgumentException
 {
     /**
-     * ZeroRateException constructor.
+     * InvalidRateException constructor.
      */
     public function __construct()
     {
