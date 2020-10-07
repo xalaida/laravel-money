@@ -26,10 +26,8 @@ class SeedCurrenciesCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed|void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->truncateAttempt();
 
@@ -104,13 +102,24 @@ class SeedCurrenciesCommand extends Command
      */
     private function getCurrenciesByCodes(array $codes): array
     {
-        $codes = array_map(static function (string $code) {
-            return Str::upper($code);
-        }, $codes);
+        $codes = $this->transformIntoUpperCase($codes);
 
         return array_filter($this->allCurrencies(), static function (array $currency) use ($codes) {
             return in_array($currency['code'], $codes, true);
         });
+    }
+
+    /**
+     * Transform the given codes into upper case.
+     *
+     * @param array $codes
+     * @return array|string[]
+     */
+    private function transformIntoUpperCase(array $codes): array
+    {
+        return array_map(static function (string $code) {
+            return Str::upper($code);
+        }, $codes);
     }
 
     /**
