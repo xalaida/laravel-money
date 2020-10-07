@@ -110,7 +110,7 @@ class Money implements Castable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function castUsing(array $arguments): MoneyCast
     {

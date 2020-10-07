@@ -50,10 +50,8 @@ class UpdateRatesCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed|void
      */
-    public function handle()
+    public function handle(): void
     {
         $rates = $this->provider->getRates()->mapByCodes();
 
