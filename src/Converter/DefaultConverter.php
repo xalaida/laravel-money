@@ -43,7 +43,7 @@ class DefaultConverter implements Converter
      */
     private function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
     {
-        if ($sourceCurrency->rate === 0 || $targetCurrency->rate === 0) {
+        if (0 === $sourceCurrency->rate || 0 === $targetCurrency->rate) {
             throw new InvalidArgumentException('Currency rate cannot be equal to zero.');
         }
     }

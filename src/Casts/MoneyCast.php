@@ -51,7 +51,7 @@ class MoneyCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes): array
     {
-        if (is_null($value)) {
+        if (null === $value) {
             return [];
         }
 
@@ -93,15 +93,10 @@ class MoneyCast implements CastsAttributes
 
     /**
      * Determine whether the money attributes is nullable.
-     *
-     * @param array $attributes
-     * @param string $amountKeyName
-     * @param string $currencyIdKeyName
-     * @return bool
      */
     private function isNullableAttributes(array $attributes, string $amountKeyName, string $currencyIdKeyName): bool
     {
-        return is_null($attributes[$amountKeyName])
-            && is_null($attributes[$currencyIdKeyName]);
+        return null === $attributes[$amountKeyName]
+            && null === $attributes[$currencyIdKeyName];
     }
 }
