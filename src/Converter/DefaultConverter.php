@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Jeka\Money\Converter;
 
-use InvalidArgumentException;
+use Jeka\Money\Exceptions\InvalidRateException;
 use Jeka\Money\Models\Currency;
 use Jeka\Money\Money;
 
@@ -33,7 +33,7 @@ class DefaultConverter implements Converter
      *
      * @return float|int
      */
-    private function getConvertedAmount(Money $money, Currency $currency)
+    protected function getConvertedAmount(Money $money, Currency $currency)
     {
         return ($money->getAmount() * $currency->rate) / $money->getCurrency()->rate;
     }
@@ -41,10 +41,10 @@ class DefaultConverter implements Converter
     /**
      * Assert that currency rates don't equal to zero.
      */
-    private function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
+    protected function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
     {
         if (0 === $sourceCurrency->rate || 0 === $targetCurrency->rate) {
-            throw new InvalidArgumentException('Currency rate cannot be equal to zero.');
+            throw new InvalidRateException();
         }
     }
 }
