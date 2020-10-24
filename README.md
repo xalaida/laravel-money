@@ -23,7 +23,7 @@ Add money attributes to according table.
 ```php
 Schema::create('products', static function (Blueprint $table) {
     $table->bigInteger('price_amount')->unsigned();
-    $table->foreignUuid('price_currency_id')->constrained('currencies')->onDelete('cascade');
+    $table->foreignUuid('price_currency_id')->constrained('currencies')->restrictOnDelete();
 });
 ```
 

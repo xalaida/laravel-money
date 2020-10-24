@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->bigInteger('price_amount')->unsigned();
-            $table->foreignUuid('price_currency_id')->constrained('currencies')->onDelete('cascade');
+            $table->foreignUuid('price_currency_id')->constrained('currencies')->restrictOnDelete();
             $table->timestamps();
         });
     }
