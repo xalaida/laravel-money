@@ -57,6 +57,7 @@ class MoneyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootCommands();
+        $this->bootRoutes();
         $this->bootEvents();
         $this->bootMigrations();
         $this->bootMorphMap();
@@ -113,6 +114,19 @@ class MoneyServiceProvider extends ServiceProvider
             return $this->app->make(Queries\CurrencyCacheQueries::class, [
                 'queries' => $queries,
             ]);
+        });
+    }
+
+    /**
+     * Boot any module routes.
+     */
+    private function bootRoutes(): void
+    {
+        $this->app['router']->group([
+            'middleware' => 'api',
+            'prefix' => 'api',
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         });
     }
 
