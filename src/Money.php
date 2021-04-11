@@ -36,6 +36,22 @@ class Money implements Castable
     }
 
     /**
+     * Create a new money instance from minor units.
+     */
+    public static function fromMajorUnits(float $amount, Currency $currency): Money
+    {
+        return new static((int) $amount * self::getMajorMultiplier($currency), $currency);
+    }
+
+    /**
+     * Create a new money instance from minor units.
+     */
+    public static function fromMinorUnits(int $amount, Currency $currency): Money
+    {
+        return new static($amount, $currency);
+    }
+
+    /**
      * Get the money amount in minor units.
      */
     public function getAmount(): int
@@ -58,7 +74,15 @@ class Money implements Castable
      */
     public function getMajorUnits()
     {
-        return $this->getMinorUnits() / (10 ** $this->currency->precision);
+        return $this->getMinorUnits() / self::getMajorMultiplier($this->currency);
+    }
+
+    /**
+     * Get the major units multiplier.
+     */
+    protected static function getMajorMultiplier(Currency $currency): int
+    {
+        return 10 ** $currency->precision;
     }
 
     /**
