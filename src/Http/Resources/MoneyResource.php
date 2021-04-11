@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jeka\Money\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jeka\Money\Money;
 
@@ -15,7 +16,7 @@ class MoneyResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param $request
+     * @param Request $request
      */
     public function toArray($request): array
     {
