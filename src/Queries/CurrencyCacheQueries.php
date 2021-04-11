@@ -5,22 +5,27 @@ declare(strict_types=1);
 namespace Jeka\Money\Queries;
 
 use Illuminate\Cache\Repository as Cache;
+use Illuminate\Database\Eloquent\Collection;
 use Jeka\Money\Models\Currency;
 
 class CurrencyCacheQueries implements CurrencyQueries
 {
     /**
+     * The base queries instance.
+     *
      * @var CurrencyQueries
      */
     private $queries;
 
     /**
+     * The cache instance.
+     *
      * @var Cache
      */
     private $cache;
 
     /**
-     * CurrencyCacheQueries constructor.
+     * Make a new queries instance.
      */
     public function __construct(CurrencyQueries $queries, Cache $cache)
     {
@@ -29,7 +34,17 @@ class CurrencyCacheQueries implements CurrencyQueries
     }
 
     /**
-     * Get a currency by the given ID.
+     * @inheritDoc
+     */
+    public function all(): Collection
+    {
+        return $this->cache->tags('currency')->rememberForever("currency:all", function () {
+            return $this->queries->all();
+        });
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getById(string $id): Currency
     {
@@ -39,7 +54,7 @@ class CurrencyCacheQueries implements CurrencyQueries
     }
 
     /**
-     * Get a currency by the given code.
+     * @inheritDoc
      */
     public function getByCode(string $code): Currency
     {

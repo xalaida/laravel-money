@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Jeka\Money\Queries;
 
+use Illuminate\Database\Eloquent\Collection;
 use Jeka\Money\Models\Currency;
 
 interface CurrencyQueries
 {
+    /**
+     * Get all available currencies.
+     */
+    public function all(): Collection;
+
     /**
      * Get a currency by the given ID.
      */

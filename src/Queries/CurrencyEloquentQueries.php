@@ -4,23 +4,36 @@ declare(strict_types=1);
 
 namespace Jeka\Money\Queries;
 
+use Illuminate\Database\Eloquent\Collection;
 use Jeka\Money\Models\Currency;
 
 class CurrencyEloquentQueries implements CurrencyQueries
 {
     /**
-     * Get a currency by the given ID.
+     * @inheritDoc
      */
-    public function getById(string $id): Currency
+    public function all(): Collection
     {
-        return Currency::findOrFail($id);
+        return Currency::query()
+            ->get();
     }
 
     /**
-     * Get a currency by the given code.
+     * @inheritDoc
+     */
+    public function getById(string $id): Currency
+    {
+        return Currency::query()
+            ->findOrFail($id);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getByCode(string $code): Currency
     {
-        return Currency::where('code', $code)->firstOrFail();
+        return Currency::query()
+            ->where('code', $code)
+            ->firstOrFail();
     }
 }
