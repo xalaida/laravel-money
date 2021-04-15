@@ -22,6 +22,7 @@ class MoneyResource extends JsonResource
     {
         return [
             'amount' => $this->getAmount(),
+            'amount_major' => $this->getMajorUnits(),
             'formatted' => $this->format(),
             'currency' => CurrencyResource::make($this->getCurrency()),
         ];
