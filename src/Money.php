@@ -40,7 +40,7 @@ class Money implements Castable
      */
     public static function fromMajorUnits(float $amount, Currency $currency): Money
     {
-        return new static((int) $amount * self::getMajorMultiplier($currency), $currency);
+        return new static((int) ($amount * self::getMajorMultiplier($currency)), $currency);
     }
 
     /**
