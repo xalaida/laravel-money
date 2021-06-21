@@ -1,13 +1,22 @@
 # Laravel Money
 
+💰 The package provides money and currency features for a Laravel application.
+
 ## Installation
 
 You can install the package via composer:
+
 ```bash
-composer require jeka/laravel-money
+composer require nevadskiy/laravel-money
 ```
 
-Add cast to a model.
+
+## Documentation
+
+### Using money cast in the model
+
+The price field can be casted into Money instance. To make it castable, add the following code to your model.
+
 ```php
 /**
  * The attributes that should be cast.
@@ -19,17 +28,19 @@ protected $casts = [
 ];
 ``` 
 
-Add money attributes to according table.
+
+Also, you need to add the following fields to the model's database table.
+
 ```php
-Schema::create('products', static function (Blueprint $table) {
+Schema::create('products', function (Blueprint $table) {
     $table->bigInteger('price_amount')->unsigned();
-    $table->foreignUuid('price_currency_id')->constrained('currencies')->restrictOnDelete();
+    $table->foreignUuid('price_currency_id')->constrained('currencies');
 });
 ```
 
-Now the price field will be casted into Money value object.
 
-Also, register currency seeder.
+## Seed currencies 
+
 ```php
 class DatabaseSeeder extends Seeder
 {
@@ -44,22 +55,3 @@ class DatabaseSeeder extends Seeder
     }
 }
 ```
-
-
-## TODO
-- [ ] add possibility to disable locale tracking for formatter 
-- [ ] add possibility to specify concrete formatter locale 
-- [ ] add possibility to specify concrete formatter format
-- [ ] add possibility to render money without decimals 
-- [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%') 
-- [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year')
-- [ ] feature formatting money into different locale
-- [ ] feature formatting money using given formatter (add `formatUsing()` method)
-- [ ] add install instruction about cron registration for rates
-- [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate}
-- [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
-- [ ] add config parameter as currency (default converter currency)
-- [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`)
-- [ ] add auto transformer for upper-cased currency code
-- [ ] add possibility to extend migration
-- [ ] add command to show outdated rates
