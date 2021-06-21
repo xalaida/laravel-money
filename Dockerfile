@@ -15,6 +15,10 @@ RUN apt-get clean \
     && apt-get install -y libcurl3-dev curl && docker-php-ext-install curl \
 # BC Math
     && docker-php-ext-install bcmath \
+# Intl
+    && apt-get install -y zlib1g-dev libicu-dev g++ \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
 # PCOV
     && pecl install pcov \
     && docker-php-ext-enable pcov \
