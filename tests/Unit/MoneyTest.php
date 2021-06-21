@@ -61,7 +61,7 @@ class MoneyTest extends TestCase
     /** @test */
     public function it_can_be_converted_into_string(): void
     {
-        $money = new Money(100, CurrencyFactory::USD());
+        $money = new Money(100, CurrencyFactory::new()->create());
 
         self::assertEquals($money->format(), (string) $money);
     }
