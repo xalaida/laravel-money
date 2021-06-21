@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nevadskiy\Money\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\Exceptions\InvalidRateException;
@@ -23,8 +22,7 @@ use Nevadskiy\Uuid\Uuid;
  */
 class Currency extends Model
 {
-    use HasFactory,
-        Uuid;
+    use Uuid;
 
     /**
      * The attributes that aren't mass assignable.
