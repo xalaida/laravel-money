@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\RateProvider\Providers;
+namespace Nevadskiy\Money\RateProvider\Providers;
 
 use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
-use Jeka\Money\RateProvider\Rate;
-use Jeka\Money\RateProvider\RateProvider;
-use Jeka\Money\RateProvider\RatesCollection;
+use Nevadskiy\Money\RateProvider\Rate;
+use Nevadskiy\Money\RateProvider\RateProvider;
+use Nevadskiy\Money\RateProvider\RatesCollection;
 
 class OpenExchangeProvider implements RateProvider
 {

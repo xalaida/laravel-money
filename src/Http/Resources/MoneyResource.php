@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Http\Resources;
+namespace Nevadskiy\Money\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Jeka\Money\Money;
+use Nevadskiy\Money\Money;
 
 /**
  * @mixin Money

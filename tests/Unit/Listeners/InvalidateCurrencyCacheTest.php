@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Unit\Listeners;
+namespace Nevadskiy\Money\Tests\Unit\Listeners;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithContainer;
-use Jeka\Money\Database\Factories\CurrencyFactory;
-use Jeka\Money\Events\CurrencyCreated;
-use Jeka\Money\Events\CurrencyDeleted;
-use Jeka\Money\Events\CurrencyUpdated;
-use Jeka\Money\Queries\CurrencyCacheQueries;
-use Jeka\Money\Tests\TestCase;
+use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Events\CurrencyCreated;
+use Nevadskiy\Money\Events\CurrencyDeleted;
+use Nevadskiy\Money\Events\CurrencyUpdated;
+use Nevadskiy\Money\Queries\CurrencyCacheQueries;
+use Nevadskiy\Money\Tests\TestCase;
 
 class InvalidateCurrencyCacheTest extends TestCase
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Models;
+namespace Nevadskiy\Money\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Jeka\Money\Events;
-use Jeka\Money\Exceptions\InvalidRateException;
+use Nevadskiy\Money\Events;
+use Nevadskiy\Money\Exceptions\InvalidRateException;
 use Nevadskiy\Uuid\Uuid;
 
 /**

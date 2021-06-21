@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Converter;
+namespace Nevadskiy\Money\Converter;
 
-use Jeka\Money\Models\Currency;
-use Jeka\Money\Money;
+use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Money;
 
 interface Converter
 {

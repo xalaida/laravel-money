@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Database\Seeders;
+namespace Nevadskiy\Money\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Jeka\Money\Models\Currency;
+use Nevadskiy\Money\Models\Currency;
 
 class CurrencySeeder extends Seeder
 {

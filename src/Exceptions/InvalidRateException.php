@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Exceptions;
+namespace Nevadskiy\Money\Exceptions;
 
 use InvalidArgumentException;
 

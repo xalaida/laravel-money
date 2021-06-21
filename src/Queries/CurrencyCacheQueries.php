@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Queries;
+namespace Nevadskiy\Money\Queries;
 
 use Illuminate\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Collection;
-use Jeka\Money\Models\Currency;
+use Nevadskiy\Money\Models\Currency;
 
 class CurrencyCacheQueries implements CurrencyQueries
 {

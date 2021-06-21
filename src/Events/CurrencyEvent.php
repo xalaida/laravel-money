@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Events;
+namespace Nevadskiy\Money\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Jeka\Money\Models\Currency;
+use Nevadskiy\Money\Models\Currency;
 
 abstract class CurrencyEvent
 {

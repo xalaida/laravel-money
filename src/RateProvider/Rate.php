@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\RateProvider;
+namespace Nevadskiy\Money\RateProvider;
 
 class Rate
 {

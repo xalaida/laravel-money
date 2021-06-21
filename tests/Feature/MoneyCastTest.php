@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests\Unit;
 
-use Jeka\Money\Database\Factories\CurrencyFactory;
-use Jeka\Money\Money;
+use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Money;
 use Jeka\Money\Tests\Support\Models\Product;
 use Jeka\Money\Tests\TestCase;
 

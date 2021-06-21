@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Listeners;
+namespace Nevadskiy\Money\Listeners;
 
 use Illuminate\Foundation\Events\LocaleUpdated;
-use Jeka\Money\Formatter\Formatter;
+use Nevadskiy\Money\Formatter\Formatter;
 
 class UpdateFormatterLocale
 {

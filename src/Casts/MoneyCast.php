@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Casts;
+namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Jeka\Money\Money;
-use Jeka\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Money;
+use Nevadskiy\Money\Queries\CurrencyQueries;
 
 class MoneyCast implements CastsAttributes
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Unit\Queries;
+namespace Nevadskiy\Money\Tests\Unit\Queries;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Jeka\Money\Database\Factories\CurrencyFactory;
-use Jeka\Money\Models\Currency;
-use Jeka\Money\Queries\CurrencyEloquentQueries;
-use Jeka\Money\Tests\TestCase;
+use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Queries\CurrencyEloquentQueries;
+use Nevadskiy\Money\Tests\TestCase;
 
 class CurrencyEloquentQueriesTest extends TestCase
 {

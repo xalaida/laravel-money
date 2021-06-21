@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests;
+namespace Nevadskiy\Money\Tests;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\WithFaker;
-use Jeka\Money\MoneyServiceProvider;
+use Nevadskiy\Money\MoneyServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase

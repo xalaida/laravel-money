@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Formatter;
+namespace Nevadskiy\Money\Formatter;
 
-use Jeka\Money\Money;
+use Nevadskiy\Money\Money;
 
 interface Formatter
 {

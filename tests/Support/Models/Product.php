@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Support\Models;
+namespace Nevadskiy\Money\Tests\Support\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Jeka\Money\Money;
+use Nevadskiy\Money\Money;
 use Nevadskiy\Uuid\Uuid;
 
 /**

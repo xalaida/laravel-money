@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money;
+namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Database\Factories;
+namespace Nevadskiy\Money\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Jeka\Money\Models\Currency;
+use Nevadskiy\Money\Models\Currency;
 
 class CurrencyFactory extends Factory
 {

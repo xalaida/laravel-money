@@ -15,7 +15,7 @@ Add cast to a model.
  * @var array
  */
 protected $casts = [
-    'price' => \Jeka\Money\Money::class,
+    'price' => \Nevadskiy\Money\Money::class,
 ];
 ``` 
 
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            \Jeka\Money\Database\Seeders\CurrencySeeder::class,
+            \Nevadskiy\Money\Database\Seeders\CurrencySeeder::class,
         ]);
     }
 }

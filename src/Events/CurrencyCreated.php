@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Events;
+namespace Nevadskiy\Money\Events;
 
 class CurrencyCreated extends CurrencyEvent
 {

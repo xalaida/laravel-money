@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Console;
+namespace Nevadskiy\Money\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
-use Jeka\Money\Events\CurrencyRateUpdated;
-use Jeka\Money\Models\Currency;
-use Jeka\Money\RateProvider\Rate;
-use Jeka\Money\RateProvider\RateProvider;
+use Nevadskiy\Money\Events\CurrencyRateUpdated;
+use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\RateProvider\Rate;
+use Nevadskiy\Money\RateProvider\RateProvider;
 
 class UpdateRatesCommand extends Command
 {

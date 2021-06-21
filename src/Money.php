@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money;
+namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
-use Jeka\Money\Casts\MoneyCast;
-use Jeka\Money\Converter\Converter;
-use Jeka\Money\Formatter\Formatter;
-use Jeka\Money\Models\Currency;
+use Nevadskiy\Money\Casts\MoneyCast;
+use Nevadskiy\Money\Converter\Converter;
+use Nevadskiy\Money\Formatter\Formatter;
+use Nevadskiy\Money\Models\Currency;
 
 class Money implements Castable
 {

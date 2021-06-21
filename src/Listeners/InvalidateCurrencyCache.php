@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Listeners;
+namespace Nevadskiy\Money\Listeners;
 
-use Jeka\Money\Events\CurrencyEvent;
-use Jeka\Money\Queries\CurrencyCacheQueries;
+use Nevadskiy\Money\Events\CurrencyEvent;
+use Nevadskiy\Money\Queries\CurrencyCacheQueries;
 
 class InvalidateCurrencyCache
 {

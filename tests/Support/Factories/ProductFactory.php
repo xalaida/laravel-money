@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Support\Database\Factories;
+namespace Nevadskiy\Money\Tests\Support\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Jeka\Money\Database\Factories\CurrencyFactory;
-use Jeka\Money\Tests\Support\Models\Product;
+use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Tests\Support\Models\Product;
 
 class ProductFactory extends Factory
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Http\Controllers\Api;
+namespace Nevadskiy\Money\Http\Controllers\Api;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Jeka\Money\Http\Resources\CurrencyResource;
-use Jeka\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Http\Resources\CurrencyResource;
+use Nevadskiy\Money\Queries\CurrencyQueries;
 
 final class CurrencyController
 {

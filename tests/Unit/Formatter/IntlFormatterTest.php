@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Jeka\Money\Tests\Unit\Formatter;
+namespace Nevadskiy\Money\Tests\Unit\Formatter;
 
-use Jeka\Money\Database\Factories\CurrencyFactory;
-use Jeka\Money\Formatter\IntlFormatter;
-use Jeka\Money\Money;
-use Jeka\Money\Tests\TestCase;
+use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Formatter\IntlFormatter;
+use Nevadskiy\Money\Money;
+use Nevadskiy\Money\Tests\TestCase;
 
 class IntlFormatterTest extends TestCase
 {
