@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 return [
     'default_rate_provider' => 'open_exchange_rates',
 

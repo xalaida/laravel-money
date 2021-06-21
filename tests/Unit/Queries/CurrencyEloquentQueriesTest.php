@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\Tests\Unit\Queries;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;

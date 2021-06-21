@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\Tests\Support\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;

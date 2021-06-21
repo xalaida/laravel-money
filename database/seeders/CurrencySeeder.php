@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\Database\Seeders;
 
 use Illuminate\Database\Seeder;

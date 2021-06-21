@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\RateProvider\Providers;
 
 use Illuminate\Http\Client\Factory as Http;

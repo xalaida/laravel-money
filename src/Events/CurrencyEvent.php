@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
