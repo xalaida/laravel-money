@@ -1,4 +1,4 @@
-# Laravel Money
+# Laravel Money (Work in progress)
 
 💰 The package provides money and currency features for a Laravel application.
 
