@@ -7,6 +7,7 @@ namespace Nevadskiy\Money\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Nevadskiy\Money\Models\Currency;
+use function in_array;
 
 class SeedCurrenciesCommand extends Command
 {
@@ -36,6 +37,14 @@ class SeedCurrenciesCommand extends Command
         }
 
         $this->info('Currencies have been seeded!');
+    }
+
+    /**
+     * Get all currencies list.
+     */
+    protected function allCurrencies(): array
+    {
+        return require __DIR__.'/../../resources/currencies.php';
     }
 
     /**
@@ -90,14 +99,6 @@ class SeedCurrenciesCommand extends Command
     }
 
     /**
-     * Get all currencies list.
-     */
-    protected function allCurrencies(): array
-    {
-        return require __DIR__.'/../../resources/currencies.php';
-    }
-
-    /**
      * Get currencies by the given codes.
      */
     private function getCurrenciesByCodes(array $codes): array
@@ -112,7 +113,6 @@ class SeedCurrenciesCommand extends Command
     /**
      * Transform the given codes into upper case.
      *
-     * @param array $codes
      * @return array|string[]
      */
     private function transformIntoUpperCase(array $codes): array

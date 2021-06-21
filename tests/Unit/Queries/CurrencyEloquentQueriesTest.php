@@ -12,8 +12,7 @@ use Nevadskiy\Money\Tests\TestCase;
 
 class CurrencyEloquentQueriesTest extends TestCase
 {
-    /** @test */
-    public function it_can_get_currency_by_id(): void
+    public function test_it_can_get_currency_by_id(): void
     {
         $id = Currency::generateId();
         $currency = CurrencyFactory::new()->create(['id' => $id]);
@@ -21,11 +20,10 @@ class CurrencyEloquentQueriesTest extends TestCase
 
         $queries = new CurrencyEloquentQueries();
 
-        self::assertTrue($queries->getById($id)->is($currency));
+        static::assertTrue($queries->getById($id)->is($currency));
     }
 
-    /** @test */
-    public function it_throws_an_exception_if_currency_is_not_found_by_id(): void
+    public function test_it_throws_an_exception_if_currency_is_not_found_by_id(): void
     {
         $someCurrency = CurrencyFactory::new()->create();
 
@@ -33,22 +31,20 @@ class CurrencyEloquentQueriesTest extends TestCase
 
         $this->expectException(ModelNotFoundException::class);
 
-        self::assertTrue($queries->getById(Currency::generateId()));
+        static::assertTrue($queries->getById(Currency::generateId()));
     }
 
-    /** @test */
-    public function it_can_get_currency_by_code(): void
+    public function test_it_can_get_currency_by_code(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'EUR']);
         $anotherCurrency = CurrencyFactory::new()->create();
 
         $queries = new CurrencyEloquentQueries();
 
-        self::assertTrue($queries->getByCode('EUR')->is($currency));
+        static::assertTrue($queries->getByCode('EUR')->is($currency));
     }
 
-    /** @test */
-    public function it_throws_an_exception_if_currency_is_not_found_by_key(): void
+    public function test_it_throws_an_exception_if_currency_is_not_found_by_key(): void
     {
         $someCurrency = CurrencyFactory::new()->create();
 
@@ -56,6 +52,6 @@ class CurrencyEloquentQueriesTest extends TestCase
 
         $this->expectException(ModelNotFoundException::class);
 
-        self::assertTrue($queries->getByCode('EUR'));
+        static::assertTrue($queries->getByCode('EUR'));
     }
 }

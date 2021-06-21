@@ -32,7 +32,7 @@ class OpenExchangeProvider implements RateProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getRates(): RatesCollection
     {

@@ -25,7 +25,7 @@ class IntlFormatter implements Formatter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setLocale(string $locale): void
     {
@@ -33,7 +33,7 @@ class IntlFormatter implements Formatter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function format(Money $money): string
     {

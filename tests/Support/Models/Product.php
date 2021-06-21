@@ -21,8 +21,8 @@ use Nevadskiy\Uuid\Uuid;
  */
 class Product extends Model
 {
-    use HasFactory,
-        Uuid;
+    use HasFactory;
+    use Uuid;
 
     /**
      * The attributes that aren't mass assignable.

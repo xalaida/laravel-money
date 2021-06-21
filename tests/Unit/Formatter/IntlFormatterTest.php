@@ -11,18 +11,16 @@ use Nevadskiy\Money\Tests\TestCase;
 
 class IntlFormatterTest extends TestCase
 {
-    /** @test */
-    public function it_can_format_money_according_to_its_locale(): void
+    public function test_it_can_format_money_according_to_its_locale(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD', 'precision' => 2]);
         $money = new Money(200, $currency);
         $formatter = new IntlFormatter('en');
 
-        self::assertEquals('$2.00', $formatter->format($money));
+        static::assertSame('$2.00', $formatter->format($money));
     }
 
-    /** @test */
-    public function it_can_format_money_according_to_new_locale(): void
+    public function test_it_can_format_money_according_to_new_locale(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD', 'precision' => 2]);
         $money = new Money(200, $currency);
@@ -30,6 +28,6 @@ class IntlFormatterTest extends TestCase
 
         $formatter->setLocale('ru');
 
-        self::assertEquals('2,00 $', $formatter->format($money));
+        static::assertSame("2,00\u{a0}\$", $formatter->format($money));
     }
 }

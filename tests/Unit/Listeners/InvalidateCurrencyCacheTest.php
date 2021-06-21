@@ -17,8 +17,7 @@ class InvalidateCurrencyCacheTest extends TestCase
 {
     use InteractsWithContainer;
 
-    /** @test */
-    public function it_invalidates_currency_cache_on_currency_created_event(): void
+    public function test_it_invalidates_currency_cache_on_currency_created_event(): void
     {
         $currency = CurrencyFactory::new()->create();
 
@@ -29,8 +28,7 @@ class InvalidateCurrencyCacheTest extends TestCase
         $queries->shouldHaveReceived('invalidate')->once();
     }
 
-    /** @test */
-    public function it_invalidates_currency_cache_on_currency_updated_event(): void
+    public function test_it_invalidates_currency_cache_on_currency_updated_event(): void
     {
         $currency = CurrencyFactory::new()->create();
 
@@ -41,8 +39,7 @@ class InvalidateCurrencyCacheTest extends TestCase
         $queries->shouldHaveReceived('invalidate')->once();
     }
 
-    /** @test */
-    public function it_invalidates_currency_cache_on_currency_deleted_event(): void
+    public function test_it_invalidates_currency_cache_on_currency_deleted_event(): void
     {
         $currency = CurrencyFactory::new()->create();
 

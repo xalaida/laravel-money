@@ -11,7 +11,7 @@ use Nevadskiy\Money\Money;
 class DefaultConverter implements Converter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setDefaultCurrency(Currency $currency): void
     {
@@ -19,7 +19,7 @@ class DefaultConverter implements Converter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function convert(Money $money, Currency $currency): Money
     {

@@ -38,7 +38,7 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function all(): Collection
     {
-        return $this->cache->tags('currency')->rememberForever("currency:all", function () {
+        return $this->cache->tags('currency')->rememberForever('currency:all', function () {
             return $this->queries->all();
         });
     }

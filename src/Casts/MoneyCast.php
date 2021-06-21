@@ -46,8 +46,8 @@ class MoneyCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param Model $model
-     * @param Money|null $value
+     * @param Model      $model
+     * @param null|Money $value
      */
     public function set($model, string $key, $value, array $attributes): array
     {

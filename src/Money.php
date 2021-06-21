@@ -36,9 +36,17 @@ class Money implements Castable
     }
 
     /**
+     * Convert the money to the string type.
+     */
+    public function __toString(): string
+    {
+        return $this->format();
+    }
+
+    /**
      * Create a new money instance from minor units.
      */
-    public static function fromMajorUnits(float $amount, Currency $currency): Money
+    public static function fromMajorUnits(float $amount, Currency $currency): self
     {
         return new static((int) ($amount * self::getMajorMultiplier($currency)), $currency);
     }
@@ -46,7 +54,7 @@ class Money implements Castable
     /**
      * Create a new money instance from minor units.
      */
-    public static function fromMinorUnits(int $amount, Currency $currency): Money
+    public static function fromMinorUnits(int $amount, Currency $currency): self
     {
         return new static($amount, $currency);
     }
@@ -78,14 +86,6 @@ class Money implements Castable
     }
 
     /**
-     * Get the major units multiplier.
-     */
-    protected static function getMajorMultiplier(Currency $currency): int
-    {
-        return 10 ** $currency->precision;
-    }
-
-    /**
      * Get the money currency.
      */
     public function getCurrency(): Currency
@@ -110,11 +110,19 @@ class Money implements Castable
     }
 
     /**
-     * Convert the money to the string type.
+     * @inheritDoc
      */
-    public function __toString(): string
+    public static function castUsing(array $arguments): MoneyCast
     {
-        return $this->format();
+        return app(MoneyCast::class);
+    }
+
+    /**
+     * Get the major units multiplier.
+     */
+    protected static function getMajorMultiplier(Currency $currency): int
+    {
+        return 10 ** $currency->precision;
     }
 
     /**
@@ -131,13 +139,5 @@ class Money implements Castable
     protected function getConverter(): Converter
     {
         return app(Converter::class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function castUsing(array $arguments): MoneyCast
-    {
-        return app(MoneyCast::class);
     }
 }

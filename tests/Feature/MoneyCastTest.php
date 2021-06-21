@@ -11,8 +11,7 @@ use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyCastTest extends TestCase
 {
-    /** @test */
-    public function money_attributes_can_be_saved_using_money_cast(): void
+    public function test_money_attributes_can_be_saved_using_money_cast(): void
     {
         $currency = CurrencyFactory::new()->create();
 
@@ -20,7 +19,7 @@ class MoneyCastTest extends TestCase
         $product->price = new Money(49900, $currency);
         $product->save();
 
-        self::assertEquals(49900, $product->price_amount);
-        self::assertEquals($currency->id, $product->price_currency_id);
+        static::assertSame(49900, $product->price_amount);
+        static::assertSame($currency->id, $product->price_currency_id);
     }
 }

@@ -33,7 +33,7 @@ class CurrencyFactory extends Factory
     /**
      * Fill the USD state.
      */
-    public function usd(): CurrencyFactory
+    public function usd(): self
     {
         return $this->state([
             'code' => 'USD',
