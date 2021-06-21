@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Queries\CurrencyQueries;
 
+/**
+ * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')
+ */
 class MoneyCast implements CastsAttributes
 {
     /**

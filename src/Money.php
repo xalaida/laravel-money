@@ -125,6 +125,7 @@ class Money implements Castable
 
     /**
      * Get the money formatter.
+     * TODO: probably extract it into static property (could be broken with Laravel Octane)
      */
     protected function getFormatter(): Formatter
     {
@@ -133,6 +134,7 @@ class Money implements Castable
 
     /**
      * Get the money converter.
+     * TODO: probably extract it into static property (could be broken with Laravel Octane)
      */
     protected function getConverter(): Converter
     {
