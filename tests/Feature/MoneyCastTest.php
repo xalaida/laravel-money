@@ -6,8 +6,8 @@ namespace Nevadskiy\Money\Tests\Unit;
 
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Money;
-use Jeka\Money\Tests\Support\Models\Product;
-use Jeka\Money\Tests\TestCase;
+use Nevadskiy\Money\Tests\Support\Models\Product;
+use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyCastTest extends TestCase
 {
