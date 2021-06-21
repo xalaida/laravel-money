@@ -1,5 +1,5 @@
 {
-    "name": "jeka/laravel-money",
+    "name": "nevadskiy/laravel-money",
     "description": "The package provides money and currency features for a Laravel application.",
     "license": "MIT",
     "keywords": ["money", "currency", "laravel"],
