@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -18,11 +16,23 @@ class MoneyCast implements CastsAttributes
     private $queries;
 
     /**
+     * @var string|null
+     */
+    private $amountColumnName;
+
+    /**
+     * @var string|null
+     */
+    private $currencyKeyColumnName;
+
+    /**
      * MoneyCast constructor.
      */
-    public function __construct(CurrencyQueries $queries)
+    public function __construct(CurrencyQueries $queries, array $arguments)
     {
         $this->queries = $queries;
+        $this->amountColumnName = $arguments[0] ?? null;
+        $this->currencyKeyColumnName = $arguments[1] ?? null;
     }
 
     /**
@@ -33,14 +43,13 @@ class MoneyCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        $amountColumnName = $this->getAmountColumnName($key);
-        $currencyKeyColumnName = $this->getCurrencyKeyColumnName($key);
+        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
+        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
 
         if ($this->isNullableAttributes($attributes, $amountColumnName, $currencyKeyColumnName)) {
             return null;
         }
 
-        // TODO: refactor with currency relation.
         return new Money($attributes[$amountColumnName], $this->queries->getById($attributes[$currencyKeyColumnName]));
     }
 
@@ -58,9 +67,12 @@ class MoneyCast implements CastsAttributes
 
         $this->assertValueIsMoneyInstance($value);
 
+        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
+        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
+
         return [
-            $this->getAmountColumnName($key) => $value->getAmount(),
-            $this->getCurrencyKeyColumnName($key) => $value->getCurrency()->getKey(),
+            $amountColumnName => $value->getAmount(),
+            $currencyKeyColumnName => $value->getCurrency()->getKey(),
         ];
     }
 
@@ -77,6 +89,15 @@ class MoneyCast implements CastsAttributes
     }
 
     /**
+     * Determine whether the money attributes is nullable.
+     */
+    private function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
+    {
+        return null === $attributes[$amountColumnName]
+            && null === $attributes[$currencyKeyColumnName];
+    }
+
+    /**
      * Get the amount column name.
      */
     private function getAmountColumnName(string $key): string
@@ -90,14 +111,5 @@ class MoneyCast implements CastsAttributes
     private function getCurrencyKeyColumnName(string $key): string
     {
         return "{$key}_currency_id";
-    }
-
-    /**
-     * Determine whether the money attributes is nullable.
-     */
-    private function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
-    {
-        return null === $attributes[$amountColumnName]
-            && null === $attributes[$currencyKeyColumnName];
     }
 }

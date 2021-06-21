@@ -112,7 +112,7 @@ class Money implements Castable
      */
     public static function castUsing(array $arguments): MoneyCast
     {
-        return app(MoneyCast::class);
+        return app(MoneyCast::class, ['arguments' => $arguments]);
     }
 
     /**
