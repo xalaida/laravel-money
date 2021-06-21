@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.2",
         "ext-intl": "*",
         "laravel/framework": "^7.0|^8.0",
         "nevadskiy/laravel-uuid": "^0.4.0"
