@@ -24,20 +24,23 @@ class CurrencyFactory extends Factory
         return [
             'code' => $this->faker->unique()->currencyCode,
             'name' => $this->faker->word,
-            'symbol' => '$',
+            'symbol' => $this->faker->randomElement(['$', '€', '£']),
             'precision' => 2,
-            'rate' => 1,
+            'rate' => $this->faker->randomFloat(),
         ];
     }
 
     /**
-     * Create the USD currency.
+     * Fill the USD state.
      */
-    public static function USD(): Currency
+    public function usd(): CurrencyFactory
     {
-        return static::new()->create([
+        return $this->state([
             'code' => 'USD',
+            'name' => 'United States dollar',
+            'symbol' => '$',
             'precision' => 2,
+            'rate' => 1,
         ]);
     }
 }
