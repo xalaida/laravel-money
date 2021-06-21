@@ -10,6 +10,14 @@ use Nevadskiy\Money\Queries\CurrencyQueries;
 
 /**
  * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')
+ * # Props:
+ *  - cleaner cast class (can be used directly in the model $casts prop)
+ *  - cleaner model class (clear price currency relation)
+ *  - no extra dependencies in the money cast
+ *
+ * # Cons:
+ *  - extra definition for relation in model class
+ *  - relation probably not useful in that case since it does not have logic (but probably can have it if user overrides it)
  */
 class MoneyCast implements CastsAttributes
 {
