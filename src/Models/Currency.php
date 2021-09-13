@@ -4,6 +4,7 @@ namespace Nevadskiy\Money\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\Exceptions\InvalidRateException;
 use Nevadskiy\Uuid\Uuid;
@@ -39,6 +40,14 @@ class Currency extends Model
         'updated' => Events\CurrencyUpdated::class,
         'deleted' => Events\CurrencyDeleted::class,
     ];
+
+    /**
+     * Set the currency's code attribute.
+     */
+    public function setCodeAttribute(string $code): void
+    {
+        $this->attributes['code'] = Str::upper($code);
+    }
 
     /**
      * Update rate of the currency.
