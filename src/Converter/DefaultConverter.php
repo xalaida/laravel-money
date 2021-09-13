@@ -9,18 +9,43 @@ use Nevadskiy\Money\Money;
 class DefaultConverter implements Converter
 {
     /**
-     * @inheritDoc
+     * The default currency instance.
+     *
+     * @var Currency
      */
-    public function setDefaultCurrency(Currency $currency): void
+    protected $defaultCurrency;
+
+    /**
+     * Make a new converter instance.
+     */
+    public function __construct(Currency $defaultCurrency)
     {
-        // TODO: Implement setDefaultCurrency() method.
+        $this->defaultCurrency = $defaultCurrency;
     }
 
     /**
      * @inheritDoc
      */
-    public function convert(Money $money, Currency $currency): Money
+    public function setDefaultCurrency(Currency $currency): void
     {
+        $this->defaultCurrency = $currency;
+    }
+
+    /**
+     * Get the default currency instance.
+     */
+    public function getDefaultCurrency(): Currency
+    {
+        return $this->defaultCurrency;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function convert(Money $money, Currency $currency = null): Money
+    {
+        $currency = $currency ?: $this->getDefaultCurrency();
+
         $this->assertNoZeroRates($money->getCurrency(), $currency);
 
         return new Money($this->getConvertedAmount($money, $currency), $currency);
@@ -41,7 +66,7 @@ class DefaultConverter implements Converter
      */
     protected function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
     {
-        if (0 === $sourceCurrency->rate || 0 === $targetCurrency->rate) {
+        if ((float) 0 === (float) $sourceCurrency->rate || (float) 0 === (float) $targetCurrency->rate) {
             throw new InvalidRateException();
         }
     }
