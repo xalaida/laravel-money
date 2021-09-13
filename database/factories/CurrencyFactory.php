@@ -30,6 +30,7 @@ class CurrencyFactory extends Factory
 
     /**
      * Fill the USD state.
+     * @deprecated make it unique. rename into 'static' or something that indicates rate=1
      */
     public function usd(): self
     {
