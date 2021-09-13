@@ -7,10 +7,10 @@ use InvalidArgumentException;
 class InvalidRateException extends InvalidArgumentException
 {
     /**
-     * InvalidRateException constructor.
+     * Make a negative invalid rate exception instance.
      */
-    public function __construct()
+    public static function negative(): self
     {
-        parent::__construct('Currency rate cannot be negative or zero.');
+        return new static('Currency rate cannot be negative or zero.');
     }
 }

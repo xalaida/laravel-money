@@ -66,7 +66,7 @@ class Currency extends Model
     private function assertPositiveRate(float $rate): void
     {
         if ($rate <= 0) {
-            throw new InvalidRateException();
+            throw InvalidRateException::negative();
         }
     }
 }
