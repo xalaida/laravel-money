@@ -2,23 +2,23 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Exceptions\InvalidRateException;
+use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class DefaultConverter implements Converter
 {
     /**
      * The default currency instance.
      *
-     * @var Currency
+     * @var Currency|null
      */
     protected $defaultCurrency;
 
     /**
      * Make a new converter instance.
      */
-    public function __construct(Currency $defaultCurrency)
+    public function __construct(Currency $defaultCurrency = null)
     {
         $this->defaultCurrency = $defaultCurrency;
     }
@@ -36,6 +36,10 @@ class DefaultConverter implements Converter
      */
     public function getDefaultCurrency(): Currency
     {
+        if (is_null($this->defaultCurrency)) {
+            throw new DefaultCurrencyMissingException();
+        }
+
         return $this->defaultCurrency;
     }
 
@@ -45,8 +49,6 @@ class DefaultConverter implements Converter
     public function convert(Money $money, Currency $currency = null): Money
     {
         $currency = $currency ?: $this->getDefaultCurrency();
-
-        $this->assertNoZeroRates($money->getCurrency(), $currency);
 
         return new Money($this->getConvertedAmount($money, $currency), $currency);
     }
@@ -58,16 +60,6 @@ class DefaultConverter implements Converter
      */
     protected function getConvertedAmount(Money $money, Currency $currency)
     {
-        return ($money->getAmount() * $currency->rate) / $money->getCurrency()->rate;
-    }
-
-    /**
-     * Assert that currency rates don't equal to zero.
-     */
-    protected function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
-    {
-        if ((float) 0 === (float) $sourceCurrency->rate || (float) 0 === (float) $targetCurrency->rate) {
-            throw new InvalidRateException();
-        }
+        return ($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue();
     }
 }
