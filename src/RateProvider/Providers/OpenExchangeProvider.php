@@ -4,9 +4,8 @@ namespace Nevadskiy\Money\RateProvider\Providers;
 
 use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
-use Nevadskiy\Money\RateProvider\Rate;
 use Nevadskiy\Money\RateProvider\RateProvider;
-use Nevadskiy\Money\RateProvider\RatesCollection;
+use Nevadskiy\Money\ValueObjects\Rate;
 
 class OpenExchangeProvider implements RateProvider
 {
@@ -32,17 +31,15 @@ class OpenExchangeProvider implements RateProvider
     /**
      * @inheritDoc
      */
-    public function getRates(): RatesCollection
+    public function getRates(): array
     {
-        $rates = $this->fetchRates();
-
         $data = [];
 
-        foreach ($rates as $code => $rate) {
-            $data[] = new Rate($code, $rate);
+        foreach ($this->fetchRates() as $code => $rate) {
+            $data[$code] = new Rate($rate);
         }
 
-        return new RatesCollection(...$data);
+        return $data;
     }
 
     /**
