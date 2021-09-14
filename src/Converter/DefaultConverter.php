@@ -9,7 +9,7 @@ use Nevadskiy\Money\ValueObjects\Money;
 class DefaultConverter implements Converter
 {
     /**
-     * The default currency instance.
+     * The default converter currency.
      *
      * @var Currency|null
      */

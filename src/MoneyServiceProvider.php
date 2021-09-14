@@ -78,7 +78,7 @@ class MoneyServiceProvider extends ServiceProvider
     private function registerFormatter(): void
     {
         $this->app->singleton(Formatter\Formatter::class, function () {
-            return new Formatter\IntlFormatter($this->app->getLocale());
+            return new Formatter\DefaultFormatter($this->app->getLocale());
         });
     }
 
