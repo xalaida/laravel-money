@@ -60,6 +60,10 @@ class DefaultConverter implements Converter
      */
     protected function getConvertedAmount(Money $money, Currency $currency)
     {
+        if ($money->getCurrency()->is($currency)) {
+            return $money->getAmount();
+        }
+
         return ($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue();
     }
 }
