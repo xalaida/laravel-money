@@ -22,7 +22,7 @@ class MoneyServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
+    private $listen = [
         LocaleUpdated::class => [
             Listeners\UpdateFormatterLocale::class,
         ],

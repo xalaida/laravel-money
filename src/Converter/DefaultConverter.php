@@ -11,7 +11,7 @@ class DefaultConverter implements Converter
     /**
      * The default converter currency.
      *
-     * @var Currency|null
+     * @var null|Currency
      */
     protected $defaultCurrency;
 
@@ -36,7 +36,7 @@ class DefaultConverter implements Converter
      */
     public function getDefaultCurrency(): Currency
     {
-        if (is_null($this->defaultCurrency)) {
+        if (null === $this->defaultCurrency) {
             throw new DefaultCurrencyMissingException();
         }
 

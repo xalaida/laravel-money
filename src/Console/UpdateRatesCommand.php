@@ -31,14 +31,14 @@ class UpdateRatesCommand extends Command
      *
      * @var RateProvider
      */
-    private $provider;
+    protected $provider;
 
     /**
      * The event dispatcher instance.
      *
      * @var Dispatcher
      */
-    private $dispatcher;
+    protected $dispatcher;
 
     /**
      * Create a new command instance.
@@ -67,7 +67,7 @@ class UpdateRatesCommand extends Command
     /**
      * Get currencies by rates collection.
      */
-    private function currencies(array $rates): Collection
+    protected function currencies(array $rates): Collection
     {
         return Currency::query()
             ->whereIn('code', array_keys($rates))
@@ -77,7 +77,7 @@ class UpdateRatesCommand extends Command
     /**
      * Update the rate for the given currency.
      */
-    private function updateRate(Currency $currency, Rate $rate): void
+    protected function updateRate(Currency $currency, Rate $rate): void
     {
         $currency->rate = $rate;
         $currency->save();

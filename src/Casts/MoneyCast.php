@@ -5,15 +5,15 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\ValueObjects\Money;
 
 /**
  * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')
  * # Props:
  *  - cleaner cast class (can be used directly in the model $casts prop)
  *  - cleaner model class (clear price currency relation)
- *  - no extra dependencies in the money cast
+ *  - no extra dependencies in the money cast.
  *
  * # Cons:
  *  - extra definition for relation in model class
@@ -24,17 +24,17 @@ class MoneyCast implements CastsAttributes
     /**
      * @var CurrencyQueries
      */
-    private $queries;
+    protected $queries;
 
     /**
-     * @var string|null
+     * @var null|string
      */
-    private $amountColumnName;
+    protected $amountColumnName;
 
     /**
-     * @var string|null
+     * @var null|string
      */
-    private $currencyKeyColumnName;
+    protected $currencyKeyColumnName;
 
     /**
      * MoneyCast constructor.
@@ -92,7 +92,7 @@ class MoneyCast implements CastsAttributes
      *
      * @param $value
      */
-    private function assertValueIsMoneyInstance($value): void
+    protected function assertValueIsMoneyInstance($value): void
     {
         if (! $value instanceof Money) {
             throw new InvalidArgumentException('The given value is not a Money instance.');
@@ -102,7 +102,7 @@ class MoneyCast implements CastsAttributes
     /**
      * Determine whether the money attributes is nullable.
      */
-    private function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
+    protected function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
     {
         return null === $attributes[$amountColumnName]
             && null === $attributes[$currencyKeyColumnName];
@@ -111,7 +111,7 @@ class MoneyCast implements CastsAttributes
     /**
      * Get the amount column name.
      */
-    private function getAmountColumnName(string $key): string
+    protected function getAmountColumnName(string $key): string
     {
         return "{$key}_amount";
     }
@@ -119,7 +119,7 @@ class MoneyCast implements CastsAttributes
     /**
      * Get the currency key column name.
      */
-    private function getCurrencyKeyColumnName(string $key): string
+    protected function getCurrencyKeyColumnName(string $key): string
     {
         return "{$key}_currency_id";
     }

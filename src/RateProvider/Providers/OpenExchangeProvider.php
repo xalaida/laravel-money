@@ -10,14 +10,18 @@ use Nevadskiy\Money\ValueObjects\Rate;
 class OpenExchangeProvider implements RateProvider
 {
     /**
+     * The HTTP client instance.
+     *
      * @var Http
      */
-    private $http;
+    protected $http;
 
     /**
+     * The provider application ID.
+     *
      * @var string
      */
-    private $appId;
+    protected $appId;
 
     /**
      * OpenExchangeProvider constructor.
@@ -47,7 +51,7 @@ class OpenExchangeProvider implements RateProvider
      *
      * @throws RequestException
      */
-    private function fetchRates(): array
+    protected function fetchRates(): array
     {
         $response = $this->http->get($this->url());
 
@@ -57,7 +61,7 @@ class OpenExchangeProvider implements RateProvider
     /**
      * Get the final URL.
      */
-    private function url(): string
+    protected function url(): string
     {
         return vsprintf('%s?%s', [
             $this->baseUrl(), http_build_query(['app_id' => $this->appId]),
@@ -67,7 +71,7 @@ class OpenExchangeProvider implements RateProvider
     /**
      * Get the base URL.
      */
-    private function baseUrl(): string
+    protected function baseUrl(): string
     {
         return 'https://openexchangerates.org/api/latest.json';
     }

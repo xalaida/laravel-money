@@ -12,7 +12,7 @@ class UpdateFormatterLocale
      *
      * @var Formatter
      */
-    private $formatter;
+    protected $formatter;
 
     /**
      * Create the event listener.

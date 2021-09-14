@@ -32,7 +32,7 @@ class CurrencyFactory extends Factory
     /**
      * Make an unrated currency.
      */
-    public function unrated(): CurrencyFactory
+    public function unrated(): self
     {
         return $this->rated(1);
     }
@@ -40,7 +40,7 @@ class CurrencyFactory extends Factory
     /**
      * Make a rated currency.
      */
-    public function rated(float $rate): CurrencyFactory
+    public function rated(float $rate): self
     {
         return $this->state([
             'precision' => 2,

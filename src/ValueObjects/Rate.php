@@ -11,7 +11,7 @@ class Rate
      *
      * @var float
      */
-    private $value;
+    protected $value;
 
     /**
      * Make a new rate instance.
@@ -33,7 +33,7 @@ class Rate
     /**
      * Assert that the given value is valid.
      */
-    private function assertValueIsValid(float $value): void
+    protected function assertValueIsValid(float $value): void
     {
         if ($value <= 0) {
             throw new InvalidRateException('Currency rate cannot be negative or zero.');

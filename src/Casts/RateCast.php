@@ -23,7 +23,7 @@ class RateCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param Model $model
+     * @param Model     $model
      * @param null|Rate $value
      */
     public function set($model, string $key, $value, array $attributes): array

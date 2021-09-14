@@ -4,8 +4,8 @@ namespace Nevadskiy\Money\Tests\Unit\Formatter;
 
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Formatter\DefaultFormatter;
-use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Money\Tests\TestCase;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class NumberFormatterTest extends TestCase
 {
@@ -25,7 +25,7 @@ class NumberFormatterTest extends TestCase
         $money = Money::fromMajorUnits(200, $currency);
         $formatter = new DefaultFormatter('ru');
 
-        self::assertEquals('200,00 $', $formatter->format($money));
+        static::assertSame("200,00\u{a0}\$", $formatter->format($money));
     }
 
     public function test_it_can_format_money_according_to_updated_default_locale(): void
@@ -36,6 +36,6 @@ class NumberFormatterTest extends TestCase
         $formatter = new DefaultFormatter('en');
         $formatter->setDefaultLocale('ru');
 
-        static::assertSame('200,00 $', $formatter->format($money));
+        static::assertSame("200,00\u{a0}\$", $formatter->format($money));
     }
 }

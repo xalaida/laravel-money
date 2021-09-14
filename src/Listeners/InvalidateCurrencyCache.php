@@ -10,7 +10,7 @@ class InvalidateCurrencyCache
     /**
      * @var CurrencyCacheQueries
      */
-    private $queries;
+    protected $queries;
 
     /**
      * Create the event listener.

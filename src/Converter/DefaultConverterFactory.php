@@ -2,6 +2,8 @@
 
 namespace Nevadskiy\Money\Converter;
 
+use function call_user_func;
+
 class DefaultConverterFactory
 {
     /**

@@ -4,8 +4,8 @@ namespace Nevadskiy\Money\Tests\Unit\ValueObjects;
 
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Money\Tests\TestCase;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class MoneyTest extends TestCase
 {
@@ -40,7 +40,7 @@ class MoneyTest extends TestCase
     {
         $money = new Money(100, CurrencyFactory::new()->create(['code' => 'USD']));
 
-        static::assertSame('1,00 $', $money->format('ru'));
+        static::assertSame("1,00\u{a0}\$", $money->format('ru'));
     }
 
     public function test_it_can_determine_major_units_amount(): void
