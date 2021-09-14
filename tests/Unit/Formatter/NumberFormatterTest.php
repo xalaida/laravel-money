@@ -36,6 +36,6 @@ class NumberFormatterTest extends TestCase
         $formatter = new DefaultFormatter('en');
         $formatter->setDefaultLocale('ru');
 
-        static::assertSame("2,00\u{a0}\$", $formatter->format($money));
+        static::assertSame('200,00 $', $formatter->format($money));
     }
 }
