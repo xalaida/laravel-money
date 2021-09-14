@@ -6,6 +6,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Nevadskiy\Money\Converter\DefaultConverterFactory;
+use Nevadskiy\Money\Models\Currency;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -84,8 +87,16 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
+        if ($this->app['config']['money']['default_currency_code'] ?? false) {
+            DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
+                return Currency::query()
+                    ->where('code', Str::upper($this->app['config']['money']['default_currency_code']))
+                    ->firstOrFail();
+            });
+        }
+
         $this->app->singleton(Converter\Converter::class, static function () {
-            return new Converter\DefaultConverter();
+            return DefaultConverterFactory::create();
         });
     }
 
