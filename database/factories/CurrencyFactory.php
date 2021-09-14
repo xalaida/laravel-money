@@ -4,6 +4,7 @@ namespace Nevadskiy\Money\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\ValueObjects\Rate;
 
 class CurrencyFactory extends Factory
 {
@@ -24,21 +25,26 @@ class CurrencyFactory extends Factory
             'name' => $this->faker->word,
             'symbol' => $this->faker->randomElement(['$', '€', '£']),
             'precision' => 2,
-            'rate' => $this->faker->randomFloat(),
+            'rate' => new Rate($this->faker->randomFloat(0.5, 5.0)),
         ];
     }
 
     /**
-     * Fill the USD state.
+     * Make an unrated currency.
      */
-    public function usd(): self
+    public function unrated(): self
+    {
+        return $this->rated(1);
+    }
+
+    /**
+     * Make a rated currency.
+     */
+    public function rated(float $rate): self
     {
         return $this->state([
-            'code' => 'USD',
-            'name' => 'United States dollar',
-            'symbol' => '$',
             'precision' => 2,
-            'rate' => 1,
+            'rate' => new Rate($rate),
         ]);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests\Unit\ValueObjects;
 
+use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Tests\TestCase;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class MoneyTest extends TestCase
 {
@@ -35,6 +36,13 @@ class MoneyTest extends TestCase
         static::assertSame("1,00\u{a0}\$", $money->format());
     }
 
+    public function test_it_can_be_formatted_according_to_the_given_locale(): void
+    {
+        $money = new Money(100, CurrencyFactory::new()->create(['code' => 'USD']));
+
+        static::assertSame("1,00\u{a0}\$", $money->format('ru'));
+    }
+
     public function test_it_can_determine_major_units_amount(): void
     {
         $currency = CurrencyFactory::new()->create(['code' => 'USD', 'precision' => 3]);
@@ -60,11 +68,26 @@ class MoneyTest extends TestCase
 
     public function test_it_can_be_converted_into_money_with_another_currency(): void
     {
-        $currencySource = CurrencyFactory::new()->create(['code' => 'USD', 'rate' => 1]);
-        $currencyTarget = CurrencyFactory::new()->create(['code' => 'EUR', 'rate' => 3]);
+        $originalCurrency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+        $currency = CurrencyFactory::new()->rated(3)->create(['code' => 'EUR']);
 
-        $money = new Money(100, $currencySource);
+        $money = new Money(100, $originalCurrency);
 
-        static::assertSame(300, $money->convert($currencyTarget)->getAmount());
+        static::assertSame(300, $money->convert($currency)->getAmount());
+    }
+
+    public function test_it_can_be_converted_using_default_converter_currency(): void
+    {
+        $originalCurrency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+        $originalMoney = Money::fromMajorUnits(100, $originalCurrency);
+
+        $currency = CurrencyFactory::new()->rated(3)->create(['code' => 'EUR']);
+
+        app(Converter::class)->setDefaultCurrency($currency);
+
+        $money = $originalMoney->convert();
+
+        static::assertSame(300, $money->getMajorUnits());
+        static::assertTrue($money->getCurrency()->is($currency));
     }
 }

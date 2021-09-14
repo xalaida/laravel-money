@@ -13,14 +13,14 @@ class CurrencyCacheQueries implements CurrencyQueries
      *
      * @var CurrencyQueries
      */
-    private $queries;
+    protected $queries;
 
     /**
      * The cache instance.
      *
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * Make a new queries instance.

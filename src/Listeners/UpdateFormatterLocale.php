@@ -12,7 +12,7 @@ class UpdateFormatterLocale
      *
      * @var Formatter
      */
-    private $formatter;
+    protected $formatter;
 
     /**
      * Create the event listener.
@@ -27,6 +27,6 @@ class UpdateFormatterLocale
      */
     public function handle(LocaleUpdated $event): void
     {
-        $this->formatter->setLocale($event->locale);
+        $this->formatter->setDefaultLocale($event->locale);
     }
 }

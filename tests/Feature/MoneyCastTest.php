@@ -1,11 +1,11 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests\Feature;
 
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Tests\Support\Models\Product;
 use Nevadskiy\Money\Tests\TestCase;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class MoneyCastTest extends TestCase
 {

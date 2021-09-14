@@ -7,8 +7,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Nevadskiy\Money\Events\CurrencyRateUpdated;
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\RateProvider\Rate;
 use Nevadskiy\Money\RateProvider\RateProvider;
+use Nevadskiy\Money\ValueObjects\Rate;
 
 class UpdateRatesCommand extends Command
 {
@@ -27,14 +27,18 @@ class UpdateRatesCommand extends Command
     protected $description = 'Update rates for currencies';
 
     /**
+     * The rate provider instance.
+     *
      * @var RateProvider
      */
-    private $provider;
+    protected $provider;
 
     /**
+     * The event dispatcher instance.
+     *
      * @var Dispatcher
      */
-    private $dispatcher;
+    protected $dispatcher;
 
     /**
      * Create a new command instance.
@@ -51,7 +55,7 @@ class UpdateRatesCommand extends Command
      */
     public function handle(): void
     {
-        $rates = $this->provider->getRates()->mapByCodes();
+        $rates = $this->provider->getRates();
 
         foreach ($this->currencies($rates) as $currency) {
             $this->updateRate($currency, $rates[$currency->code]);
@@ -63,20 +67,23 @@ class UpdateRatesCommand extends Command
     /**
      * Get currencies by rates collection.
      */
-    private function currencies(array $rates): Collection
+    protected function currencies(array $rates): Collection
     {
-        return Currency::whereIn('code', array_keys($rates))->get();
+        return Currency::query()
+            ->whereIn('code', array_keys($rates))
+            ->get();
     }
 
     /**
      * Update the rate for the given currency.
      */
-    private function updateRate(Currency $currency, Rate $rate): void
+    protected function updateRate(Currency $currency, Rate $rate): void
     {
-        $currency->updateRate($rate->getValue());
+        $currency->rate = $rate;
+        $currency->save();
 
         $this->dispatcher->dispatch(new CurrencyRateUpdated($currency));
 
-        $this->line("Rate has been updated for the currency {$rate->getCode()} with the value {$rate->getValue()}");
+        $this->line("Rate has been updated for the currency {$currency->code} with the value {$rate->getValue()}");
     }
 }

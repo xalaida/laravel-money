@@ -2,10 +2,14 @@
 
 namespace Nevadskiy\Money\RateProvider;
 
+use Nevadskiy\Money\ValueObjects\Rate;
+
 interface RateProvider
 {
     /**
-     * Get the rates collection of the provider.
+     * Get the collection of rates.
+     *
+     * @returns array<string,Rate>
      */
-    public function getRates(): RatesCollection;
+    public function getRates(): array;
 }

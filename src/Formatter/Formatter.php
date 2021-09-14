@@ -2,18 +2,17 @@
 
 namespace Nevadskiy\Money\Formatter;
 
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 
 interface Formatter
 {
     /**
-     * TODO: think about handling this as separate LocaleFormatter
-     * Set the formatter locale.
+     * Set the default formatter locale.
      */
-    public function setLocale(string $locale): void;
+    public function setDefaultLocale(string $locale): void;
 
     /**
-     * Format the given money according to the current locale.
+     * Format the given money instance according to the locale.
      */
-    public function format(Money $money): string;
+    public function format(Money $money, string $locale = null): string;
 }

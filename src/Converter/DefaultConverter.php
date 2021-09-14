@@ -2,26 +2,53 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Exceptions\InvalidRateException;
+use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class DefaultConverter implements Converter
 {
     /**
-     * @inheritDoc
+     * The default converter currency.
+     *
+     * @var null|Currency
      */
-    public function setDefaultCurrency(Currency $currency): void
+    protected $defaultCurrency;
+
+    /**
+     * Make a new converter instance.
+     */
+    public function __construct(Currency $defaultCurrency = null)
     {
-        // TODO: Implement setDefaultCurrency() method.
+        $this->defaultCurrency = $defaultCurrency;
     }
 
     /**
      * @inheritDoc
      */
-    public function convert(Money $money, Currency $currency): Money
+    public function setDefaultCurrency(Currency $currency): void
     {
-        $this->assertNoZeroRates($money->getCurrency(), $currency);
+        $this->defaultCurrency = $currency;
+    }
+
+    /**
+     * Get the default currency instance.
+     */
+    public function getDefaultCurrency(): Currency
+    {
+        if (null === $this->defaultCurrency) {
+            throw new DefaultCurrencyMissingException();
+        }
+
+        return $this->defaultCurrency;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function convert(Money $money, Currency $currency = null): Money
+    {
+        $currency = $currency ?: $this->getDefaultCurrency();
 
         return new Money($this->getConvertedAmount($money, $currency), $currency);
     }
@@ -33,16 +60,10 @@ class DefaultConverter implements Converter
      */
     protected function getConvertedAmount(Money $money, Currency $currency)
     {
-        return ($money->getAmount() * $currency->rate) / $money->getCurrency()->rate;
-    }
-
-    /**
-     * Assert that currency rates don't equal to zero.
-     */
-    protected function assertNoZeroRates(Currency $sourceCurrency, Currency $targetCurrency): void
-    {
-        if (0 === $sourceCurrency->rate || 0 === $targetCurrency->rate) {
-            throw new InvalidRateException();
+        if ($money->getCurrency()->is($currency)) {
+            return $money->getAmount();
         }
+
+        return ($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue();
     }
 }

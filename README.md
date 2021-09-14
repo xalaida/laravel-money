@@ -24,7 +24,7 @@ The price field can be casted into Money instance. To make it castable, add the 
  * @var array
  */
 protected $casts = [
-    'price' => \Nevadskiy\Money\Money::class,
+    'price' => \Nevadskiy\Money\ValueObjects\Money::class,
 ];
 ``` 
 

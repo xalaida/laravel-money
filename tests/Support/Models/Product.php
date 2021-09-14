@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Tests\Support\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Uuid\Uuid;
 
 /**
@@ -19,8 +19,8 @@ use Nevadskiy\Uuid\Uuid;
  */
 class Product extends Model
 {
-    use HasFactory;
-    use Uuid;
+    use HasFactory,
+        Uuid;
 
     /**
      * The attributes that aren't mass assignable.

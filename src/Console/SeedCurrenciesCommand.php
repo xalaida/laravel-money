@@ -48,7 +48,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Try to truncate currencies if the action is requested.
      */
-    private function truncateAttempt(): void
+    protected function truncateAttempt(): void
     {
         if (! $this->option('truncate')) {
             return;
@@ -64,7 +64,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Truncate the currencies table.
      */
-    private function truncate(): void
+    protected function truncate(): void
     {
         Currency::query()->truncate();
         $this->warn('Currencies have been truncated!');
@@ -73,7 +73,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Confirm the production truncate process.
      */
-    private function confirmProductionTruncate(): bool
+    protected function confirmProductionTruncate(): bool
     {
         if (! app()->environment('production')) {
             return true;
@@ -85,7 +85,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Get currencies to be seeded.
      */
-    private function currencies(): array
+    protected function currencies(): array
     {
         $codes = $this->argument('currencies');
 
@@ -99,7 +99,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Get currencies by the given codes.
      */
-    private function getCurrenciesByCodes(array $codes): array
+    protected function getCurrenciesByCodes(array $codes): array
     {
         $codes = $this->transformIntoUpperCase($codes);
 
@@ -113,7 +113,7 @@ class SeedCurrenciesCommand extends Command
      *
      * @return array|string[]
      */
-    private function transformIntoUpperCase(array $codes): array
+    protected function transformIntoUpperCase(array $codes): array
     {
         return array_map(static function (string $code) {
             return Str::upper($code);
@@ -123,7 +123,7 @@ class SeedCurrenciesCommand extends Command
     /**
      * Seed the currency data.
      */
-    private function seed(array $currency): void
+    protected function seed(array $currency): void
     {
         Currency::query()->updateOrCreate(['code' => $currency['code']], $currency);
         $this->line("Currency {$currency['code']} has been seeded!");

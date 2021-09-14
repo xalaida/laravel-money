@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money;
+namespace Nevadskiy\Money\ValueObjects;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Nevadskiy\Money\Casts\MoneyCast;
@@ -92,17 +92,17 @@ class Money implements Castable
     }
 
     /**
-     * Returns money formatted according to the current locale.
+     * Returns money formatted according to the locale.
      */
-    public function format(): string
+    public function format(string $locale = null): string
     {
-        return $this->getFormatter()->format($this);
+        return $this->getFormatter()->format($this, $locale);
     }
 
     /**
      * Returns money converted according to the given currency.
      */
-    public function convert(Currency $currency): self
+    public function convert(Currency $currency = null): self
     {
         return $this->getConverter()->convert($this, $currency);
     }
@@ -116,7 +116,7 @@ class Money implements Castable
     }
 
     /**
-     * Get the major units multiplier.
+     * Get the major unit multiplier.
      */
     protected static function getMajorMultiplier(Currency $currency): int
     {
@@ -125,7 +125,6 @@ class Money implements Castable
 
     /**
      * Get the money formatter.
-     * TODO: probably extract it into static property (could be broken with Laravel Octane)
      */
     protected function getFormatter(): Formatter
     {
@@ -134,7 +133,6 @@ class Money implements Castable
 
     /**
      * Get the money converter.
-     * TODO: probably extract it into static property (could be broken with Laravel Octane)
      */
     protected function getConverter(): Converter
     {
