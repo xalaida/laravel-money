@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Nevadskiy\Money\Casts\RateCast;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\Exceptions\InvalidRateException;
 use Nevadskiy\Uuid\Uuid;
@@ -24,11 +25,21 @@ class Currency extends Model
     use Uuid;
 
     /**
+     * TODO: do not unguard attributes.
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'rate' => RateCast::class,
+    ];
 
     /**
      * The event map for the model.
