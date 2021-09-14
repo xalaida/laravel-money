@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Tests\Unit\Formatter;
 
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Formatter\IntlFormatter;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Money\Tests\TestCase;
 
 class IntlFormatterTest extends TestCase

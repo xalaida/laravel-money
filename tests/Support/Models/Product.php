@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Tests\Support\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Uuid\Uuid;
 
 /**

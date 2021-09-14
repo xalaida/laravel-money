@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Money\Queries\CurrencyQueries;
 
 /**

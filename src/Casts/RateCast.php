@@ -5,7 +5,6 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Nevadskiy\Money\Money;
 use Nevadskiy\Money\ValueObjects\Rate;
 
 class RateCast implements CastsAttributes
@@ -14,7 +13,7 @@ class RateCast implements CastsAttributes
      * Cast the given value.
      *
      * @param Model $model
-     * @param mixed $value
+     * @param float $value
      */
     public function get($model, string $key, $value, array $attributes): Rate
     {
@@ -25,7 +24,7 @@ class RateCast implements CastsAttributes
      * Prepare the given value for storage.
      *
      * @param Model $model
-     * @param null|Money $value
+     * @param null|Rate $value
      */
     public function set($model, string $key, $value, array $attributes): array
     {

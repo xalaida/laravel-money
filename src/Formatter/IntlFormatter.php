@@ -2,7 +2,7 @@
 
 namespace Nevadskiy\Money\Formatter;
 
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 use NumberFormatter;
 
 class IntlFormatter implements Formatter

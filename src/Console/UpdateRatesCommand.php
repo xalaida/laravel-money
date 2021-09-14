@@ -51,6 +51,8 @@ class UpdateRatesCommand extends Command
      */
     public function handle(): void
     {
+        // TODO: could be rewritten using Rate value object.
+        // TODO: skip provided invalid rates using catch {} statement.
         $rates = $this->provider->getRates()->mapByCodes();
 
         foreach ($this->currencies($rates) as $currency) {

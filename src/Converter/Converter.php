@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\Converter;
 
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\Money;
+use Nevadskiy\Money\ValueObjects\Money;
 
 interface Converter
 {

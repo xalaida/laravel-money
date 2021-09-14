@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money;
+namespace Nevadskiy\Money\ValueObjects;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Nevadskiy\Money\Casts\MoneyCast;
@@ -116,7 +116,7 @@ class Money implements Castable
     }
 
     /**
-     * Get the major units multiplier.
+     * Get the major unit multiplier.
      */
     protected static function getMajorMultiplier(Currency $currency): int
     {
