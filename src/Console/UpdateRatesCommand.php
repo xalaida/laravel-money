@@ -75,7 +75,9 @@ class UpdateRatesCommand extends Command
      */
     private function updateRate(Currency $currency, Rate $rate): void
     {
-        $currency->updateRate($rate->getValue());
+        // TODO: use the same rate object.
+        $currency->rate = new \Nevadskiy\Money\ValueObjects\Rate($rate->getValue());
+        $currency->save();
 
         $this->dispatcher->dispatch(new CurrencyRateUpdated($currency));
 

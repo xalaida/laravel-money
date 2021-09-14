@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Nevadskiy\Money\Casts\RateCast;
 use Nevadskiy\Money\Events;
-use Nevadskiy\Money\Exceptions\InvalidRateException;
+use Nevadskiy\Money\ValueObjects\Rate;
 use Nevadskiy\Uuid\Uuid;
 
 /**
@@ -16,7 +16,7 @@ use Nevadskiy\Uuid\Uuid;
  * @property string name
  * @property string symbol
  * @property int precision
- * @property float rate
+ * @property Rate rate
  * @property Carbon created_at
  * @property Carbon updated_at
  */
@@ -58,26 +58,5 @@ class Currency extends Model
     public function setCodeAttribute(string $code): void
     {
         $this->attributes['code'] = Str::upper($code);
-    }
-
-    /**
-     * Update rate of the currency.
-     */
-    public function updateRate(float $rate): void
-    {
-        $this->assertPositiveRate($rate);
-
-        $this->rate = $rate;
-        $this->save();
-    }
-
-    /**
-     * Assert that the given rate is more than zero.
-     */
-    private function assertPositiveRate(float $rate): void
-    {
-        if ($rate <= 0) {
-            throw InvalidRateException::negative();
-        }
     }
 }
