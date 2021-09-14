@@ -27,6 +27,6 @@ class UpdateFormatterLocale
      */
     public function handle(LocaleUpdated $event): void
     {
-        $this->formatter->setLocale($event->locale);
+        $this->formatter->setDefaultLocale($event->locale);
     }
 }
