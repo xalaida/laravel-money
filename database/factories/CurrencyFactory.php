@@ -47,20 +47,4 @@ class CurrencyFactory extends Factory
             'rate' => new Rate($rate),
         ]);
     }
-
-    /**
-     * Fill the USD state.
-     * TODO: remove.
-     * @deprecated make it unique. rename into 'static' or something that indicates rate=1
-     */
-    public function usd(): self
-    {
-        return $this->state([
-            'code' => 'USD',
-            'name' => 'United States dollar',
-            'symbol' => '$',
-            'precision' => 2,
-            'rate' => new Rate(1),
-        ]);
-    }
 }
