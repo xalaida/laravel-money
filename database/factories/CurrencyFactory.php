@@ -3,9 +3,13 @@
 namespace Nevadskiy\Money\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\ValueObjects\Rate;
 
+/**
+ * @method Collection|Currency|Currency[] create(array $attributes = [])
+ */
 class CurrencyFactory extends Factory
 {
     /**
