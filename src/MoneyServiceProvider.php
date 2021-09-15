@@ -91,7 +91,7 @@ class MoneyServiceProvider extends ServiceProvider
             DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
                 return Currency::query()
                     ->where('code', Str::upper($this->app['config']['money']['default_currency_code']))
-                    ->firstOrFail();
+                    ->first();
             });
         }
 
