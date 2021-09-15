@@ -47,4 +47,14 @@ class CurrencyFactory extends Factory
             'rate' => new Rate($rate),
         ]);
     }
+
+    /**
+     * Make the default currency.
+     */
+    public function default(): self
+    {
+        return $this->state([
+            'code' => config('money.default_currency_code')
+        ]);
+    }
 }
