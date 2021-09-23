@@ -89,6 +89,7 @@ class MoneyServiceProvider extends ServiceProvider
     {
         if ($this->app['config']['money']['default_currency_code'] ?? false) {
             DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
+                // TODO: refactor with query findByCode()
                 return Currency::query()
                     ->where('code', Str::upper($this->app['config']['money']['default_currency_code']))
                     ->first();
@@ -124,6 +125,13 @@ class MoneyServiceProvider extends ServiceProvider
                 'queries' => $queries,
             ]);
         });
+
+        // TODO: pass it only if it is available. feature case when app do not use default currency (add exception to query instance)
+        $this->app->when([Queries\CurrencyEloquentQueries::class, Queries\CurrencyCacheQueries::class])
+            ->needs('$defaultCurrencyCode')
+            ->give(function () {
+                return $this->app['config']['money']['default_currency_code'];
+            });
     }
 
     /**
