@@ -21,4 +21,9 @@ interface CurrencyQueries
      * Get a currency by the given code.
      */
     public function getByCode(string $code): Currency;
+
+    /**
+     * Get the default app currency.
+     */
+    public function default(): Currency;
 }
