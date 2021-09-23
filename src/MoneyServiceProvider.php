@@ -3,12 +3,14 @@
 namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Nevadskiy\Money\Converter\DefaultConverterFactory;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Queries\CurrencyQueries;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -87,17 +89,16 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
-        if ($this->app['config']['money']['default_currency_code'] ?? false) {
-            DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
-                // TODO: refactor with query findByCode()
-                return Currency::query()
-                    ->where('code', Str::upper($this->app['config']['money']['default_currency_code']))
-                    ->first();
-            });
-        }
-
         $this->app->singleton(Converter\Converter::class, static function () {
             return DefaultConverterFactory::create();
+        });
+
+        DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
+            try {
+                return $this->app[CurrencyQueries::class]->default();
+            } catch (ModelNotFoundException $e) {
+                return null;
+            }
         });
     }
 
@@ -126,7 +127,6 @@ class MoneyServiceProvider extends ServiceProvider
             ]);
         });
 
-        // TODO: pass it only if it is available. feature case when app do not use default currency (add exception to query instance)
         $this->app->when([Queries\CurrencyEloquentQueries::class, Queries\CurrencyCacheQueries::class])
             ->needs('$defaultCurrencyCode')
             ->give(function () {
