@@ -16,7 +16,7 @@ class CurrencyEloquentQueriesTest extends TestCase
         $currency = CurrencyFactory::new()->create(['id' => $id]);
         $anotherCurrency = CurrencyFactory::new()->create();
 
-        $queries = new CurrencyEloquentQueries();
+        $queries = app(CurrencyEloquentQueries::class);
 
         static::assertTrue($queries->getById($id)->is($currency));
     }
@@ -25,7 +25,7 @@ class CurrencyEloquentQueriesTest extends TestCase
     {
         $someCurrency = CurrencyFactory::new()->create();
 
-        $queries = new CurrencyEloquentQueries();
+        $queries = app(CurrencyEloquentQueries::class);
 
         $this->expectException(ModelNotFoundException::class);
 
@@ -37,7 +37,7 @@ class CurrencyEloquentQueriesTest extends TestCase
         $currency = CurrencyFactory::new()->create(['code' => 'EUR']);
         $anotherCurrency = CurrencyFactory::new()->create();
 
-        $queries = new CurrencyEloquentQueries();
+        $queries = app(CurrencyEloquentQueries::class);
 
         static::assertTrue($queries->getByCode('EUR')->is($currency));
     }
@@ -46,7 +46,7 @@ class CurrencyEloquentQueriesTest extends TestCase
     {
         $someCurrency = CurrencyFactory::new()->create();
 
-        $queries = new CurrencyEloquentQueries();
+        $queries = app(CurrencyEloquentQueries::class);
 
         $this->expectException(ModelNotFoundException::class);
 

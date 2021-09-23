@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'default_currency_code' => 'USD',
+
     'default_rate_provider' => 'open_exchange_rates',
 
     'rate_providers' => [
