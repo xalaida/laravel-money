@@ -93,6 +93,7 @@ class MoneyServiceProvider extends ServiceProvider
             return DefaultConverterFactory::create();
         });
 
+        // TODO: call this only if config is not null value.
         DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
             try {
                 return $this->app[CurrencyQueries::class]->default();
