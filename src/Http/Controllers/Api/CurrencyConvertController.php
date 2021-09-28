@@ -3,7 +3,9 @@
 namespace Nevadskiy\Money\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Nevadskiy\Money\Http\Requests\CurrencyConvertRequest;
 use Nevadskiy\Money\Http\Resources\MoneyResource;
+use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyQueries;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -11,6 +13,8 @@ final class CurrencyConvertController
 {
     /**
      * The queries instance.
+     *
+     * @var CurrencyQueries
      */
     private $queries;
 
@@ -25,29 +29,33 @@ final class CurrencyConvertController
     /**
      * The currencies index action.
      */
-    public function __invoke(Request $request): MoneyResource
+    public function __invoke(CurrencyConvertRequest $request): MoneyResource
     {
-        // Validate
-        $request->validate([
-            'from' => ['required', 'string', 'uuid'],
-            'to' => ['sometimes', 'required', 'string', 'uuid'],
-            'amount' => ['required', 'numeric'],
-        ]);
-
-        // Init
-        $money = Money::fromMinorUnits(
-            $request->get('amount'),
-            $this->queries->getById($request->get('from'))
+        return MoneyResource::make(
+            Money::fromMinorUnits($request->get('amount'), $this->getSourceCurrency($request))
+                ->convert($this->getTargetCurrency($request))
         );
+    }
 
-        // Convert
-        $money = $money->convert(
-            $request->get('to')
-                ? $this->queries->getById($request->get('to'))
-                : null
-        );
+    /**
+     * Get the source currency from the request.
+     * Use the default app currency if the 'from' currency is not defined.
+     */
+    protected function getSourceCurrency(Request $request): Currency
+    {
+        return $request->query('from')
+            ? $this->queries->getByCode($request->query('from'))
+            : $this->queries->default();
+    }
 
-        // Format
-        return MoneyResource::make($money);
+    /**
+     * Get the target currency from the request.
+     * Use request currency if 'to' is not set.
+     */
+    protected function getTargetCurrency(Request $request): Currency
+    {
+        return $request->query('to')
+            ? $this->queries->getByCode($request->query('to'))
+            : $request->attributes->get('currency');
     }
 }
