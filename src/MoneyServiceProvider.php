@@ -7,18 +7,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Nevadskiy\Money\Converter\DefaultConverterFactory;
-use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyQueries;
 
 class MoneyServiceProvider extends ServiceProvider
 {
-    /**
-     * The package's name.
-     */
-    private const NAME = 'money';
-
     /**
      * The event listener mappings for the package.
      *
@@ -50,8 +43,9 @@ class MoneyServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerFormatter();
         $this->registerConverter();
-        $this->registerRateProviders();
         $this->registerCurrencyQueries();
+        $this->registerOpenExchangeProvider();
+        $this->registerDefaultRateProvider();
     }
 
     /**
@@ -64,6 +58,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootEvents();
         $this->bootMigrations();
         $this->bootMorphMap();
+        $this->publishMigrations();
     }
 
     /**
@@ -71,7 +66,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/money.php', self::NAME);
+        $this->mergeConfigFrom(__DIR__.'/../config/money.php', 'money');
     }
 
     /**
@@ -104,18 +99,6 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package rate providers.
-     */
-    private function registerRateProviders(): void
-    {
-        $this->registerOpenExchangeProvider();
-
-        $this->app->singleton(RateProvider\RateProvider::class, function () {
-            return $this->app[$this->app['config']['money']['default_rate_provider']];
-        });
-    }
-
-    /**
      * Register any package currency queries.
      */
     private function registerCurrencyQueries(): void
@@ -133,6 +116,28 @@ class MoneyServiceProvider extends ServiceProvider
             ->give(function () {
                 return $this->app['config']['money']['default_currency_code'];
             });
+    }
+
+    /**
+     * Register the open exchange rate provider.
+     */
+    private function registerOpenExchangeProvider(): void
+    {
+        $this->app->bind('open_exchange_rates', RateProvider\Providers\OpenExchangeProvider::class);
+
+        $this->app->when(RateProvider\Providers\OpenExchangeProvider::class)
+            ->needs('$appId')
+            ->give($this->app['config']['money']['rate_providers']['open_exchange_rates']['app_id']);
+    }
+
+    /**
+     * Register the default rate provider.
+     */
+    private function registerDefaultRateProvider(): void
+    {
+        $this->app->singleton(RateProvider\RateProvider::class, function () {
+            return $this->app[$this->app['config']['money']['default_rate_provider']];
+        });
     }
 
     /**
@@ -180,7 +185,9 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function bootMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        if ($this->app['config']['money']['default_migrations']) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
     }
 
     /**
@@ -194,14 +201,12 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the open exchange rate provider.
+     * Publish any package migrations.
      */
-    private function registerOpenExchangeProvider(): void
+    private function publishMigrations(): void
     {
-        $this->app->bind('open_exchange_rates', RateProvider\Providers\OpenExchangeProvider::class);
-
-        $this->app->when(RateProvider\Providers\OpenExchangeProvider::class)
-            ->needs('$appId')
-            ->give($this->app['config']['money']['rate_providers']['open_exchange_rates']['app_id']);
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'money-migrations');
     }
 }

@@ -11,4 +11,6 @@ return [
             'app_id' => env('OPEN_EXCHANGE_RATE_APP_ID', ''),
         ],
     ],
+
+    'default_migrations' => true,
 ];
