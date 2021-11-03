@@ -2,29 +2,30 @@
 
 namespace Nevadskiy\Money\Listeners;
 
-use Nevadskiy\Money\Events\CurrencyEvent;
-use Nevadskiy\Money\Queries\CurrencyCacheQueries;
+use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 
 class InvalidateCurrencyCache
 {
     /**
-     * @var CurrencyCacheQueries
+     * The currency query instance.
+     *
+     * @var CurrencyCacheQuery
      */
-    protected $queries;
+    private $currencies;
 
     /**
      * Create the event listener.
      */
-    public function __construct(CurrencyCacheQueries $queries)
+    public function __construct(CurrencyCacheQuery $currencies)
     {
-        $this->queries = $queries;
+        $this->currencies = $currencies;
     }
 
     /**
      * Handle the event.
      */
-    public function handle(CurrencyEvent $event): void
+    public function handle(): void
     {
-        $this->queries->invalidate();
+        $this->currencies->invalidate();
     }
 }

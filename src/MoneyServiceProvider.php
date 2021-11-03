@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\Converter\DefaultConverterFactory;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -92,7 +92,7 @@ class MoneyServiceProvider extends ServiceProvider
         DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
             try {
                 // TODO: move exception to the query instance.
-                return $this->app[CurrencyQueries::class]->default();
+                return $this->app[CurrencyQuery::class]->default();
             } catch (ModelNotFoundException $e) {
                 return null;
             }
@@ -104,15 +104,15 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerCurrencyQueries(): void
     {
-        $this->app->singleton(Queries\CurrencyQueries::class, Queries\CurrencyEloquentQueries::class);
+        $this->app->singleton(Queries\CurrencyQuery::class, Queries\CurrencyEloquentQuery::class);
 
-        $this->app->extend(Queries\CurrencyQueries::class, function (Queries\CurrencyQueries $queries) {
-            return $this->app->make(Queries\CurrencyCacheQueries::class, [
+        $this->app->extend(Queries\CurrencyQuery::class, function (Queries\CurrencyQuery $queries) {
+            return $this->app->make(Queries\CurrencyCacheQuery::class, [
                 'queries' => $queries,
             ]);
         });
 
-        $this->app->when([Queries\CurrencyEloquentQueries::class, Queries\CurrencyCacheQueries::class])
+        $this->app->when([Queries\CurrencyEloquentQuery::class, Queries\CurrencyCacheQuery::class])
             ->needs('$defaultCurrencyCode')
             ->give(function () {
                 return $this->app['config']['money']['default_currency_code'];

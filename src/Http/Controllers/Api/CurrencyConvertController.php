@@ -6,24 +6,24 @@ use Illuminate\Http\Request;
 use Nevadskiy\Money\Http\Requests\CurrencyConvertRequest;
 use Nevadskiy\Money\Http\Resources\MoneyResource;
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
 
 final class CurrencyConvertController
 {
     /**
-     * The queries instance.
+     * The currency query instance.
      *
-     * @var CurrencyQueries
+     * @var CurrencyQuery
      */
-    private $queries;
+    private $currencies;
 
     /**
      * Make a new controller instance.
      */
-    public function __construct(CurrencyQueries $queries)
+    public function __construct(CurrencyQuery $currencies)
     {
-        $this->queries = $queries;
+        $this->currencies = $currencies;
     }
 
     /**
@@ -44,8 +44,8 @@ final class CurrencyConvertController
     protected function getSourceCurrency(Request $request): Currency
     {
         return $request->query('from')
-            ? $this->queries->getByCode($request->query('from'))
-            : $this->queries->default();
+            ? $this->currencies->getByCode($request->query('from'))
+            : $this->currencies->default();
     }
 
     /**
@@ -55,7 +55,7 @@ final class CurrencyConvertController
     protected function getTargetCurrency(Request $request): Currency
     {
         return $request->query('to')
-            ? $this->queries->getByCode($request->query('to'))
+            ? $this->currencies->getByCode($request->query('to'))
             : $request->attributes->get('currency');
     }
 }

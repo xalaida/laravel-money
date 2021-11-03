@@ -8,23 +8,23 @@ use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
 
 final class SetCurrencyMiddleware
 {
     /**
-     * The currency queries instance.
+     * The currency query instance.
      *
-     * @var CurrencyQueries
+     * @var CurrencyQuery
      */
-    private $currencyQueries;
+    private $currencies;
 
     /**
      * Make a new middleware instance.
      */
-    public function __construct(CurrencyQueries $currencyQueries)
+    public function __construct(CurrencyQuery $currencies)
     {
-        $this->currencyQueries = $currencyQueries;
+        $this->currencies = $currencies;
     }
 
     /**
@@ -57,16 +57,16 @@ final class SetCurrencyMiddleware
     private function getCurrencyFromRequest(Request $request): Currency
     {
         if (! $request->query('currency')) {
-            return $this->currencyQueries->default();
+            return $this->currencies->default();
         }
 
         // TODO: validate currency code here...
 
         try {
-            return $this->currencyQueries->getByCode($request->query('currency'));
+            return $this->currencies->getByCode($request->query('currency'));
         } catch (ModelNotFoundException $e) {
             // TODO: log that currency cannot be resolved by the given code.
-            return $this->currencyQueries->default();
+            return $this->currencies->default();
         }
     }
 }

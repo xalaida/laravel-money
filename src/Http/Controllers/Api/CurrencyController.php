@@ -4,21 +4,23 @@ namespace Nevadskiy\Money\Http\Controllers\Api;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Nevadskiy\Money\Http\Resources\CurrencyResource;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
 
 final class CurrencyController
 {
     /**
-     * The queries instance.
+     * The currency query instance.
+     *
+     * @var CurrencyQuery
      */
-    private $queries;
+    private $currencies;
 
     /**
      * Make a new controller instance.
      */
-    public function __construct(CurrencyQueries $queries)
+    public function __construct(CurrencyQuery $currencies)
     {
-        $this->queries = $queries;
+        $this->currencies = $currencies;
     }
 
     /**
@@ -27,7 +29,7 @@ final class CurrencyController
     public function index(): AnonymousResourceCollection
     {
         return CurrencyResource::collection(
-            $this->queries->all()
+            $this->currencies->all()
         );
     }
 }
