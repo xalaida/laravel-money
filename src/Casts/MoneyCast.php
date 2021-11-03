@@ -22,13 +22,6 @@ use Nevadskiy\Money\ValueObjects\Money;
 class MoneyCast implements CastsAttributes
 {
     /**
-     * The currency query instance.
-     *
-     * @var CurrencyQuery
-     */
-    protected $currencies;
-
-    /**
      * The column name of the money amount.
      *
      * @var null|string
@@ -45,9 +38,8 @@ class MoneyCast implements CastsAttributes
     /**
      * Make a new cast instance.
      */
-    public function __construct(CurrencyQuery $currencies, array $arguments)
+    public function __construct(array $arguments = [])
     {
-        $this->currencies = $currencies;
         $this->amountColumnName = $arguments[0] ?? null;
         $this->currencyKeyColumnName = $arguments[1] ?? null;
     }
@@ -67,7 +59,10 @@ class MoneyCast implements CastsAttributes
             return null;
         }
 
-        return new Money($attributes[$amountColumnName], $this->currencies->getById($attributes[$currencyKeyColumnName]));
+        return new Money(
+            $attributes[$amountColumnName],
+            resolve(CurrencyQuery::class)->getById($attributes[$currencyKeyColumnName])
+        );
     }
 
     /**
