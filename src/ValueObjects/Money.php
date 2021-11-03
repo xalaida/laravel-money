@@ -134,6 +134,34 @@ class Money implements Castable
     }
 
     /**
+     * Multiply the money instance.
+     *
+     * @param float|int $multiplier
+     */
+    public function multiply($multiplier): self
+    {
+        return $this->clone($this->getAmount() * $multiplier);
+    }
+
+    /**
+     * Divide the money instance.
+     *
+     * @param float|int $divisor
+     */
+    public function divide($divisor): self
+    {
+        return $this->clone($this->getAmount() / $divisor);
+    }
+
+    /**
+     * Get a clone of the money instance.
+     */
+    public function clone(int $amount = null, Currency $currency = null): self
+    {
+        return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
+    }
+
+    /**
      * Get the default currency.
      */
     public static function getDefaultCurrency(): Currency

@@ -115,4 +115,30 @@ class MoneyTest extends TestCase
         static::assertTrue($money->getCurrency()->is($currency));
         static::assertSame(1000, $money->getMinorUnits());
     }
+
+    /** @test */
+    public function it_can_be_immutable_multiplied(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        $money = Money::fromMinorUnits(1000, $currency);
+
+        $multipliedMoney = $money->multiply(0.5);
+
+        self::assertEquals(500, $multipliedMoney->getAmount());
+        self::assertEquals(1000, $money->getAmount());
+    }
+
+    /** @test */
+    public function it_can_be_immutable_divided(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        $money = Money::fromMinorUnits(1000, $currency);
+
+        $multipliedMoney = $money->divide(5);
+
+        self::assertEquals(200, $multipliedMoney->getAmount());
+        self::assertEquals(1000, $money->getAmount());
+    }
 }
