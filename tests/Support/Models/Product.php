@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Tests\Support\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Nevadskiy\Money\Casts\MoneyCast;
 use Nevadskiy\Money\ValueObjects\Money;
 use Nevadskiy\Uuid\Uuid;
 
@@ -35,6 +36,6 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'price' => Money::class,
+        'price' => MoneyCast::class,
     ];
 }

@@ -2,14 +2,12 @@
 
 namespace Nevadskiy\Money\ValueObjects;
 
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Nevadskiy\Money\Casts\MoneyCast;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
 use RuntimeException;
 
-class Money implements Castable
+class Money
 {
     /**
      * The default currency resolver function.
@@ -134,6 +132,34 @@ class Money implements Castable
     }
 
     /**
+     * Multiply the money instance.
+     *
+     * @param float|int $multiplier
+     */
+    public function multiply($multiplier): self
+    {
+        return $this->clone($this->getAmount() * $multiplier);
+    }
+
+    /**
+     * Divide the money instance.
+     *
+     * @param float|int $divisor
+     */
+    public function divide($divisor): self
+    {
+        return $this->clone($this->getAmount() / $divisor);
+    }
+
+    /**
+     * Get a clone of the money instance.
+     */
+    public function clone(int $amount = null, Currency $currency = null): self
+    {
+        return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
+    }
+
+    /**
      * Get the default currency.
      */
     public static function getDefaultCurrency(): Currency
@@ -175,14 +201,6 @@ class Money implements Castable
     protected function getConverter(): Converter
     {
         return app(Converter::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function castUsing(array $arguments): MoneyCast
-    {
-        return app(MoneyCast::class, ['arguments' => $arguments]);
     }
 
     /**
