@@ -41,6 +41,14 @@ class DefaultConverter implements Converter
     }
 
     /**
+     * Get the default currency instance.
+     */
+    public function getDefaultCurrency(): Currency
+    {
+        return $this->defaultCurrency ?: Money::getDefaultCurrency();
+    }
+
+    /**
      * Get the converted money amount.
      *
      * @return float|int
@@ -52,13 +60,5 @@ class DefaultConverter implements Converter
         }
 
         return ($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue();
-    }
-
-    /**
-     * Get the default currency instance.
-     */
-    public function getDefaultCurrency(): Currency
-    {
-        return $this->defaultCurrency ?: Money::getDefaultCurrency();
     }
 }
