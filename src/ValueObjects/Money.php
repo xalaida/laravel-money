@@ -12,13 +12,6 @@ use RuntimeException;
 class Money implements Castable
 {
     /**
-     * The default currency instance.
-     *
-     * @var Currency
-     */
-    protected static $defaultCurrency;
-
-    /**
      * The default currency resolver function.
      *
      * @var callable
@@ -145,11 +138,7 @@ class Money implements Castable
      */
     public static function getDefaultCurrency(): Currency
     {
-        if (! isset(static::$defaultCurrency)) {
-            static::$defaultCurrency = static::resolveDefaultCurrency();
-        }
-
-        return static::$defaultCurrency;
+        return static::resolveDefaultCurrency();
     }
 
     /**
@@ -174,8 +163,6 @@ class Money implements Castable
 
     /**
      * Get the money formatter.
-     *
-     * @todo: refactor to resolve from the static prop.
      */
     protected function getFormatter(): Formatter
     {
@@ -184,8 +171,6 @@ class Money implements Castable
 
     /**
      * Get the money converter.
-     *
-     * @todo: refactor to resolve from the static prop.
      */
     protected function getConverter(): Converter
     {

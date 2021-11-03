@@ -82,6 +82,6 @@ class DefaultConverterTest extends TestCase
         $converter = new DefaultConverter();
         $money = $converter->convert(Money::fromMajorUnits(100, $originalCurrency));
 
-        self::assertTrue($money->getCurrency()->is($defaultCurrency));
+        static::assertTrue($money->getCurrency()->is($defaultCurrency));
     }
 }

@@ -91,8 +91,7 @@ class MoneyTest extends TestCase
         static::assertTrue($money->getCurrency()->is($currency));
     }
 
-    /** @test */
-    public function it_can_resolve_default_currency_using_given_resolver(): void
+    public function test_it_can_resolve_default_currency_using_given_resolver(): void
     {
         $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
 
@@ -100,11 +99,10 @@ class MoneyTest extends TestCase
             return $currency;
         });
 
-        self::assertTrue(Money::getDefaultCurrency()->is($currency));
+        static::assertTrue(Money::getDefaultCurrency()->is($currency));
     }
 
-    /** @test */
-    public function it_can_be_created_with_default_currency(): void
+    public function test_it_can_be_created_with_default_currency(): void
     {
         $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
 
@@ -114,7 +112,7 @@ class MoneyTest extends TestCase
 
         $money = Money::fromMinorUnits(1000);
 
-        self::assertTrue($money->getCurrency()->is($currency));
-        self::assertEquals(1000, $money->getMinorUnits());
+        static::assertTrue($money->getCurrency()->is($currency));
+        static::assertSame(1000, $money->getMinorUnits());
     }
 }

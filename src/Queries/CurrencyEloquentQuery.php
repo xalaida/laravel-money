@@ -12,7 +12,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
     /**
      * The default currency code.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $defaultCurrencyCode;
 
