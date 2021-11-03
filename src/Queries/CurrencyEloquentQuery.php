@@ -4,21 +4,22 @@ namespace Nevadskiy\Money\Queries;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
+use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Models\Currency;
 
-class CurrencyEloquentQueries implements CurrencyQueries
+class CurrencyEloquentQuery implements CurrencyQuery
 {
     /**
      * The default currency code.
      *
-     * @var string
+     * @var string|null
      */
     protected $defaultCurrencyCode;
 
     /**
      * Make a new queries instance.
      */
-    public function __construct(string $defaultCurrencyCode)
+    public function __construct(string $defaultCurrencyCode = null)
     {
         $this->defaultCurrencyCode = $defaultCurrencyCode;
     }
@@ -44,7 +45,7 @@ class CurrencyEloquentQueries implements CurrencyQueries
      */
     public function getByCode(string $code): Currency
     {
-        return Currency::query()->where('code', Str::upper($code))->firstOrFail();
+        return Currency::query()->where('code', $this->normalizeCode($code))->firstOrFail();
     }
 
     /**
@@ -52,6 +53,18 @@ class CurrencyEloquentQueries implements CurrencyQueries
      */
     public function default(): Currency
     {
+        if (! $this->defaultCurrencyCode) {
+            throw new DefaultCurrencyMissingException();
+        }
+
         return $this->getByCode($this->defaultCurrencyCode);
+    }
+
+    /**
+     * Get the normalized currency code.
+     */
+    protected function normalizeCode(string $code): string
+    {
+        return Str::upper($code);
     }
 }

@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Queries;
 use Illuminate\Database\Eloquent\Collection;
 use Nevadskiy\Money\Models\Currency;
 
-interface CurrencyQueries
+interface CurrencyQuery
 {
     /**
      * Get all available currencies.
@@ -23,7 +23,7 @@ interface CurrencyQueries
     public function getByCode(string $code): Currency;
 
     /**
-     * Get the default app currency.
+     * Get the default application currency.
      */
     public function default(): Currency;
 }
