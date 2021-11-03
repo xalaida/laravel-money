@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Listeners;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Nevadskiy\Money\Formatter\Formatter;
 
-class UpdateFormatterLocale
+class UpdateDefaultFormatterLocale
 {
     /**
      * The money formatter.

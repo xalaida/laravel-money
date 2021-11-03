@@ -12,6 +12,8 @@ abstract class CurrencyEvent
         SerializesModels;
 
     /**
+     * The currency instance
+     *
      * @var Currency
      */
     public $currency;
