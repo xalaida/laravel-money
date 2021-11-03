@@ -96,7 +96,15 @@ class Money implements Castable
      */
     public function format(string $locale = null): string
     {
-        return $this->getFormatter()->format($this, $locale);
+        return $this->formatUsing($this->getFormatter(), $locale);
+    }
+
+    /**
+     * Format the money instance using the given formatter.
+     */
+    public function formatUsing(Formatter $formatter, string $locale = null): string
+    {
+        return $formatter->format($this, $locale);
     }
 
     /**
@@ -104,15 +112,15 @@ class Money implements Castable
      */
     public function convert(Currency $currency = null): self
     {
-        return $this->getConverter()->convert($this, $currency);
+        return $this->convertUsing($this->getConverter(), $currency);
     }
 
     /**
-     * @inheritDoc
+     * Convert the money instance using the given converter.
      */
-    public static function castUsing(array $arguments): MoneyCast
+    public function convertUsing(Converter $converter, Currency $currency = null): self
     {
-        return app(MoneyCast::class, ['arguments' => $arguments]);
+        return $converter->convert($this, $currency);
     }
 
     /**
@@ -125,6 +133,8 @@ class Money implements Castable
 
     /**
      * Get the money formatter.
+     *
+     * @todo: refactor to resolve from the static prop.
      */
     protected function getFormatter(): Formatter
     {
@@ -133,9 +143,19 @@ class Money implements Castable
 
     /**
      * Get the money converter.
+     *
+     * @todo: refactor to resolve from the static prop.
      */
     protected function getConverter(): Converter
     {
         return app(Converter::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function castUsing(array $arguments): MoneyCast
+    {
+        return app(MoneyCast::class, ['arguments' => $arguments]);
     }
 }
