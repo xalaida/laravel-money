@@ -91,6 +91,7 @@ class MoneyServiceProvider extends ServiceProvider
         // TODO: call this only if config is not null value.
         DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
             try {
+                // TODO: move exception to the query instance.
                 return $this->app[CurrencyQueries::class]->default();
             } catch (ModelNotFoundException $e) {
                 return null;

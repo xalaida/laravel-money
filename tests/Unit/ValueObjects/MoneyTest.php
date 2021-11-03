@@ -90,4 +90,16 @@ class MoneyTest extends TestCase
         static::assertSame(300, $money->getMajorUnits());
         static::assertTrue($money->getCurrency()->is($currency));
     }
+
+    /** @test */
+    public function it_can_resolve_default_currency_using_given_resolver(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        Money::resolveDefaultCurrencyUsing(function () use ($currency) {
+            return $currency;
+        });
+
+        self::assertTrue(Money::getDefaultCurrency()->is($currency));
+    }
 }

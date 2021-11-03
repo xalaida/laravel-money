@@ -7,9 +7,24 @@ use Nevadskiy\Money\Casts\MoneyCast;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
+use RuntimeException;
 
 class Money implements Castable
 {
+    /**
+     * The default currency instance.
+     *
+     * @var Currency
+     */
+    protected static $defaultCurrency;
+
+    /**
+     * The default currency resolver function.
+     *
+     * @var callable
+     */
+    protected static $defaultCurrencyResolver;
+
     /**
      * The money amount in minor units.
      *
@@ -25,7 +40,7 @@ class Money implements Castable
     protected $currency;
 
     /**
-     * Money constructor.
+     * Make a new money instance.
      */
     public function __construct(int $amount, Currency $currency)
     {
@@ -34,19 +49,11 @@ class Money implements Castable
     }
 
     /**
-     * Convert the money to the string type.
-     */
-    public function __toString(): string
-    {
-        return $this->format();
-    }
-
-    /**
      * Create a new money instance from minor units.
      */
     public static function fromMajorUnits(float $amount, Currency $currency): self
     {
-        return new static((int) ($amount * self::getMajorMultiplier($currency)), $currency);
+        return new static((int) ($amount * static::getMajorMultiplier($currency)), $currency);
     }
 
     /**
@@ -80,7 +87,7 @@ class Money implements Castable
      */
     public function getMajorUnits()
     {
-        return $this->getMinorUnits() / self::getMajorMultiplier($this->currency);
+        return $this->getMinorUnits() / static::getMajorMultiplier($this->currency);
     }
 
     /**
@@ -132,6 +139,38 @@ class Money implements Castable
     }
 
     /**
+     * Get the default currency.
+     */
+    public static function getDefaultCurrency(): Currency
+    {
+        if (! isset(static::$defaultCurrency)) {
+            static::$defaultCurrency = static::resolveDefaultCurrency();
+        }
+
+        return static::$defaultCurrency;
+    }
+
+    /**
+     * Set the default currency resolver function.
+     */
+    public static function resolveDefaultCurrencyUsing(callable $resolver): void
+    {
+        static::$defaultCurrencyResolver = $resolver;
+    }
+
+    /**
+     * Resolve the default currency.
+     */
+    protected static function resolveDefaultCurrency(): Currency
+    {
+        if (! isset(static::$defaultCurrencyResolver)) {
+            throw new RuntimeException("Cannot resolve the default currency.");
+        }
+
+        return call_user_func(static::$defaultCurrencyResolver);
+    }
+
+    /**
      * Get the money formatter.
      *
      * @todo: refactor to resolve from the static prop.
@@ -157,5 +196,13 @@ class Money implements Castable
     public static function castUsing(array $arguments): MoneyCast
     {
         return app(MoneyCast::class, ['arguments' => $arguments]);
+    }
+
+    /**
+     * Convert the money to the string type.
+     */
+    public function __toString(): string
+    {
+        return $this->format();
     }
 }
