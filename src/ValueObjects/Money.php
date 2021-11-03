@@ -38,7 +38,7 @@ class Money implements Castable
     public function __construct(int $amount, Currency $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: self::getDefaultCurrency();
+        $this->currency = $currency ?: static::getDefaultCurrency();
     }
 
     /**
