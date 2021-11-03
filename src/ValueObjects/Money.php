@@ -42,24 +42,26 @@ class Money implements Castable
     /**
      * Make a new money instance.
      */
-    public function __construct(int $amount, Currency $currency)
+    public function __construct(int $amount, Currency $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency;
+        $this->currency = $currency ?: self::getDefaultCurrency();
     }
 
     /**
      * Create a new money instance from minor units.
      */
-    public static function fromMajorUnits(float $amount, Currency $currency): self
+    public static function fromMajorUnits(float $amount, Currency $currency = null): self
     {
+        $currency = $currency ?: static::getDefaultCurrency();
+
         return new static((int) ($amount * static::getMajorMultiplier($currency)), $currency);
     }
 
     /**
      * Create a new money instance from minor units.
      */
-    public static function fromMinorUnits(int $amount, Currency $currency): self
+    public static function fromMinorUnits(int $amount, Currency $currency = null): self
     {
         return new static($amount, $currency);
     }

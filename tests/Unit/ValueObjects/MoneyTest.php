@@ -102,4 +102,19 @@ class MoneyTest extends TestCase
 
         self::assertTrue(Money::getDefaultCurrency()->is($currency));
     }
+
+    /** @test */
+    public function it_can_be_created_with_default_currency(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        Money::resolveDefaultCurrencyUsing(function () use ($currency) {
+            return $currency;
+        });
+
+        $money = Money::fromMinorUnits(1000);
+
+        self::assertTrue($money->getCurrency()->is($currency));
+        self::assertEquals(1000, $money->getMinorUnits());
+    }
 }
