@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 
-final class SetCurrencyMiddleware
+final class SetRequestCurrencyMiddleware
 {
     /**
      * The currency query instance.
