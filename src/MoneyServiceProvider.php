@@ -88,7 +88,9 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, Converter\DefaultConverter::class);
+        $this->app->singleton(Converter\Converter::class, function () {
+            return new Converter\DefaultConverter(Money::getDefaultCurrency());
+        });
     }
 
     /**
