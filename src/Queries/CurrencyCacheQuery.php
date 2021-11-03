@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Nevadskiy\Money\Models\Currency;
 
-class CurrencyCacheQueries implements CurrencyQueries
+class CurrencyCacheQuery implements CurrencyQuery
 {
     /**
      * The base queries instance.
      *
-     * @var CurrencyQueries
+     * @var CurrencyQuery
      */
-    protected $queries;
+    protected $currencies;
 
     /**
      * The cache instance.
@@ -24,20 +24,12 @@ class CurrencyCacheQueries implements CurrencyQueries
     protected $cache;
 
     /**
-     * The default currency code.
-     *
-     * @var string
-     */
-    protected $defaultCurrencyCode;
-
-    /**
      * Make a new queries instance.
      */
-    public function __construct(CurrencyQueries $queries, Cache $cache, string $defaultCurrencyCode)
+    public function __construct(CurrencyQuery $currencies, Cache $cache)
     {
-        $this->queries = $queries;
+        $this->currencies = $currencies;
         $this->cache = $cache;
-        $this->defaultCurrencyCode = $defaultCurrencyCode;
     }
 
     /**
@@ -47,7 +39,7 @@ class CurrencyCacheQueries implements CurrencyQueries
     {
         return $this->cache->tags('currency')
             ->rememberForever($this->buildCacheKey(['currency', 'all']), function () {
-                return $this->queries->all();
+                return $this->currencies->all();
             });
     }
 
@@ -58,7 +50,7 @@ class CurrencyCacheQueries implements CurrencyQueries
     {
         return $this->cache->tags('currency')
             ->rememberForever($this->buildCacheKey(['currency', 'id', $id]), function () use ($id) {
-                return $this->queries->getById($id);
+                return $this->currencies->getById($id);
             });
     }
 
@@ -69,7 +61,7 @@ class CurrencyCacheQueries implements CurrencyQueries
     {
         return $this->cache->tags('currency')
             ->rememberForever($this->buildCacheKey(['currency', 'code', $code]), function () use ($code) {
-                return $this->queries->getByCode($code);
+                return $this->currencies->getByCode($code);
             });
     }
 
@@ -78,7 +70,10 @@ class CurrencyCacheQueries implements CurrencyQueries
      */
     public function default(): Currency
     {
-        return $this->getByCode($this->defaultCurrencyCode);
+        return $this->cache->tags('currency')
+            ->rememberForever($this->buildCacheKey(['currency', 'default']), function () {
+                return $this->currencies->default();
+            });
     }
 
     /**
@@ -91,9 +86,6 @@ class CurrencyCacheQueries implements CurrencyQueries
 
     /**
      * Build the cache key from segments.
-     *
-     * @param array $segments
-     * @return string
      */
     private function buildCacheKey(array $segments): string
     {

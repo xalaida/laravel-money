@@ -4,7 +4,6 @@ namespace Nevadskiy\Money\Tests\Unit\Converter;
 
 use Nevadskiy\Money\Converter\DefaultConverter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -70,16 +69,19 @@ class DefaultConverterTest extends TestCase
         static::assertSame($money->getMajorUnits(), 100);
     }
 
-    public function test_it_throws_an_exception_when_no_default_currency_is_set(): void
+    public function test_it_takes_default_currency_from_money_when_it_is_missing(): void
     {
-        $originalCurrency = CurrencyFactory::new()->unrated()->create([
-            'code' => 'USD',
-        ]);
+        $defaultCurrency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
+
+        Money::resolveDefaultCurrencyUsing(function () use ($defaultCurrency) {
+            return $defaultCurrency;
+        });
+
+        $originalCurrency = CurrencyFactory::new()->unrated()->create(['code' => 'EUR']);
 
         $converter = new DefaultConverter();
+        $money = $converter->convert(Money::fromMajorUnits(100, $originalCurrency));
 
-        $this->expectException(DefaultCurrencyMissingException::class);
-
-        $converter->convert(Money::fromMajorUnits(100, $originalCurrency));
+        static::assertTrue($money->getCurrency()->is($defaultCurrency));
     }
 }

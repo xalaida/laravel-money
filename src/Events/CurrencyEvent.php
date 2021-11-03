@@ -8,10 +8,12 @@ use Nevadskiy\Money\Models\Currency;
 
 abstract class CurrencyEvent
 {
-    use Dispatchable,
-        SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
+     * The currency instance.
+     *
      * @var Currency
      */
     public $currency;

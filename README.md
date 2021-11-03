@@ -55,3 +55,31 @@ class DatabaseSeeder extends Seeder
     }
 }
 ```
+
+
+## TODO
+
+- [ ] cover with tests
+- [ ] add publish config
+- [ ] add Money::parse() method to receive data from front-end
+- [ ] add possibility to specify custom currency model
+- [ ] add possibility to disable locale tracking for formatter
+- [ ] add possibility to specify concrete formatter format
+- [ ] add possibility to render money without decimals
+- [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%')
+- [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year') (can be done using laravel prunable models)
+- [ ] add install instruction about cron registration for rates
+- [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate})
+- [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
+- [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`) \Casts\DefaultMoney::class
+- [ ] add possibility to use Casts\Money::class directly without needing or resolving container dependencies (resolve them inside)
+- [ ] add possibility to extend migration
+- [ ] add command to show outdated rates
+- [ ] integrations with laravel cashier
+- [x] add auto transformer for upper-cased currency code
+- [x] feature formatting money into different locale
+- [x] add possibility to specify concrete formatter locale
+- [x] define two different currencies: app and request. App currency is used as absolute currency (similar to app.timezone). Request currency is the currency to convert into.
+- [x] think about default currency prices (one field in the database)
+- [x] feature formatting money using given formatter (add `formatUsing()` method)
+- [x] add config parameter as currency (default converter currency)

@@ -3,12 +3,11 @@
 namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
-use Nevadskiy\Money\Converter\DefaultConverterFactory;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
+use Nevadskiy\Money\ValueObjects\Money;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -19,7 +18,11 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private $listen = [
         LocaleUpdated::class => [
-            Listeners\UpdateFormatterLocale::class,
+            Listeners\UpdateDefaultFormatterLocale::class,
+        ],
+
+        Events\DefaultCurrencyUpdated::class => [
+            Listeners\UpdateDefaultConverterCurrency::class,
         ],
 
         Events\CurrencyCreated::class => [
@@ -44,6 +47,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->registerFormatter();
         $this->registerConverter();
         $this->registerCurrencyQueries();
+        $this->registerDefaultCurrency();
         $this->registerOpenExchangeProvider();
         $this->registerDefaultRateProvider();
     }
@@ -84,18 +88,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, static function () {
-            return DefaultConverterFactory::create();
-        });
-
-        // TODO: call this only if config is not null value.
-        DefaultConverterFactory::resolveDefaultCurrencyUsing(function () {
-            try {
-                return $this->app[CurrencyQueries::class]->default();
-            } catch (ModelNotFoundException $e) {
-                return null;
-            }
-        });
+        $this->app->singleton(Converter\Converter::class, Converter\DefaultConverter::class);
     }
 
     /**
@@ -103,19 +96,29 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerCurrencyQueries(): void
     {
-        $this->app->singleton(Queries\CurrencyQueries::class, Queries\CurrencyEloquentQueries::class);
+        $this->app->singleton(Queries\CurrencyQuery::class, Queries\CurrencyEloquentQuery::class);
 
-        $this->app->extend(Queries\CurrencyQueries::class, function (Queries\CurrencyQueries $queries) {
-            return $this->app->make(Queries\CurrencyCacheQueries::class, [
-                'queries' => $queries,
+        $this->app->extend(Queries\CurrencyQuery::class, function (Queries\CurrencyQuery $currencies) {
+            return $this->app->make(Queries\CurrencyCacheQuery::class, [
+                'currencies' => $currencies,
             ]);
         });
+    }
 
-        $this->app->when([Queries\CurrencyEloquentQueries::class, Queries\CurrencyCacheQueries::class])
+    /**
+     * Register the default application currency.
+     */
+    private function registerDefaultCurrency(): void
+    {
+        $this->app->when(Queries\CurrencyEloquentQuery::class)
             ->needs('$defaultCurrencyCode')
             ->give(function () {
-                return $this->app['config']['money']['default_currency_code'];
+                return $this->app['config']['money']['default_currency_code'] ?? null;
             });
+
+        Money::resolveDefaultCurrencyUsing(function () {
+            return $this->app[CurrencyQuery::class]->default();
+        });
     }
 
     /**

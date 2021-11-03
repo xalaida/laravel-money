@@ -2,7 +2,6 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -32,18 +31,6 @@ class DefaultConverter implements Converter
     }
 
     /**
-     * Get the default currency instance.
-     */
-    public function getDefaultCurrency(): Currency
-    {
-        if (null === $this->defaultCurrency) {
-            throw new DefaultCurrencyMissingException();
-        }
-
-        return $this->defaultCurrency;
-    }
-
-    /**
      * @inheritDoc
      */
     public function convert(Money $money, Currency $currency = null): Money
@@ -51,6 +38,14 @@ class DefaultConverter implements Converter
         $currency = $currency ?: $this->getDefaultCurrency();
 
         return new Money($this->getConvertedAmount($money, $currency), $currency);
+    }
+
+    /**
+     * Get the default currency instance.
+     */
+    public function getDefaultCurrency(): Currency
+    {
+        return $this->defaultCurrency ?: Money::getDefaultCurrency();
     }
 
     /**

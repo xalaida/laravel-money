@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Nevadskiy\Money\Queries\CurrencyQueries;
+use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
 
 /**
@@ -22,26 +22,32 @@ use Nevadskiy\Money\ValueObjects\Money;
 class MoneyCast implements CastsAttributes
 {
     /**
-     * @var CurrencyQueries
+     * The currency query instance.
+     *
+     * @var CurrencyQuery
      */
-    protected $queries;
+    protected $currencies;
 
     /**
+     * The column name of the money amount.
+     *
      * @var null|string
      */
     protected $amountColumnName;
 
     /**
+     * The column name of the money currency.
+     *
      * @var null|string
      */
     protected $currencyKeyColumnName;
 
     /**
-     * MoneyCast constructor.
+     * Make a new cast instance.
      */
-    public function __construct(CurrencyQueries $queries, array $arguments)
+    public function __construct(CurrencyQuery $currencies, array $arguments)
     {
-        $this->queries = $queries;
+        $this->currencies = $currencies;
         $this->amountColumnName = $arguments[0] ?? null;
         $this->currencyKeyColumnName = $arguments[1] ?? null;
     }
@@ -61,7 +67,7 @@ class MoneyCast implements CastsAttributes
             return null;
         }
 
-        return new Money($attributes[$amountColumnName], $this->queries->getById($attributes[$currencyKeyColumnName]));
+        return new Money($attributes[$amountColumnName], $this->currencies->getById($attributes[$currencyKeyColumnName]));
     }
 
     /**

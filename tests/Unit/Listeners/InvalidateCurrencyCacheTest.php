@@ -8,7 +8,7 @@ use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Events\CurrencyCreated;
 use Nevadskiy\Money\Events\CurrencyDeleted;
 use Nevadskiy\Money\Events\CurrencyUpdated;
-use Nevadskiy\Money\Queries\CurrencyCacheQueries;
+use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Tests\TestCase;
 
 class InvalidateCurrencyCacheTest extends TestCase
@@ -19,7 +19,7 @@ class InvalidateCurrencyCacheTest extends TestCase
     {
         $currency = CurrencyFactory::new()->create();
 
-        $queries = $this->spy(CurrencyCacheQueries::class);
+        $queries = $this->spy(CurrencyCacheQuery::class);
 
         $this->app[Dispatcher::class]->dispatch(new CurrencyCreated($currency));
 
@@ -30,7 +30,7 @@ class InvalidateCurrencyCacheTest extends TestCase
     {
         $currency = CurrencyFactory::new()->create();
 
-        $queries = $this->spy(CurrencyCacheQueries::class);
+        $queries = $this->spy(CurrencyCacheQuery::class);
 
         $this->app[Dispatcher::class]->dispatch(new CurrencyUpdated($currency));
 
@@ -41,7 +41,7 @@ class InvalidateCurrencyCacheTest extends TestCase
     {
         $currency = CurrencyFactory::new()->create();
 
-        $queries = $this->spy(CurrencyCacheQueries::class);
+        $queries = $this->spy(CurrencyCacheQuery::class);
 
         $this->app[Dispatcher::class]->dispatch(new CurrencyDeleted($currency));
 

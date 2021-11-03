@@ -90,4 +90,29 @@ class MoneyTest extends TestCase
         static::assertSame(300, $money->getMajorUnits());
         static::assertTrue($money->getCurrency()->is($currency));
     }
+
+    public function test_it_can_resolve_default_currency_using_given_resolver(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        Money::resolveDefaultCurrencyUsing(function () use ($currency) {
+            return $currency;
+        });
+
+        static::assertTrue(Money::getDefaultCurrency()->is($currency));
+    }
+
+    public function test_it_can_be_created_with_default_currency(): void
+    {
+        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+
+        Money::resolveDefaultCurrencyUsing(function () use ($currency) {
+            return $currency;
+        });
+
+        $money = Money::fromMinorUnits(1000);
+
+        static::assertTrue($money->getCurrency()->is($currency));
+        static::assertSame(1000, $money->getMinorUnits());
+    }
 }
