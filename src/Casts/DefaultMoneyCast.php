@@ -17,11 +17,11 @@ class DefaultMoneyCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        if ($attributes[$key] === null) {
+        if ($value === null) {
             return null;
         }
 
-        return new Money($attributes[$key]);
+        return new Money($value);
     }
 
     /**
