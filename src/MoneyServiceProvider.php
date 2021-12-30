@@ -3,11 +3,10 @@
 namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
-use Nevadskiy\Money\Queries\CurrencyCacheQuery;
-use Nevadskiy\Money\Queries\CurrencyEloquentQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -80,8 +79,8 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerFormatter(): void
     {
-        $this->app->singleton(Formatter\Formatter::class, function () {
-            return new Formatter\DefaultFormatter($this->app->getLocale());
+        $this->app->singleton(Formatter\Formatter::class, function (Application $app) {
+            return new Formatter\DefaultFormatter($app->getLocale());
         });
     }
 
@@ -105,8 +104,8 @@ class MoneyServiceProvider extends ServiceProvider
         $this->app->singleton(CurrencyQuery::class, $config['implementation']);
 
         foreach ($config['decorators'] ?? [] as $decorator) {
-            $this->app->extend(CurrencyQuery::class, function (CurrencyQuery $currencies) use ($decorator) {
-                return $this->app->make($decorator, [
+            $this->app->extend(CurrencyQuery::class, function (CurrencyQuery $currencies, Application $app) use ($decorator) {
+                return $app->make($decorator, [
                     'currencies' => $currencies,
                 ]);
             });
@@ -118,10 +117,10 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerDefaultCurrency(): void
     {
-        $this->app->when(Queries\CurrencyEloquentQuery::class)
+        $this->app->when($this->app['config']['money']['bindings'][CurrencyQuery::class]['implementation'])
             ->needs('$defaultCurrencyCode')
-            ->give(function () {
-                return $this->app['config']['money']['default_currency_code'] ?? null;
+            ->give(function (Application $app) {
+                return $app['config']['money']['default_currency_code'] ?? null;
             });
 
         Money::resolveDefaultCurrencyUsing(function () {
@@ -138,7 +137,9 @@ class MoneyServiceProvider extends ServiceProvider
 
         $this->app->when(RateProvider\Providers\OpenExchangeProvider::class)
             ->needs('$appId')
-            ->give($this->app['config']['money']['rate_providers']['open_exchange_rates']['app_id']);
+            ->give(function (Application $app) {
+                return $app['config']['money']['rate_providers']['open_exchange_rates']['app_id'];
+            });
     }
 
     /**
@@ -146,9 +147,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerDefaultRateProvider(): void
     {
-        $this->app->singleton(RateProvider\RateProvider::class, function () {
-            return $this->app[$this->app['config']['money']['default_rate_provider']];
-        });
+        $this->app->singleton(RateProvider\RateProvider::class, $this->app['config']['money']['default_rate_provider']);
     }
 
     /**
