@@ -6,6 +6,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Nevadskiy\Money\Queries\CurrencyCacheQuery;
+use Nevadskiy\Money\Queries\CurrencyEloquentQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -98,13 +100,17 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerCurrencyQueries(): void
     {
-        $this->app->singleton(Queries\CurrencyQuery::class, Queries\CurrencyEloquentQuery::class);
+        $config = $this->app['config']['money']['bindings'][CurrencyQuery::class];
 
-        $this->app->extend(Queries\CurrencyQuery::class, function (Queries\CurrencyQuery $currencies) {
-            return $this->app->make(Queries\CurrencyCacheQuery::class, [
-                'currencies' => $currencies,
-            ]);
-        });
+        $this->app->singleton(CurrencyQuery::class, $config['implementation']);
+
+        foreach ($config['decorators'] ?? [] as $decorator) {
+            $this->app->extend(CurrencyQuery::class, function (CurrencyQuery $currencies) use ($decorator) {
+                return $this->app->make($decorator, [
+                    'currencies' => $currencies,
+                ]);
+            });
+        }
     }
 
     /**

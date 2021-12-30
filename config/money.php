@@ -1,5 +1,7 @@
 <?php
 
+use Nevadskiy\Money\Queries;
+
 return [
     // TODO: make it optional.
     'default_currency_code' => 'USD',
@@ -13,4 +15,14 @@ return [
     ],
 
     'default_migrations' => true,
+
+    'bindings' => [
+        Queries\CurrencyQuery::class => [
+            'implementation' => Queries\CurrencyEloquentQuery::class,
+
+            'decorators' => [
+                Queries\CurrencyCacheQuery::class
+            ],
+        ]
+    ]
 ];
