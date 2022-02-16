@@ -2,13 +2,22 @@
 
 namespace Nevadskiy\Money\Queries;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Nevadskiy\Money\Exceptions\DefaultCurrencyMissingException;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Models\CurrencyResolver;
 
 class CurrencyEloquentQuery implements CurrencyQuery
 {
+    /**
+     * The currency model resolver instance.
+     *
+     * @var CurrencyResolver
+     */
+    private $currencyResolver;
+
     /**
      * The default currency code.
      *
@@ -19,8 +28,9 @@ class CurrencyEloquentQuery implements CurrencyQuery
     /**
      * Make a new queries instance.
      */
-    public function __construct(string $defaultCurrencyCode = null)
+    public function __construct(CurrencyResolver $currencyResolver, string $defaultCurrencyCode = null)
     {
+        $this->currencyResolver = $currencyResolver;
         $this->defaultCurrencyCode = $defaultCurrencyCode;
     }
 
@@ -29,7 +39,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
      */
     public function all(): Collection
     {
-        return Currency::query()->get();
+        return $this->query()->get();
     }
 
     /**
@@ -37,7 +47,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
      */
     public function getById(string $id): Currency
     {
-        return Currency::query()->findOrFail($id);
+        return $this->query()->findOrFail($id);
     }
 
     /**
@@ -45,7 +55,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
      */
     public function getByCode(string $code): Currency
     {
-        return Currency::query()->where('code', $this->normalizeCode($code))->firstOrFail();
+        return $this->query()->where('code', $this->normalizeCode($code))->firstOrFail();
     }
 
     /**
@@ -66,5 +76,13 @@ class CurrencyEloquentQuery implements CurrencyQuery
     protected function normalizeCode(string $code): string
     {
         return Str::upper($code);
+    }
+
+    /**
+     * Get the currency query builder instance.
+     */
+    protected function query(): Builder
+    {
+        return $this->currencyResolver->resolve()->newQuery();
     }
 }

@@ -51,6 +51,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->registerDefaultCurrency();
         $this->registerOpenExchangeProvider();
         $this->registerDefaultRateProvider();
+        $this->registerCurrencyResolver();
     }
 
     /**
@@ -148,6 +149,16 @@ class MoneyServiceProvider extends ServiceProvider
     private function registerDefaultRateProvider(): void
     {
         $this->app->singleton(RateProvider\RateProvider::class, $this->app['config']['money']['default_rate_provider']);
+    }
+
+    /**
+     * Register the currency model resolver.
+     */
+    private function registerCurrencyResolver(): void
+    {
+        $this->app->singleton(Models\CurrencyResolver::class, function (Application $app) {
+            return new Models\CurrencyResolver($app['config']['money']['currency']['model']);
+        });
     }
 
     /**

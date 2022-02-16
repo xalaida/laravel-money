@@ -3,8 +3,9 @@
 namespace Nevadskiy\Money\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Models\CurrencyResolver;
 use function in_array;
 
 class SeedCurrenciesCommand extends Command
@@ -24,10 +25,27 @@ class SeedCurrenciesCommand extends Command
     protected $description = 'Seed currencies to the database';
 
     /**
+     * The currency model instance.
+     *
+     * @var Model
+     */
+    protected $currency;
+
+    /**
+     * Init the command instance.
+     */
+    protected function init(CurrencyResolver $currencyResolver): void
+    {
+        $this->currency = $currencyResolver->resolve();
+    }
+
+    /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(CurrencyResolver $currencyResolver): void
     {
+        $this->init($currencyResolver);
+
         $this->truncateAttempt();
 
         foreach ($this->currencies() as $currency) {
@@ -66,7 +84,7 @@ class SeedCurrenciesCommand extends Command
      */
     protected function truncate(): void
     {
-        Currency::query()->truncate();
+        $this->currency->newQuery()->truncate();
         $this->warn('Currencies have been truncated!');
     }
 
@@ -125,7 +143,7 @@ class SeedCurrenciesCommand extends Command
      */
     protected function seed(array $currency): void
     {
-        Currency::query()->updateOrCreate(['code' => $currency['code']], $currency);
+        $this->currency->newQuery()->updateOrCreate(['code' => $currency['code']], $currency);
         $this->line("Currency {$currency['code']} has been seeded!");
     }
 }

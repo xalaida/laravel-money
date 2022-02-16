@@ -24,5 +24,9 @@ return [
                 Queries\CurrencyCacheQuery::class
             ],
         ]
+    ],
+
+    'currency' => [
+        'model' => Nevadskiy\Money\Models\Currency::class,
     ]
 ];
