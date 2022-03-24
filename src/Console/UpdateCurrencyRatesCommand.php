@@ -10,14 +10,14 @@ use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\RateProvider\RateProvider;
 use Nevadskiy\Money\ValueObjects\Rate;
 
-class UpdateRatesCommand extends Command
+class UpdateCurrencyRatesCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'money:rates:update';
+    protected $signature = 'currencies:rates:update';
 
     /**
      * The console command description.
@@ -41,11 +41,10 @@ class UpdateRatesCommand extends Command
     protected $dispatcher;
 
     /**
-     * Create a new command instance.
+     * Init the command instance.
      */
-    public function __construct(RateProvider $provider, Dispatcher $dispatcher)
+    public function init(RateProvider $provider, Dispatcher $dispatcher): void
     {
-        parent::__construct();
         $this->provider = $provider;
         $this->dispatcher = $dispatcher;
     }
@@ -53,8 +52,10 @@ class UpdateRatesCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(RateProvider $provider, Dispatcher $dispatcher): void
     {
+        $this->init($provider, $dispatcher);
+
         $rates = $this->provider->getRates();
 
         foreach ($this->currencies($rates) as $currency) {

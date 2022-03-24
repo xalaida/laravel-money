@@ -15,7 +15,7 @@ class SeedCurrenciesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'money:currencies:seed {currencies?*} {--truncate}';
+    protected $signature = 'currencies:seed {currencies?*} {--truncate}';
 
     /**
      * The console command description.
@@ -85,6 +85,7 @@ class SeedCurrenciesCommand extends Command
     protected function truncate(): void
     {
         $this->currency->newQuery()->truncate();
+
         $this->warn('Currencies have been truncated!');
     }
 
@@ -144,6 +145,7 @@ class SeedCurrenciesCommand extends Command
     protected function seed(array $currency): void
     {
         $this->currency->newQuery()->updateOrCreate(['code' => $currency['code']], $currency);
+
         $this->line("Currency {$currency['code']} has been seeded!");
     }
 }

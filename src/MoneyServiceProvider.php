@@ -181,7 +181,7 @@ class MoneyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\UpdateRatesCommand::class,
+                Console\UpdateCurrencyRatesCommand::class,
                 Console\SeedCurrenciesCommand::class,
             ]);
         }
