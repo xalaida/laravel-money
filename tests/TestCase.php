@@ -2,6 +2,8 @@
 
 namespace Nevadskiy\Money\Tests;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\WithFaker;
 use Nevadskiy\Money\MoneyServiceProvider;
@@ -43,5 +45,13 @@ abstract class TestCase extends OrchestraTestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
+    }
+
+    /**
+     * Get a schema builder instance.
+     */
+    protected function schema(): Builder
+    {
+        return Model::getConnectionResolver()->connection()->getSchemaBuilder();
     }
 }
