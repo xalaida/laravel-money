@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Nevadskiy\Money\ValueObjects\Rate;
 
-class RateCast implements CastsAttributes
+class AsRate implements CastsAttributes
 {
     /**
-     * Cast the given value.
-     *
-     * @param Model $model
-     * @param float $value
+     * @inheritDoc
      */
     public function get($model, string $key, $value, array $attributes): Rate
     {
@@ -21,19 +18,24 @@ class RateCast implements CastsAttributes
     }
 
     /**
-     * Prepare the given value for storage.
-     *
-     * @param Model     $model
-     * @param null|Rate $value
+     * @inheritDoc
      */
     public function set($model, string $key, $value, array $attributes): array
     {
-        if (! $value instanceof Rate) {
-            throw new InvalidArgumentException('The given value is not a Rate instance.');
-        }
+        $this->assertValueIsRateInstance($value);
 
         return [
             $key => $value->getValue(),
         ];
+    }
+
+    /**
+     * Assert that the given value is a rate instance.
+     */
+    private function assertValueIsRateInstance($value): void
+    {
+        if (! $value instanceof Rate) {
+            throw new InvalidArgumentException('The given value is not a Rate instance.');
+        }
     }
 }

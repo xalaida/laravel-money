@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Nevadskiy\Money\Casts\RateCast;
+use Nevadskiy\Money\Casts\AsRate;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\ValueObjects\Rate;
 use Nevadskiy\Uuid\Uuid;
@@ -38,7 +38,7 @@ class Currency extends Model
      * @var array
      */
     protected $casts = [
-        'rate' => RateCast::class,
+        'rate' => AsRate::class,
     ];
 
     /**

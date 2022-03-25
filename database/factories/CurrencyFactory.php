@@ -57,7 +57,7 @@ class CurrencyFactory extends Factory
      */
     public function default(): self
     {
-        return $this->unrated()->state([
+        return $this->state([
             'code' => config('money.default_currency_code'),
         ]);
     }

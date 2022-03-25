@@ -19,7 +19,7 @@ use Nevadskiy\Money\ValueObjects\Money;
  *  - extra definition for relation in model class
  *  - relation probably not useful in that case since it does not have logic (but probably can have it if user overrides it)
  */
-class MoneyCast implements CastsAttributes
+class AsMoney implements CastsAttributes
 {
     /**
      * The column name of the money amount.
@@ -45,10 +45,7 @@ class MoneyCast implements CastsAttributes
     }
 
     /**
-     * Cast the given value.
-     *
-     * @param Model $model
-     * @param mixed $value
+     * @inheritDoc
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
@@ -66,10 +63,7 @@ class MoneyCast implements CastsAttributes
     }
 
     /**
-     * Prepare the given value for storage.
-     *
-     * @param Model      $model
-     * @param null|Money $value
+     * @inheritDoc
      */
     public function set($model, string $key, $value, array $attributes): array
     {
@@ -83,15 +77,13 @@ class MoneyCast implements CastsAttributes
         $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
 
         return [
-            $amountColumnName => $value->getAmount(),
+            $amountColumnName => $value->getMinorUnits(),
             $currencyKeyColumnName => $value->getCurrency()->getKey(),
         ];
     }
 
     /**
      * Assert that the given value is a money instance.
-     *
-     * @param $value
      */
     protected function assertValueIsMoneyInstance($value): void
     {

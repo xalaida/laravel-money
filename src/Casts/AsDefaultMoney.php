@@ -3,17 +3,13 @@
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Nevadskiy\Money\ValueObjects\Money;
 
-class DefaultMoneyCast implements CastsAttributes
+class AsDefaultMoney implements CastsAttributes
 {
     /**
-     * Cast the given value.
-     *
-     * @param Model $model
-     * @param mixed $value
+     * @inheritDoc
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
@@ -25,10 +21,7 @@ class DefaultMoneyCast implements CastsAttributes
     }
 
     /**
-     * Prepare the given value for storage.
-     *
-     * @param Model      $model
-     * @param null|Money $value
+     * @inheritDoc
      */
     public function set($model, string $key, $value, array $attributes): array
     {
@@ -38,13 +31,13 @@ class DefaultMoneyCast implements CastsAttributes
 
         $this->assertValueIsMoneyInstance($value);
 
-        return [$key => $value->getAmount()];
+        return [
+            $key => $value->getMinorUnits()
+        ];
     }
 
     /**
      * Assert that the given value is a money instance.
-     *
-     * @param $value
      */
     protected function assertValueIsMoneyInstance($value): void
     {
