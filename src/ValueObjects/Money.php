@@ -40,7 +40,7 @@ class Money
     }
 
     /**
-     * Create a new money instance from minor units.
+     * Create a new money instance from major units.
      */
     public static function fromMajorUnits(float $amount, Currency $currency = null): self
     {
@@ -92,7 +92,7 @@ class Money
     }
 
     /**
-     * Returns money formatted according to the locale.
+     * Returns formatted money according to the locale.
      */
     public function format(string $locale = null): string
     {
@@ -108,7 +108,7 @@ class Money
     }
 
     /**
-     * Returns money converted according to the given currency.
+     * Returns converted money according to the given currency.
      */
     public function convert(Currency $currency = null): self
     {
@@ -125,6 +125,7 @@ class Money
 
     /**
      * Get the major unit multiplier.
+     * TODO: extract into the currency class.
      */
     protected static function getMajorMultiplier(Currency $currency): int
     {
@@ -204,7 +205,7 @@ class Money
     }
 
     /**
-     * Convert the money to the string type.
+     * Get the string representation of the money instance.
      */
     public function __toString(): string
     {
