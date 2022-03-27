@@ -15,7 +15,7 @@ composer require nevadskiy/laravel-money
 
 ### Using money cast in the model
 
-The price field can be casted into Money instance. To make it castable, add the following code to your model.
+The price field can be cast into Money instance. To make it castable, add the following code to your model.
 
 ```php
 /**
@@ -41,19 +41,8 @@ Schema::create('products', function (Blueprint $table) {
 
 ## Seed currencies 
 
-```php
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        $this->call([
-            \Nevadskiy\Money\Database\Seeders\CurrencySeeder::class,
-        ]);
-    }
-}
+```bash
+php artisan currencies:seed
 ```
 
 
@@ -66,6 +55,9 @@ class DatabaseSeeder extends Seeder
 - [ ] add possibility to disable locale tracking for formatter
 - [ ] add possibility to specify concrete formatter format
 - [ ] add possibility to render money without decimals
+- [ ] introduce the CurrencyInterface that allow to not extend default currency using custom currency
+- [ ] allow using POPO currency (not model) as the currency instance for the money (probably possible using interface)
+- [ ] add possibility to use currency code instead of ID (in the cast)
 - [ ] add possibility to use package with only single (default anonymous) currency
 - [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%')
 - [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year') (can be done using laravel prunable models)
