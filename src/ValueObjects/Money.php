@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\ValueObjects;
 
 use Nevadskiy\Money\Converter\Converter;
-use Nevadskiy\Money\Exceptions\MoneyMismatchException;
+use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
 use RuntimeException;
@@ -236,7 +236,7 @@ class Money
     private function assertMoneyCurrencyMatches(Money $money): void
     {
         if (! $this->getCurrency()->is($money->getCurrency())) {
-            throw new MoneyMismatchException();
+            throw new CurrencyMismatchException();
         }
     }
 }
