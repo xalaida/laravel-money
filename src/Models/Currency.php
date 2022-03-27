@@ -8,10 +8,9 @@ use Illuminate\Support\Str;
 use Nevadskiy\Money\Casts\AsRate;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\ValueObjects\Rate;
-use Nevadskiy\Uuid\Uuid;
 
 /**
- * @property string id
+ * @property int id
  * @property string code
  * @property string name
  * @property string symbol
@@ -22,16 +21,6 @@ use Nevadskiy\Uuid\Uuid;
  */
 class Currency extends Model
 {
-    use Uuid;
-
-    /**
-     * TODO: do not unguard attributes.
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [];
-
     /**
      * The attributes that should be cast.
      *

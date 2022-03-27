@@ -12,7 +12,7 @@ class CreateCurrenciesTable extends Migration
     public function up(): void
     {
         Schema::create('currencies', static function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('code', 3)->unique()->comment('ISO 4217');
             $table->string('name', 50);
             $table->string('symbol', 10)->nullable();
