@@ -48,10 +48,11 @@ php artisan currencies:seed
 
 ## TODO
 
+- [ ] update doc
 - [ ] cover with tests
 - [ ] add publish config
+- [ ] add possibility to seed custom currency (provide callback)
 - [ ] add Money::parse() method to receive data from front-end
-- [ ] add possibility to specify custom currency model
 - [ ] add possibility to disable locale tracking for formatter
 - [ ] add possibility to specify concrete formatter format
 - [ ] add possibility to render money without decimals
@@ -62,7 +63,6 @@ php artisan currencies:seed
 - [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%')
 - [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year') (can be done using laravel prunable models)
 - [ ] add install instruction about cron registration for rates
-- [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate})
 - [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
 - [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`) \Casts\DefaultMoney::class
 - [ ] add possibility to use Casts\Money::class directly without needing or resolving container dependencies (resolve them inside)
