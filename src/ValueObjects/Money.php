@@ -46,7 +46,7 @@ class Money
     {
         $currency = $currency ?: static::getDefaultCurrency();
 
-        return new static((int) ($amount * static::getMajorMultiplier($currency)), $currency);
+        return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
     }
 
     /**
@@ -80,7 +80,7 @@ class Money
      */
     public function getMajorUnits()
     {
-        return $this->getMinorUnits() / static::getMajorMultiplier($this->currency);
+        return $this->getMinorUnits() / $this->currency->getMajorMultiplier();
     }
 
     /**
@@ -121,15 +121,6 @@ class Money
     public function convertUsing(Converter $converter, Currency $currency = null): self
     {
         return $converter->convert($this, $currency);
-    }
-
-    /**
-     * Get the major unit multiplier.
-     * TODO: extract into the currency class.
-     */
-    protected static function getMajorMultiplier(Currency $currency): int
-    {
-        return 10 ** $currency->precision;
     }
 
     /**

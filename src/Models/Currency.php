@@ -48,4 +48,12 @@ class Currency extends Model
     {
         $this->attributes['code'] = Str::upper($code);
     }
+
+    /**
+     * Get the major unit multiplier according to the precision.
+     */
+    public function getMajorMultiplier(): int
+    {
+        return 10 ** $this->precision;
+    }
 }
