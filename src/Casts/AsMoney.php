@@ -3,7 +3,6 @@
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
@@ -84,6 +83,8 @@ class AsMoney implements CastsAttributes
 
     /**
      * Assert that the given value is a money instance.
+     *
+     * @param mixed $value
      */
     protected function assertValueIsMoneyInstance($value): void
     {

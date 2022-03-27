@@ -22,8 +22,8 @@ return [
             'implementation' => Queries\CurrencyEloquentQuery::class,
 
             'decorators' => [
-                Queries\CurrencyCacheQuery::class
+                Queries\CurrencyCacheQuery::class,
             ],
-        ]
-    ]
+        ],
+    ],
 ];

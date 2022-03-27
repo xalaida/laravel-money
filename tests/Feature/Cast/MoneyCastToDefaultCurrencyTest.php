@@ -22,15 +22,13 @@ class MoneyCastToDefaultCurrencyTest extends TestCase
     }
 
     /**
-     * Set up the database schema.
+     * @inheritDoc
      */
-    private function createSchema(): void
+    protected function tearDown(): void
     {
-        $this->schema()->create('products', function (Blueprint $table) {
-            $table->id();
-            $table->integer('cost')->unsigned();
-            $table->timestamps();
-        });
+        $this->schema()->drop('products');
+
+        parent::tearDown();
     }
 
     public function test_attribute_can_be_cast_using_default_currency(): void
@@ -48,13 +46,15 @@ class MoneyCastToDefaultCurrencyTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * Set up the database schema.
      */
-    protected function tearDown(): void
+    private function createSchema(): void
     {
-        $this->schema()->drop('products');
-
-        parent::tearDown();
+        $this->schema()->create('products', function (Blueprint $table) {
+            $table->id();
+            $table->integer('cost')->unsigned();
+            $table->timestamps();
+        });
     }
 }
 

@@ -2,9 +2,10 @@
 
 namespace Nevadskiy\Money\Console;
 
-use Nevadskiy\Money\Models\CurrencyResolver;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Nevadskiy\Money\Models\CurrencyResolver;
+use function call_user_func;
 
 class SeedCurrenciesCommand extends Command
 {

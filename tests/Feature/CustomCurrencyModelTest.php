@@ -27,6 +27,33 @@ class CustomCurrencyModelTest extends TestCase
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->schema()->drop('products');
+        $this->schema()->drop('currencies_uuid');
+
+        CurrencyResolver::useDefault();
+
+        parent::tearDown();
+    }
+
+    public function test_it_uses_custom_currency_model_to_handle_money(): void
+    {
+        $currency = CurrencyFactory::new()->default()->create();
+
+        $product = new CustomCurrencyModelProduct();
+        $product->cost = Money::fromMajorUnits(100, $currency);
+        $product->save();
+
+        static::assertInstanceOf(Money::class, $product->cost);
+        static::assertInstanceOf(CurrencyUuid::class, $product->cost->getCurrency());
+        static::assertSame(100, $product->cost->getMajorUnits());
+        static::assertTrue($product->cost->getCurrency()->is($currency));
+    }
+
+    /**
      * Set up the database schema.
      */
     private function createSchema(): void
@@ -47,33 +74,6 @@ class CustomCurrencyModelTest extends TestCase
             $table->foreignId('cost_currency_id')->constrained('currencies_uuid');
             $table->timestamps();
         });
-    }
-
-    public function test_it_uses_custom_currency_model_to_handle_money(): void
-    {
-        $currency = CurrencyFactory::new()->default()->create();
-
-        $product = new CustomCurrencyModelProduct();
-        $product->cost = Money::fromMajorUnits(100, $currency);
-        $product->save();
-
-        static::assertInstanceOf(Money::class, $product->cost);
-        static::assertInstanceOf(CurrencyUuid::class, $product->cost->getCurrency());
-        static::assertSame(100, $product->cost->getMajorUnits());
-        static::assertTrue($product->cost->getCurrency()->is($currency));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown(): void
-    {
-        $this->schema()->drop('products');
-        $this->schema()->drop('currencies_uuid');
-
-        CurrencyResolver::useDefault();
-
-        parent::tearDown();
     }
 }
 

@@ -3,7 +3,6 @@
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Nevadskiy\Money\ValueObjects\Rate;
 
@@ -31,6 +30,8 @@ class AsRate implements CastsAttributes
 
     /**
      * Assert that the given value is a rate instance.
+     *
+     * @param mixed $value
      */
     private function assertValueIsRateInstance($value): void
     {

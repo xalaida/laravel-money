@@ -13,7 +13,7 @@ class AsDefaultMoney implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 
@@ -32,12 +32,14 @@ class AsDefaultMoney implements CastsAttributes
         $this->assertValueIsMoneyInstance($value);
 
         return [
-            $key => $value->getMinorUnits()
+            $key => $value->getMinorUnits(),
         ];
     }
 
     /**
      * Assert that the given value is a money instance.
+     *
+     * @param mixed $value
      */
     protected function assertValueIsMoneyInstance($value): void
     {
