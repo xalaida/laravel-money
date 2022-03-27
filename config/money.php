@@ -16,6 +16,7 @@ return [
 
     'default_migrations' => true,
 
+    // TODO: simplify that.
     'bindings' => [
         Queries\CurrencyQuery::class => [
             'implementation' => Queries\CurrencyEloquentQuery::class,
@@ -24,9 +25,5 @@ return [
                 Queries\CurrencyCacheQuery::class
             ],
         ]
-    ],
-
-    'currency' => [
-        'model' => Nevadskiy\Money\Models\Currency::class,
     ]
 ];

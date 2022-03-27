@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Models\CurrencyResolver;
 use Nevadskiy\Money\ValueObjects\Rate;
 
 /**
@@ -18,6 +19,14 @@ class CurrencyFactory extends Factory
      * @var string
      */
     protected $model = Currency::class;
+
+    /**
+     * @inheritDoc
+     */
+    public function modelName(): string
+    {
+        return CurrencyResolver::modelName();
+    }
 
     /**
      * Define the model's default state.

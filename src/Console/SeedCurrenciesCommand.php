@@ -2,11 +2,9 @@
 
 namespace Nevadskiy\Money\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Nevadskiy\Money\Models\CurrencyResolver;
-use function in_array;
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class SeedCurrenciesCommand extends Command
 {
@@ -25,27 +23,10 @@ class SeedCurrenciesCommand extends Command
     protected $description = 'Seed currencies to the database';
 
     /**
-     * The currency model instance.
-     *
-     * @var Model
-     */
-    protected $currency;
-
-    /**
-     * Init the command instance.
-     */
-    protected function init(CurrencyResolver $currencyResolver): void
-    {
-        $this->currency = $currencyResolver->resolve();
-    }
-
-    /**
      * Execute the console command.
      */
-    public function handle(CurrencyResolver $currencyResolver): void
+    public function handle(): void
     {
-        $this->init($currencyResolver);
-
         $this->truncateAttempt();
 
         foreach ($this->currencies() as $currency) {
@@ -84,7 +65,7 @@ class SeedCurrenciesCommand extends Command
      */
     protected function truncate(): void
     {
-        $this->currency->newQuery()->truncate();
+        CurrencyResolver::resolve()->newQuery()->truncate();
 
         $this->warn('Currencies have been truncated!');
     }
@@ -120,32 +101,24 @@ class SeedCurrenciesCommand extends Command
      */
     protected function getCurrenciesByCodes(array $codes): array
     {
-        $codes = $this->transformIntoUpperCase($codes);
-
-        return array_filter($this->allCurrencies(), static function (array $currency) use ($codes) {
-            return in_array($currency['code'], $codes, true);
-        });
+        return collect($this->allCurrencies())
+            ->filter(function (array $currency) use ($codes) {
+                return collect($codes)->contains(Str::upper($currency['code']));
+            })
+            ->all();
     }
 
     /**
-     * Transform the given codes into upper case.
-     *
-     * @return array|string[]
-     */
-    protected function transformIntoUpperCase(array $codes): array
-    {
-        return array_map(static function (string $code) {
-            return Str::upper($code);
-        }, $codes);
-    }
-
-    /**
-     * Seed the currency data.
+     * Seed the currency record from the given data.
      */
     protected function seed(array $currency): void
     {
-        $this->currency->newQuery()->updateOrCreate(['code' => $currency['code']], $currency);
+        call_user_func([CurrencyResolver::modelName(), 'unguarded'], static function () use ($currency) {
+            CurrencyResolver::resolve()
+                ->newQuery()
+                ->create($currency);
+        });
 
-        $this->line("Currency {$currency['code']} has been seeded!");
+        $this->line("Currency {$currency['code']} has been inserted!");
     }
 }
