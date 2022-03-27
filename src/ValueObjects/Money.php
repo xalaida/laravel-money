@@ -37,7 +37,7 @@ class Money
     public function __construct(int $amount, Currency $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: static::getDefaultCurrency();
+        $this->currency = $currency ?: static::resolveDefaultCurrency();
     }
 
     /**
@@ -45,7 +45,7 @@ class Money
      */
     public static function fromMajorUnits(float $amount, Currency $currency = null): self
     {
-        $currency = $currency ?: static::getDefaultCurrency();
+        $currency = $currency ?: static::resolveDefaultCurrency();
 
         return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
     }
@@ -98,7 +98,7 @@ class Money
     public function add(Money $money, bool $convert = false): self
     {
         if (! $convert) {
-            $this->assertCurrencyMatches($money);
+            $this->assertMoneyCurrencyMatches($money);
         }
 
         return $this->clone($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
@@ -110,7 +110,7 @@ class Money
     public function subtract(Money $money, bool $convert = false): self
     {
         if (! $convert) {
-            $this->assertCurrencyMatches($money);
+            $this->assertMoneyCurrencyMatches($money);
         }
 
         return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
@@ -177,15 +177,7 @@ class Money
     }
 
     /**
-     * Get the default currency.
-     */
-    public static function getDefaultCurrency(): Currency
-    {
-        return static::resolveDefaultCurrency();
-    }
-
-    /**
-     * Set the default currency resolver function.
+     * Set the resolver function for the default currency.
      */
     public static function resolveDefaultCurrencyUsing(callable $resolver): void
     {
@@ -231,7 +223,7 @@ class Money
     /**
      * Assert that the given currency matches the current currency.
      */
-    private function assertCurrencyMatches(Money $money): void
+    private function assertMoneyCurrencyMatches(Money $money): void
     {
         if (! $this->getCurrency()->is($money->getCurrency())) {
             throw new MoneyMismatchException();
