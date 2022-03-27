@@ -14,13 +14,6 @@ use Nevadskiy\Money\ValueObjects\Rate;
 class CurrencyFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Currency::class;
-
-    /**
      * @inheritDoc
      */
     public function modelName(): string
