@@ -95,7 +95,7 @@ class Money
     /**
      * Add the given money to the money instance.
      */
-    public function add(Money $money, bool $convert = false): self
+    public function plus(Money $money, bool $convert = false): self
     {
         if (! $convert) {
             $this->assertMoneyCurrencyMatches($money);
@@ -107,13 +107,23 @@ class Money
     /**
      * Subtract the given money from the money instance.
      */
-    public function subtract(Money $money, bool $convert = false): self
+    public function minus(Money $money, bool $convert = false): self
     {
         if (! $convert) {
             $this->assertMoneyCurrencyMatches($money);
         }
 
         return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
+    }
+
+    public function plusPercentage(float $percentage): self
+    {
+        // TODO: complete the method.
+    }
+
+    public function minusPercentage(float $percentage): self
+    {
+        // TODO: complete the method.
     }
 
     /**
