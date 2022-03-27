@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
+use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\ValueObjects\Money;
 
@@ -24,18 +25,6 @@ class MoneyServiceProvider extends ServiceProvider
 
         Events\DefaultCurrencyUpdated::class => [
             Listeners\UpdateDefaultConverterCurrency::class,
-        ],
-
-        Events\CurrencyCreated::class => [
-            Listeners\InvalidateCurrencyCache::class,
-        ],
-
-        Events\CurrencyUpdated::class => [
-            Listeners\InvalidateCurrencyCache::class,
-        ],
-
-        Events\CurrencyDeleted::class => [
-            Listeners\InvalidateCurrencyCache::class,
         ],
     ];
 
@@ -61,6 +50,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootCommands();
         $this->bootRoutes();
         $this->bootEvents();
+        $this->bootCacheInvalidator();
         $this->bootMigrations();
         $this->bootMorphMap();
         $this->publishMigrations();
@@ -187,6 +177,20 @@ class MoneyServiceProvider extends ServiceProvider
             foreach ($listeners as $listener) {
                 $dispatcher->listen($event, $listener);
             }
+        }
+    }
+
+    /**
+     * Boot any package events.
+     */
+    private function bootCacheInvalidator(): void
+    {
+        if ($this->app[CurrencyQuery::class] instanceof CurrencyCacheQuery) {
+            $this->app[Dispatcher::class]->listen([
+                Events\CurrencyCreated::class,
+                Events\CurrencyUpdated::class,
+                Events\CurrencyDeleted::class,
+            ], Listeners\InvalidateCurrencyCache::class);
         }
     }
 
