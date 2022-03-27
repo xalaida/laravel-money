@@ -10,16 +10,16 @@ class DefaultConverter implements Converter
     /**
      * The default converter currency.
      *
-     * @var null|Currency
+     * @var Currency
      */
     protected $defaultCurrency;
 
     /**
      * Make a new converter instance.
      */
-    public function __construct(Currency $defaultCurrency = null)
+    public function __construct(Currency $currency)
     {
-        $this->defaultCurrency = $defaultCurrency;
+        $this->defaultCurrency = $currency;
     }
 
     /**
@@ -35,17 +35,9 @@ class DefaultConverter implements Converter
      */
     public function convert(Money $money, Currency $currency = null): Money
     {
-        $currency = $currency ?: $this->getDefaultCurrency();
+        $currency = $currency ?: $this->defaultCurrency;
 
         return new Money($this->getConvertedAmount($money, $currency), $currency);
-    }
-
-    /**
-     * Get the default currency instance.
-     */
-    public function getDefaultCurrency(): Currency
-    {
-        return $this->defaultCurrency ?: Money::getDefaultCurrency();
     }
 
     /**

@@ -99,7 +99,7 @@ class MoneyTest extends TestCase
             return $currency;
         });
 
-        static::assertTrue(Money::getDefaultCurrency()->is($currency));
+        static::assertTrue(Money::resolveDefaultCurrency()->is($currency));
     }
 
     public function test_it_can_be_created_with_default_currency(): void

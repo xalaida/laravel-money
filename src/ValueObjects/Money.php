@@ -187,7 +187,7 @@ class Money
     /**
      * Resolve the default currency.
      */
-    protected static function resolveDefaultCurrency(): Currency
+    public static function resolveDefaultCurrency(): Currency
     {
         if (! isset(static::$defaultCurrencyResolver)) {
             throw new RuntimeException("Cannot resolve the default currency.");
