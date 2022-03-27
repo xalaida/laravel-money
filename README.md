@@ -51,6 +51,7 @@ php artisan currencies:seed
 - [ ] update doc
 - [ ] cover with tests
 - [ ] add publish config
+- [ ] refactor exceptions to put message inside
 - [ ] add possibility to seed custom currency (provide callback)
 - [ ] add Money::parse() method to receive data from front-end
 - [ ] add possibility to disable locale tracking for formatter
