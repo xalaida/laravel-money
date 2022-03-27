@@ -37,7 +37,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
     /**
      * @inheritDoc
      */
-    public function getById(string $id): Currency
+    public function getById($id): Currency
     {
         return $this->query()->findOrFail($id);
     }
