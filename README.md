@@ -57,14 +57,14 @@ php artisan currencies:seed
 - [ ] add possibility to specify concrete formatter format
 - [ ] add possibility to render money without decimals
 - [ ] introduce the CurrencyInterface that allow to not extend default currency using custom currency
-- [ ] allow using POPO currency (not model) as the currency instance for the money (probably possible using interface)
+- [ ] allow using plain object currency (not model) as the currency instance for the money (probably possible using interface)
 - [ ] add possibility to use currency code instead of ID (in the cast)
 - [ ] add possibility to use package with only single (default anonymous) currency
 - [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%')
 - [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year') (can be done using laravel prunable models)
 - [ ] add install instruction about cron registration for rates
 - [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
-- [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`) \Casts\DefaultMoney::class
+- [ ] add cast with the following syntax: AsMoneyOf::class.'USD'
 - [ ] add possibility to use Casts\Money::class directly without needing or resolving container dependencies (resolve them inside)
 - [ ] add possibility to extend migration
 - [ ] add command to show outdated rates
