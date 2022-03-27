@@ -6,7 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use InvalidArgumentException;
 use Nevadskiy\Money\ValueObjects\Money;
 
-class AsDefaultMoney implements CastsAttributes
+class AsMoneyDefault implements CastsAttributes
 {
     /**
      * @inheritDoc

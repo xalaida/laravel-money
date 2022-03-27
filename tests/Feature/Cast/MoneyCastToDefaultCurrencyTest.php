@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Tests\Feature\Cast;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Nevadskiy\Money\Casts\AsDefaultMoney;
+use Nevadskiy\Money\Casts\AsMoneyDefault;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\ValueObjects\Money;
@@ -66,6 +66,6 @@ class DefaultMoneyCastProduct extends Model
     protected $table = 'products';
 
     protected $casts = [
-        'cost' => AsDefaultMoney::class,
+        'cost' => AsMoneyDefault::class,
     ];
 }
