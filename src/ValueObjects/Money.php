@@ -3,6 +3,7 @@
 namespace Nevadskiy\Money\ValueObjects;
 
 use Nevadskiy\Money\Converter\Converter;
+use Nevadskiy\Money\Exceptions\MoneyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
 use RuntimeException;
@@ -92,6 +93,58 @@ class Money
     }
 
     /**
+     * Add the given money to the money instance.
+     */
+    public function add(Money $money, bool $convert = false): self
+    {
+        if (! $convert) {
+            $this->assertCurrencyMatches($money);
+        }
+
+        return $this->clone($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
+    }
+
+    /**
+     * Subtract the given money from the money instance.
+     */
+    public function subtract(Money $money, bool $convert = false): self
+    {
+        if (! $convert) {
+            $this->assertCurrencyMatches($money);
+        }
+
+        return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
+    }
+
+    /**
+     * Multiply the money instance.
+     *
+     * @param float|int $multiplier
+     */
+    public function multiply($multiplier): self
+    {
+        return $this->clone($this->getAmount() * $multiplier);
+    }
+
+    /**
+     * Divide the money instance.
+     *
+     * @param float|int $divisor
+     */
+    public function divide($divisor): self
+    {
+        return $this->clone($this->getAmount() / $divisor);
+    }
+
+    /**
+     * Get a clone of the money instance.
+     */
+    public function clone(int $amount = null, Currency $currency = null): self
+    {
+        return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
+    }
+
+    /**
      * Returns formatted money according to the locale.
      */
     public function format(string $locale = null): string
@@ -121,34 +174,6 @@ class Money
     public function convertUsing(Converter $converter, Currency $currency = null): self
     {
         return $converter->convert($this, $currency);
-    }
-
-    /**
-     * Multiply the money instance.
-     *
-     * @param float|int $multiplier
-     */
-    public function multiply($multiplier): self
-    {
-        return $this->clone($this->getAmount() * $multiplier);
-    }
-
-    /**
-     * Divide the money instance.
-     *
-     * @param float|int $divisor
-     */
-    public function divide($divisor): self
-    {
-        return $this->clone($this->getAmount() / $divisor);
-    }
-
-    /**
-     * Get a clone of the money instance.
-     */
-    public function clone(int $amount = null, Currency $currency = null): self
-    {
-        return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
     }
 
     /**
@@ -201,5 +226,15 @@ class Money
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * Assert that the given currency matches the current currency.
+     */
+    private function assertCurrencyMatches(Money $money): void
+    {
+        if (! $this->getCurrency()->is($money->getCurrency())) {
+            throw new MoneyMismatchException();
+        }
     }
 }
