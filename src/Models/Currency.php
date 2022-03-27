@@ -50,6 +50,14 @@ class Currency extends Model
     }
 
     /**
+     * Get the code of the currency.
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
      * Get the major unit multiplier according to the precision.
      */
     public function getMajorMultiplier(): int
