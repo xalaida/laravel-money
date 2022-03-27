@@ -42,9 +42,9 @@ class CurrencyResolver
      */
     public static function resolve(): Model
     {
-        $modelName = static::modelName();
+        $class = static::modelName();
 
-        return new $modelName;
+        return new $class();
     }
 
     /**
