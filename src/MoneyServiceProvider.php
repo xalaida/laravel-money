@@ -48,7 +48,6 @@ class MoneyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootCommands();
-        $this->bootRoutes();
         $this->bootEvents();
         $this->bootCacheInvalidator();
         $this->bootMigrations();
@@ -139,19 +138,6 @@ class MoneyServiceProvider extends ServiceProvider
     private function registerDefaultRateProvider(): void
     {
         $this->app->singleton(RateProvider\RateProvider::class, $this->app['config']['money']['default_rate_provider']);
-    }
-
-    /**
-     * Boot any module routes.
-     */
-    private function bootRoutes(): void
-    {
-        $this->app['router']->group([
-            'middleware' => 'api',
-            'prefix' => 'api',
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        });
     }
 
     /**
