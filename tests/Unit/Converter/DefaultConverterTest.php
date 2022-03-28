@@ -68,20 +68,4 @@ class DefaultConverterTest extends TestCase
         static::assertTrue($money->getCurrency()->is($currency));
         static::assertSame($money->getMajorUnits(), 100);
     }
-
-    public function test_it_takes_default_currency_from_money_when_it_is_missing(): void
-    {
-        $defaultCurrency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
-
-        Money::resolveDefaultCurrencyUsing(function () use ($defaultCurrency) {
-            return $defaultCurrency;
-        });
-
-        $originalCurrency = CurrencyFactory::new()->unrated()->create(['code' => 'EUR']);
-
-        $converter = new DefaultConverter();
-        $money = $converter->convert(Money::fromMajorUnits(100, $originalCurrency));
-
-        static::assertTrue($money->getCurrency()->is($defaultCurrency));
-    }
 }
