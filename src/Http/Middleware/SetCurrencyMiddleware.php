@@ -7,10 +7,11 @@ namespace Nevadskiy\Money\Http\Middleware;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 
-final class SetRequestCurrencyMiddleware
+final class SetCurrencyMiddleware
 {
     /**
      * The currency query instance.
@@ -34,39 +35,56 @@ final class SetRequestCurrencyMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $this->setRequestCurrency($request);
+        $this->setCurrencyFromRequest($request);
 
         return $next($request);
     }
 
     /**
-     * TODO: probably add different resolvers (CookieResolver, GeoIPResolver, UserResolver, etc.
-     * TODO: cover with tests
      * Set the default converter currency from the request query.
      */
-    private function setRequestCurrency(Request $request): void
+    private function setCurrencyFromRequest(Request $request): void
     {
-        // TODO: maybe define strategies here how to update currency (as default, or as request attribute, or custom)
-        // TODO: probably it should be saved into request attribute and somewhere else.
         $request->attributes->set('currency', $this->getCurrencyFromRequest($request));
     }
 
     /**
-     * Get currency from the request.
+     * Get a currency instance from the request.
      */
     private function getCurrencyFromRequest(Request $request): Currency
     {
-        if (! $request->query('currency')) {
+        $currencyCode = $this->parseValidCurrencyCode($request);
+
+        if (! $currencyCode) {
             return $this->currencies->default();
         }
-
-        // TODO: validate currency code here...
 
         try {
-            return $this->currencies->getByCode($request->query('currency'));
+            return $this->currencies->getByCode($currencyCode);
         } catch (ModelNotFoundException $e) {
-            // TODO: log that currency cannot be resolved by the given code.
             return $this->currencies->default();
         }
+    }
+
+    /**
+     * Parse valid currency code from the request.
+     */
+    private function parseValidCurrencyCode(Request $request): ?string
+    {
+        $code = $request->query('currency');
+
+        if (! $code) {
+            return null;
+        }
+
+        if (! is_string($code)) {
+            return null;
+        }
+
+        if (Str::length($code) !== 3) {
+            return null;
+        }
+
+        return $code;
     }
 }
