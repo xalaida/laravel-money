@@ -83,10 +83,12 @@ class UpdateCurrencyRatesCommand extends Command
      */
     protected function updateRate(Currency $currency, Rate $rate): void
     {
+        $rateBefore = $currency->rate;
+
         $currency->rate = $rate;
         $currency->save();
 
-        $this->dispatcher->dispatch(new CurrencyRateUpdated($currency));
+        $this->dispatcher->dispatch(new CurrencyRateUpdated($currency, $rateBefore, $rate));
 
         $this->line("Rate has been updated for the currency {$currency->code} with the value {$rate->getValue()}");
     }
