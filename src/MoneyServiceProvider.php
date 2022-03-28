@@ -53,6 +53,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootCacheInvalidator();
         $this->bootMigrations();
         $this->bootMorphMap();
+        $this->publishConfig();
         $this->publishMigrations();
     }
 
@@ -212,6 +213,16 @@ class MoneyServiceProvider extends ServiceProvider
         Relation::morphMap([
             'currencies' => Models\Currency::class,
         ]);
+    }
+
+    /**
+     * Publish any package configurations.
+     */
+    private function publishConfig(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/money.php' => config_path('money.php')
+        ], 'money-config');
     }
 
     /**
