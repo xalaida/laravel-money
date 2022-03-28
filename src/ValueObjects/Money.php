@@ -211,7 +211,7 @@ class Money
      */
     protected function getFormatter(): Formatter
     {
-        return app(Formatter::class);
+        return resolve(Formatter::class);
     }
 
     /**
@@ -219,7 +219,7 @@ class Money
      */
     protected function getConverter(): Converter
     {
-        return app(Converter::class);
+        return resolve(Converter::class);
     }
 
     /**

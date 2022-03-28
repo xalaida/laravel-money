@@ -83,7 +83,7 @@ class MoneyTest extends TestCase
 
         $currency = CurrencyFactory::new()->rated(3)->create(['code' => 'EUR']);
 
-        app(Converter::class)->setDefaultCurrency($currency);
+        resolve(Converter::class)->setDefaultCurrency($currency);
 
         $money = $originalMoney->convert();
 
