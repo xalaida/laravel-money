@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Models\CurrencyResolver;
 use Nevadskiy\Money\ValueObjects\Rate;
 
 /**
@@ -13,11 +14,12 @@ use Nevadskiy\Money\ValueObjects\Rate;
 class CurrencyFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
+     * @inheritDoc
      */
-    protected $model = Currency::class;
+    public function modelName(): string
+    {
+        return CurrencyResolver::modelName();
+    }
 
     /**
      * Define the model's default state.
@@ -57,7 +59,7 @@ class CurrencyFactory extends Factory
      */
     public function default(): self
     {
-        return $this->unrated()->state([
+        return $this->state([
             'code' => config('money.default_currency_code'),
         ]);
     }

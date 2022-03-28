@@ -46,7 +46,7 @@ class CurrencyCacheQuery implements CurrencyQuery
     /**
      * @inheritDoc
      */
-    public function getById(string $id): Currency
+    public function getById($id): Currency
     {
         return $this->cache->tags('currency')
             ->rememberForever($this->buildCacheKey(['currency', 'id', $id]), function () use ($id) {

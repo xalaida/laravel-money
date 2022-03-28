@@ -7,6 +7,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Nevadskiy\Money\Events\CurrencyRateUpdated;
 use Nevadskiy\Money\Models\Currency;
+use Nevadskiy\Money\Models\CurrencyResolver;
 use Nevadskiy\Money\RateProvider\RateProvider;
 use Nevadskiy\Money\ValueObjects\Rate;
 
@@ -70,7 +71,9 @@ class UpdateCurrencyRatesCommand extends Command
      */
     protected function currencies(array $rates): Collection
     {
-        return Currency::query()
+        return CurrencyResolver::resolve()
+            ->newQuery()
+            // TODO: refactor array_keys to use another format. introduce better provider rates structure.
             ->whereIn('code', array_keys($rates))
             ->get();
     }
@@ -80,10 +83,12 @@ class UpdateCurrencyRatesCommand extends Command
      */
     protected function updateRate(Currency $currency, Rate $rate): void
     {
+        $rateBefore = $currency->rate;
+
         $currency->rate = $rate;
         $currency->save();
 
-        $this->dispatcher->dispatch(new CurrencyRateUpdated($currency));
+        $this->dispatcher->dispatch(new CurrencyRateUpdated($currency, $rateBefore, $rate));
 
         $this->line("Rate has been updated for the currency {$currency->code} with the value {$rate->getValue()}");
     }

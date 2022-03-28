@@ -7,7 +7,7 @@ use Nevadskiy\Money\Formatter\DefaultFormatter;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\ValueObjects\Money;
 
-class NumberFormatterTest extends TestCase
+class DefaultFormatterTest extends TestCase
 {
     public function test_it_can_format_money_according_to_given_locale(): void
     {

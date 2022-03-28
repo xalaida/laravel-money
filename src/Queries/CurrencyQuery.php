@@ -15,7 +15,7 @@ interface CurrencyQuery
     /**
      * Get a currency by the given ID.
      */
-    public function getById(string $id): Currency;
+    public function getById($id): Currency;
 
     /**
      * Get a currency by the given code.

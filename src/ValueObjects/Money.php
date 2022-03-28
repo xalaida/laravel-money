@@ -3,6 +3,7 @@
 namespace Nevadskiy\Money\ValueObjects;
 
 use Nevadskiy\Money\Converter\Converter;
+use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
 use RuntimeException;
@@ -36,17 +37,17 @@ class Money
     public function __construct(int $amount, Currency $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: static::getDefaultCurrency();
+        $this->currency = $currency ?: static::resolveDefaultCurrency();
     }
 
     /**
-     * Create a new money instance from minor units.
+     * Create a new money instance from major units.
      */
     public static function fromMajorUnits(float $amount, Currency $currency = null): self
     {
-        $currency = $currency ?: static::getDefaultCurrency();
+        $currency = $currency ?: static::resolveDefaultCurrency();
 
-        return new static((int) ($amount * static::getMajorMultiplier($currency)), $currency);
+        return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
     }
 
     /**
@@ -80,7 +81,7 @@ class Money
      */
     public function getMajorUnits()
     {
-        return $this->getMinorUnits() / static::getMajorMultiplier($this->currency);
+        return $this->getMinorUnits() / $this->currency->getMajorMultiplier();
     }
 
     /**
@@ -92,43 +93,37 @@ class Money
     }
 
     /**
-     * Returns money formatted according to the locale.
+     * Add the given money to the money instance.
      */
-    public function format(string $locale = null): string
+    public function plus(Money $money, bool $convert = false): self
     {
-        return $this->formatUsing($this->getFormatter(), $locale);
+        if (! $convert) {
+            $this->assertMoneyCurrencyMatches($money);
+        }
+
+        return $this->clone($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
     }
 
     /**
-     * Format the money instance using the given formatter.
+     * Subtract the given money from the money instance.
      */
-    public function formatUsing(Formatter $formatter, string $locale = null): string
+    public function minus(Money $money, bool $convert = false): self
     {
-        return $formatter->format($this, $locale);
+        if (! $convert) {
+            $this->assertMoneyCurrencyMatches($money);
+        }
+
+        return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
     }
 
-    /**
-     * Returns money converted according to the given currency.
-     */
-    public function convert(Currency $currency = null): self
+    public function plusPercentage(float $percentage): self
     {
-        return $this->convertUsing($this->getConverter(), $currency);
+        // TODO: complete the method.
     }
 
-    /**
-     * Convert the money instance using the given converter.
-     */
-    public function convertUsing(Converter $converter, Currency $currency = null): self
+    public function minusPercentage(float $percentage): self
     {
-        return $converter->convert($this, $currency);
-    }
-
-    /**
-     * Get the major unit multiplier.
-     */
-    protected static function getMajorMultiplier(Currency $currency): int
-    {
-        return 10 ** $currency->precision;
+        // TODO: complete the method.
     }
 
     /**
@@ -160,15 +155,39 @@ class Money
     }
 
     /**
-     * Get the default currency.
+     * Returns formatted money according to the locale.
      */
-    public static function getDefaultCurrency(): Currency
+    public function format(string $locale = null): string
     {
-        return static::resolveDefaultCurrency();
+        return $this->formatUsing($this->getFormatter(), $locale);
     }
 
     /**
-     * Set the default currency resolver function.
+     * Format the money instance using the given formatter.
+     */
+    public function formatUsing(Formatter $formatter, string $locale = null): string
+    {
+        return $formatter->format($this, $locale);
+    }
+
+    /**
+     * Returns converted money according to the given currency.
+     */
+    public function convert(Currency $currency = null): self
+    {
+        return $this->convertUsing($this->getConverter(), $currency);
+    }
+
+    /**
+     * Convert the money instance using the given converter.
+     */
+    public function convertUsing(Converter $converter, Currency $currency = null): self
+    {
+        return $converter->convert($this, $currency);
+    }
+
+    /**
+     * Set the resolver function for the default currency.
      */
     public static function resolveDefaultCurrencyUsing(callable $resolver): void
     {
@@ -178,7 +197,7 @@ class Money
     /**
      * Resolve the default currency.
      */
-    protected static function resolveDefaultCurrency(): Currency
+    public static function resolveDefaultCurrency(): Currency
     {
         if (! isset(static::$defaultCurrencyResolver)) {
             throw new RuntimeException("Cannot resolve the default currency.");
@@ -192,7 +211,7 @@ class Money
      */
     protected function getFormatter(): Formatter
     {
-        return app(Formatter::class);
+        return resolve(Formatter::class);
     }
 
     /**
@@ -200,14 +219,24 @@ class Money
      */
     protected function getConverter(): Converter
     {
-        return app(Converter::class);
+        return resolve(Converter::class);
     }
 
     /**
-     * Convert the money to the string type.
+     * Get the string representation of the money instance.
      */
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * Assert that the given currency matches the current currency.
+     */
+    private function assertMoneyCurrencyMatches(Money $money): void
+    {
+        if (! $this->getCurrency()->is($money->getCurrency())) {
+            throw new CurrencyMismatchException();
+        }
     }
 }

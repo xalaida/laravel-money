@@ -12,13 +12,6 @@ use Nevadskiy\Money\Models\CurrencyResolver;
 class CurrencyEloquentQuery implements CurrencyQuery
 {
     /**
-     * The currency model resolver instance.
-     *
-     * @var CurrencyResolver
-     */
-    private $currencyResolver;
-
-    /**
      * The default currency code.
      *
      * @var null|string
@@ -28,9 +21,8 @@ class CurrencyEloquentQuery implements CurrencyQuery
     /**
      * Make a new queries instance.
      */
-    public function __construct(CurrencyResolver $currencyResolver, string $defaultCurrencyCode = null)
+    public function __construct(string $defaultCurrencyCode = null)
     {
-        $this->currencyResolver = $currencyResolver;
         $this->defaultCurrencyCode = $defaultCurrencyCode;
     }
 
@@ -45,7 +37,7 @@ class CurrencyEloquentQuery implements CurrencyQuery
     /**
      * @inheritDoc
      */
-    public function getById(string $id): Currency
+    public function getById($id): Currency
     {
         return $this->query()->findOrFail($id);
     }
@@ -83,6 +75,6 @@ class CurrencyEloquentQuery implements CurrencyQuery
      */
     protected function query(): Builder
     {
-        return $this->currencyResolver->resolve()->newQuery();
+        return CurrencyResolver::resolve()->newQuery();
     }
 }

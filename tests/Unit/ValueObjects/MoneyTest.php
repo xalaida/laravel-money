@@ -83,7 +83,7 @@ class MoneyTest extends TestCase
 
         $currency = CurrencyFactory::new()->rated(3)->create(['code' => 'EUR']);
 
-        app(Converter::class)->setDefaultCurrency($currency);
+        resolve(Converter::class)->setDefaultCurrency($currency);
 
         $money = $originalMoney->convert();
 
@@ -99,7 +99,7 @@ class MoneyTest extends TestCase
             return $currency;
         });
 
-        static::assertTrue(Money::getDefaultCurrency()->is($currency));
+        static::assertTrue(Money::resolveDefaultCurrency()->is($currency));
     }
 
     public function test_it_can_be_created_with_default_currency(): void
@@ -116,8 +116,7 @@ class MoneyTest extends TestCase
         static::assertSame(1000, $money->getMinorUnits());
     }
 
-    /** @test */
-    public function it_can_be_immutable_multiplied(): void
+    public function test_it_can_be_immutable_multiplied(): void
     {
         $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
 
@@ -125,12 +124,11 @@ class MoneyTest extends TestCase
 
         $multipliedMoney = $money->multiply(0.5);
 
-        self::assertEquals(500, $multipliedMoney->getAmount());
-        self::assertEquals(1000, $money->getAmount());
+        static::assertSame(500, $multipliedMoney->getAmount());
+        static::assertSame(1000, $money->getAmount());
     }
 
-    /** @test */
-    public function it_can_be_immutable_divided(): void
+    public function test_it_can_be_immutable_divided(): void
     {
         $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
 
@@ -138,7 +136,7 @@ class MoneyTest extends TestCase
 
         $multipliedMoney = $money->divide(5);
 
-        self::assertEquals(200, $multipliedMoney->getAmount());
-        self::assertEquals(1000, $money->getAmount());
+        static::assertSame(200, $multipliedMoney->getAmount());
+        static::assertSame(1000, $money->getAmount());
     }
 }

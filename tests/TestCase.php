@@ -5,19 +5,17 @@ namespace Nevadskiy\Money\Tests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Testing\WithFaker;
 use Nevadskiy\Money\MoneyServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
 {
-    use WithFaker;
-
+    /**
+     * Setup the test environment.
+     */
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->loadMigrationsFrom(__DIR__.'/Support/Migrations');
 
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
     }
@@ -52,6 +50,8 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function schema(): Builder
     {
-        return Model::getConnectionResolver()->connection()->getSchemaBuilder();
+        return Model::getConnectionResolver()
+            ->connection()
+            ->getSchemaBuilder();
     }
 }
