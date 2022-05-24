@@ -12,8 +12,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-intl": "*",
-        "laravel/framework": "^8.0|^9.0",
-        "nevadskiy/laravel-uuid": "^1.0"
+        "laravel/framework": "^8.0|^9.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
@@ -23,8 +22,7 @@
     "autoload": {
         "psr-4": {
             "Nevadskiy\\Money\\": "src/",
-            "Nevadskiy\\Money\\Database\\Factories\\": "database/factories/",
-            "Nevadskiy\\Money\\Database\\Seeders\\": "database/seeders/"
+            "Nevadskiy\\Money\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {

@@ -4,7 +4,6 @@ namespace Nevadskiy\Money\Tests\Unit\Queries;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyEloquentQuery;
 use Nevadskiy\Money\Tests\TestCase;
 
@@ -12,24 +11,24 @@ class CurrencyEloquentQueriesTest extends TestCase
 {
     public function test_it_can_get_currency_by_id(): void
     {
-        $id = Currency::generateId();
-        $currency = CurrencyFactory::new()->create(['id' => $id]);
-        $anotherCurrency = CurrencyFactory::new()->create();
+        [$currency, $anotherCurrency] = CurrencyFactory::new()
+            ->count(2)
+            ->create();
 
-        $queries = app(CurrencyEloquentQuery::class);
+        $queries = resolve(CurrencyEloquentQuery::class);
 
-        static::assertTrue($queries->getById($id)->is($currency));
+        static::assertTrue($queries->getById($currency->getKey())->is($currency));
     }
 
     public function test_it_throws_an_exception_if_currency_is_not_found_by_id(): void
     {
-        $someCurrency = CurrencyFactory::new()->create();
+        CurrencyFactory::new()->create();
 
-        $queries = app(CurrencyEloquentQuery::class);
+        $queries = resolve(CurrencyEloquentQuery::class);
 
         $this->expectException(ModelNotFoundException::class);
 
-        static::assertTrue($queries->getById(Currency::generateId()));
+        static::assertTrue($queries->getById(999));
     }
 
     public function test_it_can_get_currency_by_code(): void
@@ -37,16 +36,16 @@ class CurrencyEloquentQueriesTest extends TestCase
         $currency = CurrencyFactory::new()->create(['code' => 'EUR']);
         $anotherCurrency = CurrencyFactory::new()->create();
 
-        $queries = app(CurrencyEloquentQuery::class);
+        $queries = resolve(CurrencyEloquentQuery::class);
 
         static::assertTrue($queries->getByCode('EUR')->is($currency));
     }
 
-    public function test_it_throws_an_exception_if_currency_is_not_found_by_key(): void
+    public function test_it_throws_an_exception_if_currency_is_not_found_by_code(): void
     {
-        $someCurrency = CurrencyFactory::new()->create();
+        CurrencyFactory::new()->create();
 
-        $queries = app(CurrencyEloquentQuery::class);
+        $queries = resolve(CurrencyEloquentQuery::class);
 
         $this->expectException(ModelNotFoundException::class);
 

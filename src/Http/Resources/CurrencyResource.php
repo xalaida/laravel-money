@@ -23,7 +23,6 @@ class CurrencyResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'symbol' => $this->symbol,
-            'precision' => $this->precision,
         ];
     }
 }

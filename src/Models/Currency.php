@@ -5,13 +5,12 @@ namespace Nevadskiy\Money\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Nevadskiy\Money\Casts\RateCast;
+use Nevadskiy\Money\Casts\AsRate;
 use Nevadskiy\Money\Events;
 use Nevadskiy\Money\ValueObjects\Rate;
-use Nevadskiy\Uuid\Uuid;
 
 /**
- * @property string id
+ * @property int id
  * @property string code
  * @property string name
  * @property string symbol
@@ -22,23 +21,13 @@ use Nevadskiy\Uuid\Uuid;
  */
 class Currency extends Model
 {
-    use Uuid;
-
-    /**
-     * TODO: do not unguard attributes.
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [];
-
     /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'rate' => RateCast::class,
+        'rate' => AsRate::class,
     ];
 
     /**
@@ -58,5 +47,21 @@ class Currency extends Model
     public function setCodeAttribute(string $code): void
     {
         $this->attributes['code'] = Str::upper($code);
+    }
+
+    /**
+     * Get the code of the currency.
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * Get the major unit multiplier according to the precision.
+     */
+    public function getMajorMultiplier(): int
+    {
+        return 10 ** $this->precision;
     }
 }

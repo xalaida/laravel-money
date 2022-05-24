@@ -1,4 +1,4 @@
-# Laravel Money (Work in progress)
+# Laravel Money
 
 💰 The package provides money and currency features for a Laravel application.
 
@@ -15,7 +15,7 @@ composer require nevadskiy/laravel-money
 
 ### Using money cast in the model
 
-The price field can be casted into Money instance. To make it castable, add the following code to your model.
+Any field can be cast into `Money` instance. To make it castable, add the following code to your model.
 
 ```php
 /**
@@ -24,7 +24,7 @@ The price field can be casted into Money instance. To make it castable, add the 
  * @var array
  */
 protected $casts = [
-    'price' => \Nevadskiy\Money\ValueObjects\Money::class,
+    'cost' => \Nevadskiy\Money\Casts\AsMoney::class,
 ];
 ``` 
 
@@ -33,53 +33,38 @@ Also, you need to add the following fields to the model's database table.
 
 ```php
 Schema::create('products', function (Blueprint $table) {
-    $table->bigInteger('price_amount')->unsigned();
-    $table->foreignUuid('price_currency_id')->constrained('currencies');
+    $table->bigInteger('cost_amount')->unsigned();
+    $table->foreignUuid('cost_currency_id')->constrained('currencies');
 });
 ```
 
 
 ## Seed currencies 
 
-```php
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        $this->call([
-            \Nevadskiy\Money\Database\Seeders\CurrencySeeder::class,
-        ]);
-    }
-}
+```bash
+php artisan currencies:seed
 ```
 
 
 ## TODO
 
+- [ ] update doc
+- [ ] add changelog and other meta files
 - [ ] cover with tests
-- [ ] add publish config
+- [ ] refactor exceptions to put message inside
+- [ ] add possibility to seed custom currency (provide callback)
+- [ ] add different resolvers to `SetCurrencyMiddleware` (CookieResolver, GeoIPResolver, QueryResolver, UserResolver, etc)
 - [ ] add Money::parse() method to receive data from front-end
-- [ ] add possibility to specify custom currency model
 - [ ] add possibility to disable locale tracking for formatter
 - [ ] add possibility to specify concrete formatter format
 - [ ] add possibility to render money without decimals
+- [ ] introduce the CurrencyInterface that allow to not extend default currency using custom currency
+- [ ] allow using plain object currency (not model) as the currency instance for the money (probably possible using interface)
+- [ ] add possibility to use currency code instead of ID (in the cast)
+- [ ] add possibility to use package with only single (default anonymous) currency
 - [ ] add possibility to render money in custom formats (example: '%SU% %code%', '%code% %SU%')
-- [ ] store currency rates history and add config for pruning (i.e. 'keep_history' => '1 year') (can be done using laravel prunable models)
 - [ ] add install instruction about cron registration for rates
-- [ ] feature command for seeding rates (e.g. artisan money:currencies:seed {codes*?} {--truncate})
 - [ ] add config parameter as locale (default formatter locale) (add support for 'app' value as locale)
-- [ ] add support for default app currency caster (probably api like this: `$casts = [Money::class.'USD']`) \Casts\DefaultMoney::class
-- [ ] add possibility to use Casts\Money::class directly without needing or resolving container dependencies (resolve them inside)
 - [ ] add possibility to extend migration
 - [ ] add command to show outdated rates
 - [ ] integrations with laravel cashier
-- [x] add auto transformer for upper-cased currency code
-- [x] feature formatting money into different locale
-- [x] add possibility to specify concrete formatter locale
-- [x] define two different currencies: app and request. App currency is used as absolute currency (similar to app.timezone). Request currency is the currency to convert into.
-- [x] think about default currency prices (one field in the database)
-- [x] feature formatting money using given formatter (add `formatUsing()` method)
-- [x] add config parameter as currency (default converter currency)
