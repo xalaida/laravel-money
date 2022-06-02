@@ -98,8 +98,15 @@ class AsMoney implements CastsAttributes
      */
     protected function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
     {
-        return null === $attributes[$amountColumnName]
-            && null === $attributes[$currencyKeyColumnName];
+        if (! isset($attributes[$amountColumnName])) {
+            return true;
+        }
+
+        if (! isset($attributes[$currencyKeyColumnName])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

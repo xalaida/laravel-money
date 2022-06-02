@@ -31,6 +31,7 @@ class MoneyCastToDefaultCurrencyTest extends TestCase
         parent::tearDown();
     }
 
+    // TODO: sometimes the test fails according to unique constraint on currencies.code field.
     public function test_attribute_can_be_cast_to_money_using_default_currency(): void
     {
         $defaultCurrency = CurrencyFactory::new()->default()->create();
