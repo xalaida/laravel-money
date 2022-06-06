@@ -55,15 +55,13 @@ class DefaultConverter implements Converter
 
     /**
      * Get the converted money amount.
-     *
-     * @return float|int
      */
-    protected function getConvertedAmount(Money $money, Currency $currency)
+    protected function getConvertedAmount(Money $money, Currency $currency): int
     {
         if ($money->getCurrency()->is($currency)) {
             return $money->getAmount();
         }
 
-        return ($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue();
+        return (int) (($money->getAmount() * $currency->rate->getValue()) / $money->getCurrency()->rate->getValue());
     }
 }
