@@ -35,17 +35,9 @@ final class SetCurrencyMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $this->setCurrencyFromRequest($request);
+        $request->attributes->set('currency', $this->getCurrencyFromRequest($request));
 
         return $next($request);
-    }
-
-    /**
-     * Set the default converter currency from the request query.
-     */
-    private function setCurrencyFromRequest(Request $request): void
-    {
-        $request->attributes->set('currency', $this->getCurrencyFromRequest($request));
     }
 
     /**
@@ -53,7 +45,7 @@ final class SetCurrencyMiddleware
      */
     private function getCurrencyFromRequest(Request $request): Currency
     {
-        $currencyCode = $this->parseValidCurrencyCode($request);
+        $currencyCode = $this->parseCurrency($request);
 
         if (! $currencyCode) {
             return $this->currencies->default();
@@ -69,7 +61,7 @@ final class SetCurrencyMiddleware
     /**
      * Parse valid currency code from the request.
      */
-    private function parseValidCurrencyCode(Request $request): ?string
+    private function parseCurrency(Request $request): ?string
     {
         $code = $request->query('currency');
 
