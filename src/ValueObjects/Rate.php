@@ -4,6 +4,7 @@ namespace Nevadskiy\Money\ValueObjects;
 
 use Nevadskiy\Money\Exceptions\InvalidRateException;
 
+// @todo simplify rate with simple float...
 class Rate
 {
     /**

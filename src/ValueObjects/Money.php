@@ -8,6 +8,10 @@ use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Models\Currency;
 use RuntimeException;
 
+/**
+ * @todo add aliases for subtract
+ * @todo add aliases for add
+ */
 class Money
 {
     /**
@@ -148,6 +152,8 @@ class Money
 
     /**
      * Get a clone of the money instance.
+     *
+     * @todo feature clone magic method.
      */
     public function clone(int $amount = null, Currency $currency = null): self
     {
@@ -188,6 +194,8 @@ class Money
 
     /**
      * Set the resolver function for the default currency.
+     *
+     * @todo use different registry drivers: array, database, json, remote http, etc.
      */
     public static function resolveDefaultCurrencyUsing(callable $resolver): void
     {
