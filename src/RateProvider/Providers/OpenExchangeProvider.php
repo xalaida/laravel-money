@@ -63,9 +63,7 @@ class OpenExchangeProvider implements RateProvider
      */
     protected function url(): string
     {
-        return vsprintf('%s?%s', [
-            $this->baseUrl(), http_build_query(['app_id' => $this->appId]),
-        ]);
+        return $this->baseUrl() . '?' . http_build_query(['app_id' => $this->appId]);
     }
 
     /**
