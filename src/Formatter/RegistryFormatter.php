@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Formatter;
 use Nevadskiy\Money\Money;
 use NumberFormatter;
 
-class DefaultFormatter implements Formatter
+class RegistryFormatter implements Formatter
 {
     /**
      * The default formatter locale.

@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\Tests\Unit\Formatter;
 
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
-use Nevadskiy\Money\Formatter\DefaultFormatter;
+use Nevadskiy\Money\Formatter\RegistryFormatter;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\Money;
 
@@ -14,7 +14,7 @@ class DefaultFormatterTest extends TestCase
         $currency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
         $money = Money::fromMajorUnits(200, $currency);
 
-        $formatter = new DefaultFormatter('ru');
+        $formatter = new RegistryFormatter('ru');
 
         static::assertSame('$200.00', $formatter->format($money, 'en'));
     }
@@ -23,7 +23,7 @@ class DefaultFormatterTest extends TestCase
     {
         $currency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
         $money = Money::fromMajorUnits(200, $currency);
-        $formatter = new DefaultFormatter('ru');
+        $formatter = new RegistryFormatter('ru');
 
         static::assertSame("200,00\u{a0}\$", $formatter->format($money));
     }
@@ -33,7 +33,7 @@ class DefaultFormatterTest extends TestCase
         $currency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
         $money = Money::fromMajorUnits(200, $currency);
 
-        $formatter = new DefaultFormatter('en');
+        $formatter = new RegistryFormatter('en');
         $formatter->setDefaultLocale('ru');
 
         static::assertSame("200,00\u{a0}\$", $formatter->format($money));
