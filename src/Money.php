@@ -5,6 +5,7 @@ namespace Nevadskiy\Money;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
+use RuntimeException;
 
 /**
  * @todo add aliases for subtract...
@@ -41,7 +42,7 @@ class Money
     public function __construct(int $amount, string $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: static::$defaultCurrency;
+        $this->currency = strtoupper($currency ?: static::getDefaultCurrency());
     }
 
     /**
@@ -49,8 +50,6 @@ class Money
      */
     public static function fromMajorUnits(float $amount, string $currency = null): self
     {
-        $currency = $currency ?: static::$defaultCurrency;
-
         // @todo use separate service for major / minor transformation...
         return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
     }
@@ -215,6 +214,18 @@ class Money
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * Get the default currency of the money.
+     */
+    public static function getDefaultCurrency(): string
+    {
+        if (! isset(static::$defaultCurrency)) {
+            throw new RuntimeException('The default currency is not set.');
+        }
+
+        return static::$defaultCurrency;
     }
 
     /**
