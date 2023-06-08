@@ -16,7 +16,7 @@ use RuntimeException;
 class Money
 {
     /**
-     * The default currency resolver function.
+     * The default currency.
      *
      * @var string
      */
@@ -30,7 +30,7 @@ class Money
     protected $amount;
 
     /**
-     * The currency of the money.
+     * The currency of the money as 3-letter ISO 4217.
      *
      * @return string
      */
