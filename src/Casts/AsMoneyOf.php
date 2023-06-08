@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Queries\CurrencyQuery;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class AsMoneyOf implements CastsAttributes
 {

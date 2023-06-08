@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Tests\Unit\Formatter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Formatter\DefaultFormatter;
 use Nevadskiy\Money\Tests\TestCase;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class DefaultFormatterTest extends TestCase
 {

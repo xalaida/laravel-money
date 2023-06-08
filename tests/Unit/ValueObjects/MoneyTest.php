@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Tests\Unit\ValueObjects;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Tests\TestCase;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class MoneyTest extends TestCase
 {

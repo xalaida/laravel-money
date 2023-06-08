@@ -9,8 +9,11 @@ use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
+/**
+ * @todo extend Application with currency (make configurable).
+ */
 class MoneyServiceProvider extends ServiceProvider
 {
     /**
@@ -80,7 +83,7 @@ class MoneyServiceProvider extends ServiceProvider
     private function registerConverter(): void
     {
         $this->app->singleton(Converter\Converter::class, function () {
-            return new Converter\DefaultConverter(Money::resolveDefaultCurrency());
+            return new Converter\RegistryConverter(Money::resolveDefaultCurrency());
         });
     }
 

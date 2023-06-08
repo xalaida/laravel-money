@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use InvalidArgumentException;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class AsMoneyDefault implements CastsAttributes
 {

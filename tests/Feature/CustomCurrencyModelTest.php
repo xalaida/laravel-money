@@ -9,7 +9,7 @@ use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Models\CurrencyResolver;
 use Nevadskiy\Money\Tests\TestCase;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 use Ramsey\Uuid\Uuid as UuidFactory;
 
 class CustomCurrencyModelTest extends TestCase

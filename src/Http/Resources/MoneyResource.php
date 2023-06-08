@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 /**
  * @mixin Money

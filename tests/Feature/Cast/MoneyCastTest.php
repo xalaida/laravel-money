@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Nevadskiy\Money\Casts\AsMoney;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Tests\TestCase;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class MoneyCastTest extends TestCase
 {

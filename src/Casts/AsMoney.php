@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use InvalidArgumentException;
 use Nevadskiy\Money\Queries\CurrencyQuery;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 /**
  * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')

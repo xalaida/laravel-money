@@ -2,10 +2,10 @@
 
 namespace Nevadskiy\Money\Tests\Unit\Converter;
 
-use Nevadskiy\Money\Converter\DefaultConverter;
+use Nevadskiy\Money\Converter\RegistryConverter;
 use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Tests\TestCase;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 class DefaultConverterTest extends TestCase
 {
@@ -19,7 +19,7 @@ class DefaultConverterTest extends TestCase
             'code' => 'USD',
         ]);
 
-        $converter = new DefaultConverter($defaultCurrency);
+        $converter = new RegistryConverter($defaultCurrency);
 
         $money = $converter->convert(Money::fromMajorUnits(100, $originalCurrency));
 
@@ -34,7 +34,7 @@ class DefaultConverterTest extends TestCase
 
         $currency = CurrencyFactory::new()->rated(2)->create(['code' => 'USD']);
 
-        $converter = new DefaultConverter($defaultCurrency);
+        $converter = new RegistryConverter($defaultCurrency);
         $converter->setDefaultCurrency($currency);
         $money = $converter->convert($money);
 
@@ -49,7 +49,7 @@ class DefaultConverterTest extends TestCase
 
         $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'EUR']);
 
-        $converter = new DefaultConverter();
+        $converter = new RegistryConverter();
         $money = $converter->convert($money, $currency);
 
         static::assertTrue($money->getCurrency()->is($currency));
@@ -61,7 +61,7 @@ class DefaultConverterTest extends TestCase
         $currency = CurrencyFactory::new()->rated(2)->create(['code' => 'USD']);
         $originalMoney = Money::fromMajorUnits(100, $currency);
 
-        $converter = new DefaultConverter();
+        $converter = new RegistryConverter();
         $money = $converter->convert($originalMoney, $currency);
 
         static::assertNotSame($originalMoney, $money);
