@@ -2,18 +2,12 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Models\Currency;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Money;
 
 interface Converter
 {
     /**
-     * Set the default converter currency.
+     * Convert the money instance according to the given currency.
      */
-    public function setDefaultCurrency(Currency $currency): void;
-
-    /**
-     * Convert the given money instance according to the currency.
-     */
-    public function convert(Money $money, Currency $currency = null): Money;
+    public function convert(Money $money, string $currency = null): Money;
 }
