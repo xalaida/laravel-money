@@ -42,7 +42,7 @@ class Money
     public function __construct(int $amount, string $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = strtoupper($currency ?: static::getDefaultCurrency());
+        $this->currency = $this->normalizeCurrency($currency ?: static::getDefaultCurrency());
     }
 
     /**
@@ -229,9 +229,17 @@ class Money
     }
 
     /**
+     * Normalize the given currency.
+     */
+    protected function normalizeCurrency(string $currency): string
+    {
+        return strtoupper($currency);
+    }
+
+    /**
      * Ensure the currency of the given money matches the currency of the current money.
      */
-    private function ensureCurrencyMatches(Money $that): void
+    protected function ensureCurrencyMatches(Money $that): void
     {
         if ($this->getCurrency() !== $that->getCurrency()) {
             throw new CurrencyMismatchException();
