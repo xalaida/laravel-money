@@ -5,7 +5,10 @@ namespace Nevadskiy\Money\Formatter;
 use Nevadskiy\Money\Money;
 use NumberFormatter;
 
-class RegistryFormatter implements Formatter
+/**
+ * @todo add RegistryFormatter with options & symbols & custom formats.
+ */
+class IntlFormatter implements Formatter
 {
     /**
      * The default formatter locale.
@@ -37,7 +40,8 @@ class RegistryFormatter implements Formatter
     {
         $locale = $locale ?: $this->defaultLocale;
 
-        return $this->getNumberFormatter($locale)->formatCurrency($money->getMajorUnits(), $money->getCurrency()->code);
+        // @todo get currency list.
+        return $this->getNumberFormatter($locale)->formatCurrency($money->getMajorUnits(), $money->getCurrency());
     }
 
     /**
