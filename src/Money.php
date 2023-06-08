@@ -5,65 +5,66 @@ namespace Nevadskiy\Money;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
-use Nevadskiy\Money\Models\Currency;
-use RuntimeException;
 
 /**
- * @todo add aliases for subtract
- * @todo add aliases for add
+ * @todo add aliases for subtract...
+ * @todo add aliases for add...
+ * @todo use the clone magic method...
+ * @todo consider using just float instead of float|int if does not conflict with strict_types.
  */
 class Money
 {
     /**
      * The default currency resolver function.
      *
-     * @var callable
+     * @var string
      */
-    protected static $defaultCurrencyResolver;
+    protected static $defaultCurrency;
 
     /**
-     * The money amount in minor units.
+     * The amount of the money in minor units.
      *
      * @return int
      */
     protected $amount;
 
     /**
-     * The money currency.
+     * The currency of the money.
      *
-     * @return Currency
+     * @return string
      */
     protected $currency;
 
     /**
      * Make a new money instance.
      */
-    public function __construct(int $amount, Currency $currency = null)
+    public function __construct(int $amount, string $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: static::resolveDefaultCurrency();
+        $this->currency = $currency ?: static::$defaultCurrency;
     }
 
     /**
      * Create a new money instance from major units.
      */
-    public static function fromMajorUnits(float $amount, Currency $currency = null): self
+    public static function fromMajorUnits(float $amount, string $currency = null): self
     {
-        $currency = $currency ?: static::resolveDefaultCurrency();
+        $currency = $currency ?: static::$defaultCurrency;
 
+        // @todo use separate service for major / minor transformation...
         return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
     }
 
     /**
      * Create a new money instance from minor units.
      */
-    public static function fromMinorUnits(int $amount, Currency $currency = null): self
+    public static function fromMinorUnits(int $amount, string $currency = null): self
     {
         return new static($amount, $currency);
     }
 
     /**
-     * Get the money amount in minor units.
+     * Get the amount of the money.
      */
     public function getAmount(): int
     {
@@ -71,7 +72,7 @@ class Money
     }
 
     /**
-     * Alias for getter of the money amount in minor units.
+     * Get the amount of the money in minor units.
      */
     public function getMinorUnits(): int
     {
@@ -79,7 +80,7 @@ class Money
     }
 
     /**
-     * Get the money amount in major units.
+     * Get the amount of the money in major units.
      *
      * @return float|int
      */
@@ -89,9 +90,9 @@ class Money
     }
 
     /**
-     * Get the money currency.
+     * Get the currency of the money.
      */
-    public function getCurrency(): Currency
+    public function getCurrency(): string
     {
         return $this->currency;
     }
@@ -102,7 +103,7 @@ class Money
     public function plus(Money $money, bool $convert = false): self
     {
         if (! $convert) {
-            $this->assertMoneyCurrencyMatches($money);
+            $this->ensureCurrencyMatches($money);
         }
 
         return $this->clone($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
@@ -114,7 +115,7 @@ class Money
     public function minus(Money $money, bool $convert = false): self
     {
         if (! $convert) {
-            $this->assertMoneyCurrencyMatches($money);
+            $this->ensureCurrencyMatches($money);
         }
 
         return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
@@ -155,7 +156,7 @@ class Money
      *
      * @todo feature clone magic method.
      */
-    public function clone(int $amount = null, Currency $currency = null): self
+    public function clone(int $amount = null, string $currency = null): self
     {
         return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
     }
@@ -179,7 +180,7 @@ class Money
     /**
      * Returns converted money according to the given currency.
      */
-    public function convert(Currency $currency = null): self
+    public function convert(string $currency = null): self
     {
         return $this->convertUsing($this->getConverter(), $currency);
     }
@@ -187,31 +188,9 @@ class Money
     /**
      * Convert the money instance using the given converter.
      */
-    public function convertUsing(Converter $converter, Currency $currency = null): self
+    public function convertUsing(Converter $converter, string $currency = null): self
     {
         return $converter->convert($this, $currency);
-    }
-
-    /**
-     * Set the resolver function for the default currency.
-     *
-     * @todo use different registry drivers: array, database, json, remote http, etc.
-     */
-    public static function resolveDefaultCurrencyUsing(callable $resolver): void
-    {
-        static::$defaultCurrencyResolver = $resolver;
-    }
-
-    /**
-     * Resolve the default currency.
-     */
-    public static function resolveDefaultCurrency(): Currency
-    {
-        if (! isset(static::$defaultCurrencyResolver)) {
-            throw new RuntimeException("Cannot resolve the default currency.");
-        }
-
-        return call_user_func(static::$defaultCurrencyResolver);
     }
 
     /**
@@ -239,11 +218,11 @@ class Money
     }
 
     /**
-     * Assert that the given currency matches the current currency.
+     * Ensure the currency of the given money matches the currency of the current money.
      */
-    private function assertMoneyCurrencyMatches(Money $money): void
+    private function ensureCurrencyMatches(Money $that): void
     {
-        if (! $this->getCurrency()->is($money->getCurrency())) {
+        if ($this->getCurrency() !== $that->getCurrency()) {
             throw new CurrencyMismatchException();
         }
     }
