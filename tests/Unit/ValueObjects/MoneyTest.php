@@ -9,29 +9,24 @@ use Nevadskiy\Money\Money;
 
 class MoneyTest extends TestCase
 {
-    public function test_it_can_be_instantiated_with_amount_in_minor_units_and_currency(): void
+    public function test_it_can_be_instantiated_with_amount_and_currency(): void
     {
-        $currency = CurrencyFactory::new()->create();
-        $money = new Money(100, $currency);
+        $money = new Money(100, 'USD');
 
         static::assertSame(100, $money->getAmount());
-        static::assertTrue($money->getCurrency()->is($currency));
+        static::assertSame('USD', $money->getCurrency());
     }
 
     public function test_it_can_be_formatted_to_string_according_to_current_locale(): void
     {
-        $currency = CurrencyFactory::new()->create(['code' => 'USD']);
-        $money = new Money(100, $currency);
-
-        static::assertSame('$1.00', $money->format());
+        static::assertSame('$1.00', (new Money(100, 'USD'))->format());
     }
 
-    public function test_it_can_be_formatted_to_string_according_to_new_locale(): void
+    public function test_it_can_be_formatted_to_string_according_to_given_locale(): void
     {
-        $currency = CurrencyFactory::new()->create(['code' => 'USD']);
-        $money = new Money(100, $currency);
+        $money = new Money(100, 'UAH');
 
-        $this->app->setLocale('ru');
+        $this->app->setLocale('uk');
 
         static::assertSame("1,00\u{a0}\$", $money->format());
     }
@@ -40,7 +35,7 @@ class MoneyTest extends TestCase
     {
         $money = new Money(100, CurrencyFactory::new()->create(['code' => 'USD']));
 
-        static::assertSame("1,00\u{a0}\$", $money->format('ru'));
+        static::assertSame("1,00\u{a0}\$", $money->format('uk'));
     }
 
     public function test_it_can_determine_major_units_amount(): void
@@ -61,7 +56,9 @@ class MoneyTest extends TestCase
 
     public function test_it_can_be_converted_into_string(): void
     {
-        $money = new Money(100, CurrencyFactory::new()->create());
+        $money = new Money(100);
+
+        dd($money->format());
 
         static::assertSame($money->format(), (string) $money);
     }
@@ -104,39 +101,31 @@ class MoneyTest extends TestCase
 
     public function test_it_can_be_created_with_default_currency(): void
     {
-        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+        Money::setDefaultCurrency('UAH');
 
-        Money::resolveDefaultCurrencyUsing(function () use ($currency) {
-            return $currency;
-        });
+        $money = new Money(100);
 
-        $money = Money::fromMinorUnits(1000);
-
-        static::assertTrue($money->getCurrency()->is($currency));
-        static::assertSame(1000, $money->getMinorUnits());
+        static::assertSame(100, $money->getAmount());
+        static::assertSame('UAH', $money->getCurrency());
     }
 
-    public function test_it_can_be_immutable_multiplied(): void
+    public function test_it_can_be_immutably_multiplied(): void
     {
-        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+        $original = new Money(100);
 
-        $money = Money::fromMinorUnits(1000, $currency);
+        $multiplied = $original->multiply(0.5);
 
-        $multipliedMoney = $money->multiply(0.5);
-
-        static::assertSame(500, $multipliedMoney->getAmount());
-        static::assertSame(1000, $money->getAmount());
+        static::assertSame(50, $multiplied->getAmount());
+        static::assertSame(100, $original->getAmount());
     }
 
-    public function test_it_can_be_immutable_divided(): void
+    public function test_it_can_be_immutably_divided(): void
     {
-        $currency = CurrencyFactory::new()->rated(1)->create(['code' => 'USD']);
+        $original = new Money(100);
 
-        $money = Money::fromMinorUnits(1000, $currency);
+        $divided = $original->divide(5);
 
-        $multipliedMoney = $money->divide(5);
-
-        static::assertSame(200, $multipliedMoney->getAmount());
-        static::assertSame(1000, $money->getAmount());
+        static::assertSame(20, $divided->getAmount());
+        static::assertSame(100, $original->getAmount());
     }
 }

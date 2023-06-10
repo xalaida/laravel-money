@@ -14,7 +14,7 @@ class DefaultFormatterTest extends TestCase
         $currency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
         $money = Money::fromMajorUnits(200, $currency);
 
-        $formatter = new IntlFormatter('ru');
+        $formatter = new IntlFormatter('uk');
 
         static::assertSame('$200.00', $formatter->format($money, 'en'));
     }
@@ -23,7 +23,7 @@ class DefaultFormatterTest extends TestCase
     {
         $currency = CurrencyFactory::new()->unrated()->create(['code' => 'USD']);
         $money = Money::fromMajorUnits(200, $currency);
-        $formatter = new IntlFormatter('ru');
+        $formatter = new IntlFormatter('uk');
 
         static::assertSame("200,00\u{a0}\$", $formatter->format($money));
     }
@@ -34,7 +34,7 @@ class DefaultFormatterTest extends TestCase
         $money = Money::fromMajorUnits(200, $currency);
 
         $formatter = new IntlFormatter('en');
-        $formatter->setDefaultLocale('ru');
+        $formatter->setDefaultLocale('uk');
 
         static::assertSame("200,00\u{a0}\$", $formatter->format($money));
     }

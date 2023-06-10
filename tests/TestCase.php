@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Tests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
+use Nevadskiy\Money\Money;
 use Nevadskiy\Money\MoneyServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -18,6 +19,8 @@ abstract class TestCase extends OrchestraTestCase
         parent::setUp();
 
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        Money::setDefaultCurrency('UAH');
     }
 
     /**
