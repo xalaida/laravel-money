@@ -9,6 +9,7 @@ use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Scaler\Scaler;
 use RuntimeException;
+use JsonSerializable;
 
 /**
  * @todo add aliases for subtract...
@@ -16,7 +17,7 @@ use RuntimeException;
  * @todo use the clone magic method...
  * @todo consider using just float instead of float|int if does not conflict with strict_types.
  */
-class Money implements Castable
+class Money implements Castable, JsonSerializable
 {
     /**
      * The default currency.
@@ -198,6 +199,17 @@ class Money implements Castable
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        ];
     }
 
     /**
