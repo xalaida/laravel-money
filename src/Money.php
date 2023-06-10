@@ -43,22 +43,6 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Set the default currency of the money.
-     */
-    public static function setDefaultCurrency(string $currency): void
-    {
-        static::getConfig()->set('money.currency', $currency);
-    }
-
-    /**
-     * Get the default currency of the money.
-     */
-    public static function getDefaultCurrency(): string
-    {
-        return static::getConfig()->get('money.currency');
-    }
-
-    /**
      * Create a new money instance from major units.
      */
     public static function fromMajorUnits(float $amount, string $currency = null): self
@@ -72,6 +56,14 @@ class Money implements Castable, JsonSerializable
     public static function fromMinorUnits(int $amount, string $currency = null): self
     {
         return new static($amount, $currency);
+    }
+
+    /**
+     * Create a new zero money instance.
+     */
+    public static function zero(string $currency = null): self
+    {
+        return new static(0, $currency);
     }
 
     /**
@@ -210,6 +202,22 @@ class Money implements Castable, JsonSerializable
         if ($this->getCurrency() !== $that->getCurrency()) {
             throw new CurrencyMismatchException();
         }
+    }
+
+    /**
+     * Set the default currency of the money.
+     */
+    public static function setDefaultCurrency(string $currency): void
+    {
+        static::getConfig()->set('money.currency', $currency);
+    }
+
+    /**
+     * Get the default currency of the money.
+     */
+    public static function getDefaultCurrency(): string
+    {
+        return static::getConfig()->get('money.currency');
     }
 
     /**
