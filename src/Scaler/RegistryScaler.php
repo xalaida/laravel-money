@@ -9,7 +9,7 @@ class RegistryScaler implements Scaler
      */
     public function toMajorUnits(int $amount, string $currency = null): float
     {
-        // @todo
+        return $amount * $this->getMajorMultiplier($currency);
     }
 
     /**
@@ -17,7 +17,7 @@ class RegistryScaler implements Scaler
      */
     public function fromMajorUnits(float $amount, string $currency = null): int
     {
-        return $amount * $this->getMajorMultiplier($currency);
+        return $amount / $this->getMajorMultiplier($currency);
     }
 
     /**
