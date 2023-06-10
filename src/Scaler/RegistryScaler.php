@@ -17,6 +17,14 @@ class RegistryScaler implements Scaler
      */
     public function fromMajorUnits(float $amount, string $currency = null): int
     {
-        // @todo
+        return $amount * $this->getMajorMultiplier($currency);
+    }
+
+    /**
+     * Get the major unit multiplier for the currency.
+     */
+    protected function getMajorMultiplier(string $currency): int
+    {
+        return 2; // @todo use registry currency.
     }
 }

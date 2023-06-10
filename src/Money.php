@@ -7,6 +7,7 @@ use Nevadskiy\Money\Casts\AsMoney;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
+use Nevadskiy\Money\Scaler\Scaler;
 use RuntimeException;
 
 /**
@@ -44,7 +45,7 @@ class Money implements Castable
     public function __construct(int $amount, string $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $this->normalizeCurrency($currency ?: static::getDefaultCurrency());
+        $this->currency = $currency ?: static::getDefaultCurrency();
     }
 
     /**
@@ -52,8 +53,7 @@ class Money implements Castable
      */
     public static function fromMajorUnits(float $amount, string $currency = null): self
     {
-        // @todo use separate service for major / minor transformation...
-        return new static((int) ($amount * $currency->getMajorMultiplier()), $currency);
+        return new static(static::getScaler()->fromMajorUnits($amount, $currency), $currency);
     }
 
     /**
@@ -73,6 +73,14 @@ class Money implements Castable
     }
 
     /**
+     * Get the currency of the money.
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
      * Get the amount of the money in minor units.
      */
     public function getMinorUnits(): int
@@ -82,20 +90,10 @@ class Money implements Castable
 
     /**
      * Get the amount of the money in major units.
-     *
-     * @return float|int
      */
-    public function getMajorUnits()
+    public function getMajorUnits(): float
     {
-        return $this->getMinorUnits() / $this->currency->getMajorMultiplier();
-    }
-
-    /**
-     * Get the currency of the money.
-     */
-    public function getCurrency(): string
-    {
-        return $this->currency;
+        return static::getScaler()->toMajorUnits($this->getMinorUnits(), $this->getCurrency());
     }
 
     /**
@@ -195,7 +193,15 @@ class Money implements Castable
     }
 
     /**
-     * Get the money formatter.
+     * Get the money scaler instance.
+     */
+    protected static function getScaler(): Scaler
+    {
+        return resolve(Scaler::class);
+    }
+
+    /**
+     * Get the money formatter instance.
      */
     protected function getFormatter(): Formatter
     {
@@ -203,7 +209,7 @@ class Money implements Castable
     }
 
     /**
-     * Get the money converter.
+     * Get the money converter instance.
      */
     protected function getConverter(): Converter
     {
@@ -231,19 +237,13 @@ class Money implements Castable
      */
     public static function getDefaultCurrency(): string
     {
+        // @todo return config('money.currency');
+
         if (! isset(static::$defaultCurrency)) {
             throw new RuntimeException('The default currency is not set.');
         }
 
         return static::$defaultCurrency;
-    }
-
-    /**
-     * Normalize the given currency.
-     */
-    protected function normalizeCurrency(string $currency): string
-    {
-        return strtoupper($currency);
     }
 
     /**
