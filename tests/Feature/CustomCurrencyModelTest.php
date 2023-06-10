@@ -63,7 +63,7 @@ class CustomCurrencyModelTest extends TestCase
             $table->string('code', 3)->unique()->comment('ISO 4217');
             $table->string('name', 50);
             $table->string('symbol', 10)->nullable();
-            $table->tinyInteger('precision');
+            $table->tinyInteger('scale');
             $table->float('rate')->default(1);
             $table->timestamps();
         });

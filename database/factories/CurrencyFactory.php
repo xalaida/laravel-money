@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Nevadskiy\Money\Models\Currency;
 use Nevadskiy\Money\Models\CurrencyResolver;
-use Nevadskiy\Money\ValueObjects\Rate;
 
 /**
  * @method Collection|Currency|Currency[] create(array $attributes = [])
@@ -30,8 +29,8 @@ class CurrencyFactory extends Factory
             'code' => $this->faker->unique()->currencyCode,
             'name' => $this->faker->word,
             'symbol' => $this->faker->randomElement(['$', '€', '£']),
-            'precision' => 2,
-            'rate' => new Rate($this->faker->randomFloat(0.5, 5.0)),
+            'scale' => 2,
+            'rate' => $this->faker->randomFloat(0.5, 5.0),
         ];
     }
 
@@ -49,8 +48,8 @@ class CurrencyFactory extends Factory
     public function rated(float $rate): self
     {
         return $this->state([
-            'precision' => 2,
-            'rate' => new Rate($rate),
+            'scale' => 2,
+            'rate' => $rate,
         ]);
     }
 
@@ -60,7 +59,7 @@ class CurrencyFactory extends Factory
     public function default(): self
     {
         return $this->state([
-            'code' => config('money.default_currency_code'),
+            'code' => config('money.currency'),
         ]);
     }
 }
