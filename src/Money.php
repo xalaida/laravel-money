@@ -2,13 +2,13 @@
 
 namespace Nevadskiy\Money;
 
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Nevadskiy\Money\Casts\AsMoney;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Scaler\Scaler;
-use RuntimeException;
 use JsonSerializable;
 
 /**
@@ -19,13 +19,6 @@ use JsonSerializable;
  */
 class Money implements Castable, JsonSerializable
 {
-    /**
-     * The default currency.
-     *
-     * @var string
-     */
-    protected static $defaultCurrency;
-
     /**
      * The amount of the money in minor units.
      *
@@ -47,6 +40,22 @@ class Money implements Castable, JsonSerializable
     {
         $this->amount = $amount;
         $this->currency = $currency ?: static::getDefaultCurrency();
+    }
+
+    /**
+     * Set the default currency of the money.
+     */
+    public static function setDefaultCurrency(string $currency): void
+    {
+        static::getConfig()->set('money.currency', $currency);
+    }
+
+    /**
+     * Get the default currency of the money.
+     */
+    public static function getDefaultCurrency(): string
+    {
+        return static::getConfig()->get('money.currency');
     }
 
     /**
@@ -194,22 +203,21 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Get the string representation of the money instance.
+     * Ensure the currency of the given money matches the currency of the current money.
      */
-    public function __toString(): string
+    protected function ensureCurrencyMatches(Money $that): void
     {
-        return $this->format();
+        if ($this->getCurrency() !== $that->getCurrency()) {
+            throw new CurrencyMismatchException();
+        }
     }
 
     /**
-     * @inheritdoc
+     * Get the config instance.
      */
-    public function jsonSerialize(): array
+    protected static function getConfig(): Config
     {
-        return [
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-        ];
+        return resolve('config');
     }
 
     /**
@@ -237,42 +245,29 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Set the default currency of the money.
-     */
-    public static function setDefaultCurrency(string $currency): void
-    {
-        static::$defaultCurrency = $currency;
-    }
-
-    /**
-     * Get the default currency of the money.
-     */
-    public static function getDefaultCurrency(): string
-    {
-        // @todo return config('money.currency');
-
-        if (! isset(static::$defaultCurrency)) {
-            throw new RuntimeException('The default currency is not set.');
-        }
-
-        return static::$defaultCurrency;
-    }
-
-    /**
-     * Ensure the currency of the given money matches the currency of the current money.
-     */
-    protected function ensureCurrencyMatches(Money $that): void
-    {
-        if ($this->getCurrency() !== $that->getCurrency()) {
-            throw new CurrencyMismatchException();
-        }
-    }
-
-    /**
      * @inheritdoc
      */
     public static function castUsing(array $arguments): string
     {
         return AsMoney::class;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        ];
+    }
+
+    /**
+     * Get the string representation of the money instance.
+     */
+    public function __toString(): string
+    {
+        return $this->format();
     }
 }
