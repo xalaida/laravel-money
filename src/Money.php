@@ -161,11 +161,11 @@ class Money implements Castable
     }
 
     /**
-     * Returns formatted money according to the locale.
+     * Format the money instance.
      */
     public function format(string $locale = null): string
     {
-        return $this->formatUsing($this->getFormatter(), $locale);
+        return $this->formatUsing(static::getFormatter(), $locale);
     }
 
     /**
@@ -181,7 +181,7 @@ class Money implements Castable
      */
     public function convert(string $currency = null): self
     {
-        return $this->convertUsing($this->getConverter(), $currency);
+        return $this->convertUsing(static::getConverter(), $currency);
     }
 
     /**
@@ -190,6 +190,14 @@ class Money implements Castable
     public function convertUsing(Converter $converter, string $currency = null): self
     {
         return $converter->convert($this, $currency);
+    }
+
+    /**
+     * Get the string representation of the money instance.
+     */
+    public function __toString(): string
+    {
+        return $this->format();
     }
 
     /**
@@ -203,7 +211,7 @@ class Money implements Castable
     /**
      * Get the money formatter instance.
      */
-    protected function getFormatter(): Formatter
+    protected static function getFormatter(): Formatter
     {
         return resolve(Formatter::class);
     }
@@ -211,17 +219,9 @@ class Money implements Castable
     /**
      * Get the money converter instance.
      */
-    protected function getConverter(): Converter
+    protected static function getConverter(): Converter
     {
         return resolve(Converter::class);
-    }
-
-    /**
-     * Get the string representation of the money instance.
-     */
-    public function __toString(): string
-    {
-        return $this->format();
     }
 
     /**
