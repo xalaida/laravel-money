@@ -2,7 +2,6 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Exceptions\InvalidRateException;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Registry\CurrencyRegistry;
 
@@ -13,14 +12,14 @@ class RegistryConverter implements Converter
      *
      * @var CurrencyRegistry
      */
-    private $registry;
+    private $currencies;
 
     /**
      * Make a new converter instance.
      */
-    public function __construct(CurrencyRegistry $registry)
+    public function __construct(CurrencyRegistry $currencies)
     {
-        $this->registry = $registry;
+        $this->currencies = $currencies;
     }
 
 //    /**
@@ -51,40 +50,28 @@ class RegistryConverter implements Converter
         // @todo possibility to specify custom default...
         $currency = $currency ?: Money::getDefaultCurrency();
 
-        return new Money($this->getConvertedAmount($money, $currency), $currency);
+        if ($money->getCurrency() === $currency) {
+            return clone $money;
+        }
+
+        return Money::fromMajorUnits(
+            $money->getMajorUnits() * $this->getRate($money->getCurrency(), $currency), $currency
+        );
     }
 
     /**
-     * Get the converted amount of the money.
+     * Get a rate between the given currencies.
      */
-    protected function getConvertedAmount(Money $money, string $currency): int
+    protected function getRate(string $sourceCurrency, string $targetCurrency): float
     {
-        if ($money->getCurrency() === $currency) {
-            return $money->getAmount();
-        }
-
-        return (int) (($money->getAmount() * $this->getRate($currency)) / $this->getRate($money->getCurrency()));
+        return $this->getCurrencyRate($targetCurrency) / $this->getCurrencyRate($sourceCurrency);
     }
 
     /**
      * Get rate of the currency.
      */
-    protected function getRate(string $currency)
+    protected function getCurrencyRate(string $currency)
     {
-        $rate = $this->registry->get($currency)['rate'];
-
-        $this->ensureRateIsValid($rate);
-
-        return $rate;
-    }
-
-    /**
-     * Ensure that the given rate is valid.
-     */
-    protected function ensureRateIsValid(float $rate): void
-    {
-        if ($rate <= 0) {
-            throw new InvalidRateException('The rate of the currency cannot be negative or zero.');
-        }
+        return $this->currencies->get($currency)['rate'];
     }
 }
