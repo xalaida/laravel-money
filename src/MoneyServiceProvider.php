@@ -9,11 +9,7 @@ use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
-use Nevadskiy\Money\Money;
 
-/**
- * @todo extend Application with currency (make configurable).
- */
 class MoneyServiceProvider extends ServiceProvider
 {
     /**
@@ -57,6 +53,8 @@ class MoneyServiceProvider extends ServiceProvider
         $this->bootMorphMap();
         $this->publishConfig();
         $this->publishMigrations();
+
+        Money::setDefaultCurrency($this->app->get('config')['money']['currency']);
     }
 
     /**

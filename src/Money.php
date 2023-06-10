@@ -217,6 +217,14 @@ class Money
     }
 
     /**
+     * Set the default currency of the money.
+     */
+    public static function setDefaultCurrency(string $currency): void
+    {
+        static::$defaultCurrency = $currency;
+    }
+
+    /**
      * Get the default currency of the money.
      */
     public static function getDefaultCurrency(): string

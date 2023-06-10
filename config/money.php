@@ -3,8 +3,9 @@
 use Nevadskiy\Money\Queries;
 
 return [
-    // TODO: make it optional.
-    'default_currency_code' => 'USD',
+    'currency' => 'USD',
+
+    // <<< @todo
 
     'default_rate_provider' => 'open_exchange_rates',
 
