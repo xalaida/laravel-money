@@ -2,22 +2,39 @@
 
 namespace Nevadskiy\Money\Scaler;
 
+use Nevadskiy\Money\Registry\CurrencyRegistry;
+
 class RegistryScaler implements Scaler
 {
     /**
-     * @inheritdoc
+     * The currency registry instance.
+     *
+     * @var CurrencyRegistry
      */
-    public function toMajorUnits(int $amount, string $currency = null): float
+    private $currencies;
+
+    /**
+     * Make a new scaler instance.
+     */
+    public function __construct(CurrencyRegistry $currencies)
     {
-        return $amount * $this->getMajorMultiplier($currency);
+        $this->currencies = $currencies;
     }
 
     /**
      * @inheritdoc
      */
-    public function fromMajorUnits(float $amount, string $currency = null): int
+    public function toMajorUnits(int $amount, string $currency = null)
     {
         return $amount / $this->getMajorMultiplier($currency);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function fromMajorUnits($amount, string $currency = null): int
+    {
+        return $amount * $this->getMajorMultiplier($currency);
     }
 
     /**
@@ -25,6 +42,6 @@ class RegistryScaler implements Scaler
      */
     protected function getMajorMultiplier(string $currency): int
     {
-        return 2; // @todo use registry currency.
+        return 10 ** $this->currencies->get($currency)['scale'];
     }
 }
