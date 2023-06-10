@@ -14,8 +14,6 @@ use JsonSerializable;
 /**
  * @todo add aliases for subtract...
  * @todo add aliases for add...
- * @todo use the clone magic method...
- * @todo consider using just float instead of float|int if does not conflict with strict_types.
  */
 class Money implements Castable, JsonSerializable
 {
@@ -107,7 +105,7 @@ class Money implements Castable, JsonSerializable
             $this->ensureCurrencyMatches($money);
         }
 
-        return $this->clone($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
+        return $this->modify($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
     }
 
     /**
@@ -119,7 +117,7 @@ class Money implements Castable, JsonSerializable
             $this->ensureCurrencyMatches($money);
         }
 
-        return $this->clone($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
+        return $this->modify($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
     }
 
     public function plusPercentage(float $percentage): self
@@ -139,7 +137,7 @@ class Money implements Castable, JsonSerializable
      */
     public function multiply($multiplier): self
     {
-        return $this->clone($this->getAmount() * $multiplier);
+        return $this->modify($this->getAmount() * $multiplier);
     }
 
     /**
@@ -149,17 +147,29 @@ class Money implements Castable, JsonSerializable
      */
     public function divide($divisor): self
     {
-        return $this->clone($this->getAmount() / $divisor);
+        return $this->modify($this->getAmount() / $divisor);
     }
 
     /**
-     * Get a clone of the money instance.
-     *
-     * @todo feature clone magic method.
+     * Modify the money instance.
      */
-    public function clone(int $amount = null, string $currency = null): self
+    public function modify(int $amount = null, string $currency = null): self
     {
-        return new Money($amount ?: $this->getAmount(), $currency ?: $this->getCurrency());
+        $clone = clone $this;
+        $clone->amount = $amount ?: $this->getAmount();
+        $clone->currency = $currency ?: $this->getCurrency();
+
+        return $clone;
+    }
+
+    /**
+     * Ensure the currency of the given money matches the currency of the current money.
+     */
+    protected function ensureCurrencyMatches(Money $that): void
+    {
+        if ($this->getCurrency() !== $that->getCurrency()) {
+            throw new CurrencyMismatchException();
+        }
     }
 
     /**
@@ -192,16 +202,6 @@ class Money implements Castable, JsonSerializable
     public function convertUsing(Converter $converter, string $currency = null): self
     {
         return $converter->convert($this, $currency);
-    }
-
-    /**
-     * Ensure the currency of the given money matches the currency of the current money.
-     */
-    protected function ensureCurrencyMatches(Money $that): void
-    {
-        if ($this->getCurrency() !== $that->getCurrency()) {
-            throw new CurrencyMismatchException();
-        }
     }
 
     /**
