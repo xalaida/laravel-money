@@ -42,8 +42,10 @@ class Money implements Castable, JsonSerializable
 
     /**
      * Create a new money instance from major units.
+     *
+     * @param float|int $amount
      */
-    public static function fromMajorUnits(float $amount, string $currency = null): self
+    public static function fromMajorUnits($amount, string $currency = null): self
     {
         return new static(static::getScaler()->fromMajorUnits($amount, $currency), $currency);
     }
@@ -90,8 +92,10 @@ class Money implements Castable, JsonSerializable
 
     /**
      * Get the amount of the money in major units.
+     *
+     * @return float|int
      */
-    public function getMajorUnits(): float
+    public function getMajorUnits()
     {
         return static::getScaler()->toMajorUnits($this->getMinorUnits(), $this->getCurrency());
     }
