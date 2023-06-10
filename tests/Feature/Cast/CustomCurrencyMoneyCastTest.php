@@ -4,12 +4,11 @@ namespace Nevadskiy\Money\Tests\Feature\Cast;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Nevadskiy\Money\Casts\AsMoneyOf;
-use Nevadskiy\Money\Database\Factories\CurrencyFactory;
+use Nevadskiy\Money\Casts\AsMoney;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\Money;
 
-class MoneyOfCastTest extends TestCase
+class CustomCurrencyMoneyCastTest extends TestCase
 {
     /**
      * @inheritDoc
@@ -31,17 +30,24 @@ class MoneyOfCastTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_attribute_can_be_cast_to_money_with_specified_currency(): void
-    {
-        $currency = CurrencyFactory::new()->create(['code' => 'UAH']);
+    // @todo test when currency mismatch (default with money)
 
-        $product = new MoneyOfCastProduct();
-        $product->cost = Money::fromMajorUnits(20, $currency);
+    /**
+     * @test
+     */
+    public function attribute_can_be_cast_to_money_with_custom_currency(): void
+    {
+        Money::setDefaultCurrency('USD');
+
+        $product = new CustomCurrencyMoneyCastProduct();
+        $product->cost = new Money(100, 'UAH');
         $product->save();
 
+        $product->refresh();
+
         static::assertInstanceOf(Money::class, $product->cost);
-        static::assertSame(2000, $product->cost->getAmount());
-        static::assertSame('UAH', $product->cost->getCurrency()->getCode());
+        static::assertSame(100, $product->cost->getAmount());
+        static::assertSame('UAH', $product->cost->getCurrency());
     }
 
     /**
@@ -60,11 +66,11 @@ class MoneyOfCastTest extends TestCase
 /**
  * @property Money cost
  */
-class MoneyOfCastProduct extends Model
+class CustomCurrencyMoneyCastProduct extends Model
 {
     protected $table = 'products';
 
     protected $casts = [
-        'cost' => AsMoneyOf::class.':UAH',
+        'cost' => AsMoney::class.':UAH',
     ];
 }

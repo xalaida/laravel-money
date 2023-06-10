@@ -3,44 +3,45 @@
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\Money;
 
-/**
- * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')
- * # Props:
- *  - cleaner cast class (can be used directly in the model $casts prop)
- *  - cleaner model class (clear price currency relation)
- *  - no extra dependencies in the money cast.
- *
- * # Cons:
- *  - extra definition for relation in model class
- *  - relation probably not useful in that case since it does not have logic (but probably can have it if user overrides it)
- */
 class AsMoney implements CastsAttributes
 {
     /**
-     * The column name of the money amount.
+     * The currency of the money.
      *
-     * @var null|string
+     * @var string|null
      */
-    protected $amountColumnName;
+    protected $currency;
 
     /**
-     * The column name of the money currency.
+     * Indicates whether the currency should be taken from the column.
      *
-     * @var null|string
+     * @var string|null
      */
-    protected $currencyKeyColumnName;
+    protected $currencyColumn;
+
+    /**
+     * Indicates whether the currency should be converted before saving when does not match.
+     *
+     * @var bool
+     */
+    protected $convertBeforeSaving;
 
     /**
      * Make a new cast instance.
      */
-    public function __construct(array $arguments = [])
+    public function __construct(string $currency = null, bool $convertBeforeSaving = false)
     {
-        $this->amountColumnName = $arguments[0] ?? null;
-        $this->currencyKeyColumnName = $arguments[1] ?? null;
+        if (Str::startsWith($currency, '[') && Str::endsWith($currency, ']')) {
+            $this->currencyColumn = Str::between($currency, '[', ']');
+        } else {
+            $this->currency = $currency;
+        }
+
+        $this->convertBeforeSaving = $convertBeforeSaving;
     }
 
     /**
@@ -48,80 +49,42 @@ class AsMoney implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
-        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
-
-        if ($this->isNullableAttributes($attributes, $amountColumnName, $currencyKeyColumnName)) {
+        if (is_null($value)) {
             return null;
         }
 
-        return new Money(
-            $attributes[$amountColumnName],
-            resolve(CurrencyQuery::class)->getById($attributes[$currencyKeyColumnName])
-        );
+        $currency = $this->currencyColumn
+            ? $attributes[$this->currencyColumn]
+            : $this->currency;
+
+        return new Money($value, $currency);
     }
 
     /**
      * @inheritDoc
      */
-    public function set($model, string $key, $value, array $attributes): array
+    public function set($model, string $key, $value, array $attributes): ?array
     {
         if (null === $value) {
-            return [];
+            return null;
         }
 
-        $this->assertValueIsMoneyInstance($value);
-
-        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
-        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
-
-        return [
-            $amountColumnName => $value->getMinorUnits(),
-            $currencyKeyColumnName => $value->getCurrency()->getKey(),
-        ];
-    }
-
-    /**
-     * Assert that the given value is a money instance.
-     *
-     * @param mixed $value
-     */
-    protected function assertValueIsMoneyInstance($value): void
-    {
         if (! $value instanceof Money) {
             throw new InvalidArgumentException('The given value is not a Money instance.');
         }
-    }
 
-    /**
-     * Determine whether the money attributes is nullable.
-     */
-    protected function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
-    {
-        if (! isset($attributes[$amountColumnName])) {
-            return true;
+        // @todo handle currency mismatch.
+
+        $columns = [
+            $key => $value->getMinorUnits(),
+        ];
+
+        if ($this->currencyColumn) {
+            return array_merge($columns, [
+                $this->currencyColumn => $value->getCurrency(),
+            ]);
         }
 
-        if (! isset($attributes[$currencyKeyColumnName])) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the amount column name.
-     */
-    protected function getAmountColumnName(string $key): string
-    {
-        return "{$key}_amount";
-    }
-
-    /**
-     * Get the currency key column name.
-     */
-    protected function getCurrencyKeyColumnName(string $key): string
-    {
-        return "{$key}_currency_id";
+        return $columns;
     }
 }

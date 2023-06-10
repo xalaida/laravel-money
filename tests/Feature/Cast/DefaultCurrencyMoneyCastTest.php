@@ -5,11 +5,10 @@ namespace Nevadskiy\Money\Tests\Feature\Cast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Nevadskiy\Money\Casts\AsMoney;
-use Nevadskiy\Money\Database\Factories\CurrencyFactory;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\Money;
 
-class MoneyCastTest extends TestCase
+class DefaultCurrencyMoneyCastTest extends TestCase
 {
     /**
      * @inheritDoc
@@ -31,17 +30,24 @@ class MoneyCastTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_attribute_can_be_cast_to_money(): void
-    {
-        $currency = CurrencyFactory::new()->create();
+    // @todo test when currency mismatch (default with money)
 
-        $product = new MoneyCastProduct();
-        $product->cost = Money::fromMajorUnits(20, $currency);
+    /**
+     * @test
+     */
+    public function attribute_can_be_cast_to_money_with_default_currency(): void
+    {
+        Money::setDefaultCurrency('UAH');
+
+        $product = new DefaultCurrencyMoneyCastProduct();
+        $product->cost = new Money(100);
         $product->save();
 
+        $product->refresh();
+
         static::assertInstanceOf(Money::class, $product->cost);
-        static::assertSame(2000, $product->cost_amount);
-        static::assertSame($currency->getKey(), $product->cost_currency_id);
+        static::assertSame(100, $product->cost->getAmount());
+        static::assertSame('UAH', $product->cost->getCurrency());
     }
 
     /**
@@ -51,8 +57,7 @@ class MoneyCastTest extends TestCase
     {
         $this->schema()->create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('cost_amount')->unsigned();
-            $table->foreignId('cost_currency_id')->constrained('currencies');
+            $table->integer('cost')->unsigned();
             $table->timestamps();
         });
     }
@@ -60,10 +65,8 @@ class MoneyCastTest extends TestCase
 
 /**
  * @property Money cost
- * @property int cost_amount
- * @property int cost_currency_id
  */
-class MoneyCastProduct extends Model
+class DefaultCurrencyMoneyCastProduct extends Model
 {
     protected $table = 'products';
 
@@ -71,4 +74,3 @@ class MoneyCastProduct extends Model
         'cost' => AsMoney::class,
     ];
 }
-

@@ -2,6 +2,8 @@
 
 namespace Nevadskiy\Money;
 
+use Illuminate\Contracts\Database\Eloquent\Castable;
+use Nevadskiy\Money\Casts\AsMoney;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatter\Formatter;
@@ -13,7 +15,7 @@ use RuntimeException;
  * @todo use the clone magic method...
  * @todo consider using just float instead of float|int if does not conflict with strict_types.
  */
-class Money
+class Money implements Castable
 {
     /**
      * The default currency.
@@ -252,5 +254,13 @@ class Money
         if ($this->getCurrency() !== $that->getCurrency()) {
             throw new CurrencyMismatchException();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function castUsing(array $arguments): string
+    {
+        return AsMoney::class;
     }
 }
