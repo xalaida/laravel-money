@@ -9,6 +9,7 @@ use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
+use Nevadskiy\Money\Registry\CurrencyRegistry;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,8 @@ class MoneyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerConfig();
+        $this->registerRegistry();
+        $this->registerScaler();
         $this->registerFormatter();
         $this->registerConverter();
         $this->registerCurrencyQueries();
@@ -66,7 +69,23 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package formatter.
+     * Register the currency registry.
+     */
+    private function registerRegistry(): void
+    {
+        $this->app->singleton(CurrencyRegistry::class);
+    }
+
+    /**
+     * Register the money scaler.
+     */
+    private function registerScaler(): void
+    {
+        $this->app->singletonIf(Scaler\Scaler::class, Scaler\RegistryScaler::class);
+    }
+
+    /**
+     * Register the money formatter.
      */
     private function registerFormatter(): void
     {
@@ -76,7 +95,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package converter.
+     * Register the money converter.
      */
     private function registerConverter(): void
     {
