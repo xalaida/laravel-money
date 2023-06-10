@@ -17,14 +17,14 @@ class OpenExchangeProvider implements RateProvider
     protected $http;
 
     /**
-     * The provider application ID.
+     * The application ID.
      *
      * @var string
      */
     protected $appId;
 
     /**
-     * OpenExchangeProvider constructor.
+     * Make a new provider instance.
      */
     public function __construct(Http $http, string $appId)
     {

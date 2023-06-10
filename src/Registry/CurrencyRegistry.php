@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Registry;
 class CurrencyRegistry
 {
     /**
-     * The registered currency list.
+     * The currency list.
      *
      * @var array
      */
