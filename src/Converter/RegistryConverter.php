@@ -55,22 +55,26 @@ class RegistryConverter implements Converter
         }
 
         return Money::fromMajorUnits(
-            $money->getMajorUnits() * $this->getRate($money->getCurrency(), $currency), $currency
+           $money->getMajorUnits() * $this->getRateBetween($money->getCurrency(), $currency), $currency
         );
     }
 
     /**
      * Get a rate between the given currencies.
+     *
+     * @return float|int
      */
-    protected function getRate(string $sourceCurrency, string $targetCurrency): float
+    protected function getRateBetween(string $sourceCurrency, string $targetCurrency)
     {
-        return $this->getCurrencyRate($targetCurrency) / $this->getCurrencyRate($sourceCurrency);
+        return $this->getRateToBase($targetCurrency) / $this->getRateToBase($sourceCurrency);
     }
 
     /**
      * Get rate of the currency.
+     *
+     * @return float|int
      */
-    protected function getCurrencyRate(string $currency)
+    protected function getRateToBase(string $currency)
     {
         return $this->currencies->get($currency)['rate'];
     }
