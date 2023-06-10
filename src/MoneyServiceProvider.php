@@ -82,9 +82,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, function () {
-            return new Converter\RegistryConverter(Money::resolveDefaultCurrency());
-        });
+        $this->app->singleton(Converter\Converter::class, Converter\RegistryConverter::class);
     }
 
     /**
@@ -116,9 +114,9 @@ class MoneyServiceProvider extends ServiceProvider
                 return $app['config']['money']['default_currency_code'] ?? null;
             });
 
-        Money::resolveDefaultCurrencyUsing(function () {
-            return $this->app[CurrencyQuery::class]->default();
-        });
+        // Money::resolveDefaultCurrencyUsing(function () {
+            // return $this->app[CurrencyQuery::class]->default();
+        // });
     }
 
     /**
