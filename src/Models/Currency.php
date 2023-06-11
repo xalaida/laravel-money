@@ -4,7 +4,6 @@ namespace Nevadskiy\Money\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Nevadskiy\Money\Events;
 
 /**
@@ -29,28 +28,4 @@ class Currency extends Model
         'updated' => Events\CurrencyUpdated::class,
         'deleted' => Events\CurrencyDeleted::class,
     ];
-
-    /**
-     * Set the currency's code attribute.
-     */
-    public function setCodeAttribute(string $code): void
-    {
-        $this->attributes['code'] = Str::upper($code);
-    }
-
-    /**
-     * Get the code of the currency.
-     */
-    public function getCode(): string
-    {
-        return $this->code;
-    }
-
-    /**
-     * Get the major unit multiplier according to the scale.
-     */
-    public function getMajorMultiplier(): int
-    {
-        return 10 ** $this->scale;
-    }
 }
