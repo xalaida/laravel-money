@@ -53,7 +53,7 @@ class CustomCurrencyMoneyCastTest extends TestCase
     /**
      * Set up the database schema.
      */
-    private function createSchema(): void
+    protected function createSchema(): void
     {
         $this->schema()->create('products', function (Blueprint $table) {
             $table->id();
