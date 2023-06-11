@@ -61,7 +61,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerScaler(): void
     {
-        $this->app->singletonIf(Scaler\Scaler::class, Scaler\ArrayScaler::class);
+        $this->app->singletonIf(Scaler\Scaler::class, new Scaler\ArrayScaler::class);
     }
 
     /**
@@ -77,7 +77,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, Converter\RegistryConverter::class);
+        $this->app->singleton(Converter\Converter::class, Converter\ArrayConverter::class);
     }
 
     /**
