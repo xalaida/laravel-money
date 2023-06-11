@@ -3,7 +3,6 @@
 namespace Nevadskiy\Money\Tests\Unit;
 
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\Registry\CurrencyRegistry;
 use Nevadskiy\Money\Scaler\ArrayScaler;
 use Nevadskiy\Money\Scaler\Scaler;
 use Nevadskiy\Money\Tests\TestCase;

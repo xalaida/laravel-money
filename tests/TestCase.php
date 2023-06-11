@@ -7,7 +7,6 @@ use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\MoneyServiceProvider;
-use Nevadskiy\Money\Registry\CurrencyRegistry;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
@@ -22,14 +21,6 @@ abstract class TestCase extends OrchestraTestCase
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         Money::setDefaultCurrency('UAH');
-
-        $this->app->get(CurrencyRegistry::class)->set('UAH', [
-            'scale' => 2,
-        ]);
-
-        $this->app->get(CurrencyRegistry::class)->set('USD', [
-            'scale' => 2,
-        ]);
     }
 
     /**
