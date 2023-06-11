@@ -192,7 +192,7 @@ class Money implements Castable, JsonSerializable
      */
     public function formatUsing(Formatter $formatter, string $locale = null): string
     {
-        return $formatter->format($this, $locale);
+        return $formatter->format($this, $locale ?? static::getDefaultLocale());
     }
 
     /**
@@ -208,7 +208,7 @@ class Money implements Castable, JsonSerializable
      */
     public function convertUsing(Converter $converter, string $currency = null): self
     {
-        return $converter->convert($this, $currency);
+        return $converter->convert($this, $currency ?? static::getDefaultCurrency());
     }
 
     /**
@@ -225,6 +225,14 @@ class Money implements Castable, JsonSerializable
     public static function getDefaultCurrency(): string
     {
         return static::getConfig()->get('money.currency');
+    }
+
+    /**
+     * Get the default locale of the application.
+     */
+    public static function getDefaultLocale(): string
+    {
+        return static::getConfig()->get('app.locale');
     }
 
     /**
