@@ -5,7 +5,6 @@ namespace Nevadskiy\Money\RateProvider\Providers;
 use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
 use Nevadskiy\Money\RateProvider\RateProvider;
-use Nevadskiy\Money\ValueObjects\Rate;
 
 class OpenExchangeProvider implements RateProvider
 {
@@ -37,13 +36,7 @@ class OpenExchangeProvider implements RateProvider
      */
     public function getRates(): array
     {
-        $data = [];
-
-        foreach ($this->fetchRates() as $code => $rate) {
-            $data[$code] = new Rate($rate);
-        }
-
-        return $data;
+        return $this->fetch()['rates'];
     }
 
     /**
@@ -51,11 +44,9 @@ class OpenExchangeProvider implements RateProvider
      *
      * @throws RequestException
      */
-    protected function fetchRates(): array
+    protected function fetch(): array
     {
-        $response = $this->http->get($this->url());
-
-        return $response->throw()->json('rates');
+        return $this->http->get($this->url())->throw()->json();
     }
 
     /**
