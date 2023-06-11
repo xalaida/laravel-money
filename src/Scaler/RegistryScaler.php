@@ -24,7 +24,7 @@ class RegistryScaler implements Scaler
     /**
      * @inheritdoc
      */
-    public function toMajorUnits(int $amount, string $currency = null)
+    public function toMajorUnits(int $amount, string $currency)
     {
         return $amount / $this->getMajorMultiplier($currency);
     }
@@ -32,9 +32,9 @@ class RegistryScaler implements Scaler
     /**
      * @inheritdoc
      */
-    public function fromMajorUnits($amount, string $currency = null): int
+    public function fromMajorUnits($amount, string $currency): int
     {
-        return $amount * $this->getMajorMultiplier($currency);
+        return round($amount * $this->getMajorMultiplier($currency), $this->getScale($currency), PHP_ROUND_HALF_DOWN);
     }
 
     /**
@@ -42,6 +42,14 @@ class RegistryScaler implements Scaler
      */
     protected function getMajorMultiplier(string $currency): int
     {
-        return 10 ** $this->currencies->get($currency)['scale'];
+        return 10 ** $this->getScale($currency);
+    }
+
+    /**
+     * Get the scale for the currency.
+     */
+    protected function getScale(string $currency)
+    {
+        return $this->currencies->get($currency)['scale'];
     }
 }
