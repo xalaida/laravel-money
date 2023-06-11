@@ -11,6 +11,18 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['app.locale' => 'uk']);
+
+        config(['money.currency' => 'UAH']);
+    }
+
+    /**
      * Get package providers.
      *
      * @param Application $app
