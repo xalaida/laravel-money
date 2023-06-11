@@ -37,7 +37,7 @@ class Money implements Castable, JsonSerializable
     public function __construct(int $amount, string $currency = null)
     {
         $this->amount = $amount;
-        $this->currency = $currency ?: static::getDefaultCurrency();
+        $this->currency = $currency ?? static::getDefaultCurrency();
     }
 
     /**
@@ -47,7 +47,7 @@ class Money implements Castable, JsonSerializable
      */
     public static function fromMajorUnits($amount, string $currency = null): self
     {
-        $currency = $currency ?: static::getDefaultCurrency();
+        $currency = $currency ?? static::getDefaultCurrency();
 
         return new static(static::getScaler()->fromMajorUnits($amount, $currency), $currency);
     }
@@ -74,6 +74,17 @@ class Money implements Castable, JsonSerializable
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    /**
+     * Set a new amount of the money.
+     */
+    public function setAmount(int $amount = null): self
+    {
+        $clone = clone $this;
+        $clone->amount = $amount ?? $this->getAmount();
+
+        return $clone;
     }
 
     /**
@@ -111,7 +122,8 @@ class Money implements Castable, JsonSerializable
             $this->ensureCurrencyMatches($money);
         }
 
-        return $this->modify($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
+        // @todo do not convert when same currency.
+        return $this->setAmount($this->getAmount() + $money->convert($this->getCurrency())->getAmount());
     }
 
     /**
@@ -123,7 +135,8 @@ class Money implements Castable, JsonSerializable
             $this->ensureCurrencyMatches($money);
         }
 
-        return $this->modify($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
+        // @todo do not convert when same currency.
+        return $this->setAmount($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
     }
 
     public function plusPercentage(float $percentage): self
@@ -143,7 +156,7 @@ class Money implements Castable, JsonSerializable
      */
     public function multiply($multiplier): self
     {
-        return $this->modify($this->getAmount() * $multiplier);
+        return $this->setAmount($this->getAmount() * $multiplier);
     }
 
     /**
@@ -153,19 +166,7 @@ class Money implements Castable, JsonSerializable
      */
     public function divide($divisor): self
     {
-        return $this->modify($this->getAmount() / $divisor);
-    }
-
-    /**
-     * Modify the money instance.
-     */
-    public function modify(int $amount = null, string $currency = null): self
-    {
-        $clone = clone $this;
-        $clone->amount = $amount ?: $this->getAmount();
-        $clone->currency = $currency ?: $this->getCurrency();
-
-        return $clone;
+        return $this->setAmount($this->getAmount() / $divisor);
     }
 
     /**

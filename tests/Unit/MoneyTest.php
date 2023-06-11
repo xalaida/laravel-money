@@ -11,6 +11,16 @@ class MoneyTest extends TestCase
     // @todo exception that rate should be > 0
     // @todo exception that scale should be >= 0.
 
+    public function test_it_can_immutably_set_new_amount_to_money(): void
+    {
+        $original = new Money(100);
+
+        $money = $original->setAmount(0);
+
+        static::assertSame(0, $money->getAmount());
+        static::assertSame(100, $original->getAmount());
+    }
+
     public function test_it_can_be_formatted_to_string_according_to_current_locale(): void
     {
         static::assertSame('$1.00', (new Money(100, 'USD'))->format());
