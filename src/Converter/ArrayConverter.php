@@ -15,6 +15,8 @@ class ArrayConverter implements Converter
 
     /**
      * Make a new converter instance.
+     *
+     * @todo use rate provider as dependency.
      */
     public function __construct(array $rates)
     {
