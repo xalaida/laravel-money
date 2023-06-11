@@ -1,9 +1,8 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests;
 
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyCreateTest extends TestCase
 {

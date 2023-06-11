@@ -1,11 +1,10 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests;
 
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Scaler\ArrayScaler;
 use Nevadskiy\Money\Scaler\Scaler;
-use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyTest extends TestCase
 {
