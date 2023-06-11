@@ -12,7 +12,7 @@ class ArrayScaler implements Scaler
     private $default;
 
     /**
-     * The custom scale list.
+     * The custom scales.
      *
      * @var array
      */

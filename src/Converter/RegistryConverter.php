@@ -45,11 +45,8 @@ class RegistryConverter implements Converter
     /**
      * @inheritDoc
      */
-    public function convert(Money $money, string $currency = null): Money
+    public function convert(Money $money, string $currency): Money
     {
-        // @todo possibility to specify custom default...
-        $currency = $currency ?: Money::getDefaultCurrency();
-
         if ($money->getCurrency() === $currency) {
             return clone $money;
         }
