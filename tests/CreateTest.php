@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Tests;
 
 use Nevadskiy\Money\Money;
 
-class MoneyCreateTest extends TestCase
+class CreateTest extends TestCase
 {
     public function test_it_can_be_created_with_amount_and_currency(): void
     {

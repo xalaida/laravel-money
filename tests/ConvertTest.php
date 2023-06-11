@@ -8,7 +8,7 @@ use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Scaler\ArrayScaler;
 use Nevadskiy\Money\Scaler\Scaler;
 
-class MoneyConvertTest extends TestCase
+class ConvertTest extends TestCase
 {
     public function test_it_can_be_converted_to_another_currency(): void
     {
