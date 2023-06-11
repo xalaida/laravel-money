@@ -47,6 +47,8 @@ class Money implements Castable, JsonSerializable
      */
     public static function fromMajorUnits($amount, string $currency = null): self
     {
+        $currency = $currency ?: static::getDefaultCurrency();
+
         return new static(static::getScaler()->fromMajorUnits($amount, $currency), $currency);
     }
 
