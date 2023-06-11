@@ -35,6 +35,7 @@ class ArrayConverter implements Converter
      * Get a rate between the given currencies.
      *
      * @return float|int
+     * @todo use base currency.
      */
     protected function getRateBetween(string $sourceCurrency, string $targetCurrency)
     {
