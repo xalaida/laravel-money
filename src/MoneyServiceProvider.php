@@ -2,32 +2,14 @@
 
 namespace Nevadskiy\Money;
 
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
-use Nevadskiy\Money\Queries\CurrencyCacheQuery;
 use Nevadskiy\Money\Queries\CurrencyQuery;
 use Nevadskiy\Money\Registry\CurrencyRegistry;
 
 class MoneyServiceProvider extends ServiceProvider
 {
-    /**
-     * The event listener mappings for the package.
-     *
-     * @var array
-     */
-    private $listen = [
-        LocaleUpdated::class => [
-            Listeners\UpdateDefaultFormatterLocale::class,
-        ],
-
-        Events\DefaultCurrencyUpdated::class => [
-            Listeners\UpdateDefaultConverterCurrency::class,
-        ],
-    ];
-
     /**
      * Register any package services.
      */
@@ -50,8 +32,6 @@ class MoneyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootCommands();
-        $this->bootEvents();
-        $this->bootCacheInvalidator();
         $this->bootMigrations();
         $this->bootMorphMap();
         $this->publishConfig();
@@ -89,9 +69,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     private function registerFormatter(): void
     {
-        $this->app->singleton(Formatter\Formatter::class, function (Application $app) {
-            return new Formatter\IntlFormatter($app->getLocale());
-        });
+        $this->app->singleton(Formatter\Formatter::class, Formatter\IntlFormatter::class);
     }
 
     /**
@@ -168,34 +146,6 @@ class MoneyServiceProvider extends ServiceProvider
                 Console\UpdateCurrencyRatesCommand::class,
                 Console\SeedCurrenciesCommand::class,
             ]);
-        }
-    }
-
-    /**
-     * Boot any package events.
-     */
-    private function bootEvents(): void
-    {
-        $dispatcher = $this->app[Dispatcher::class];
-
-        foreach ($this->listen as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                $dispatcher->listen($event, $listener);
-            }
-        }
-    }
-
-    /**
-     * Boot any package events.
-     */
-    private function bootCacheInvalidator(): void
-    {
-        if ($this->app[CurrencyQuery::class] instanceof CurrencyCacheQuery) {
-            $this->app[Dispatcher::class]->listen([
-                Events\CurrencyCreated::class,
-                Events\CurrencyUpdated::class,
-                Events\CurrencyDeleted::class,
-            ], Listeners\InvalidateCurrencyCache::class);
         }
     }
 
