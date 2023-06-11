@@ -1,12 +1,11 @@
 <?php
 
-namespace Nevadskiy\Money\RateProvider\Providers;
+namespace Nevadskiy\Money\RateProvider;
 
 use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
-use Nevadskiy\Money\RateProvider\RateProvider;
 
-class OpenExchangeProvider implements RateProvider
+class OpenExchangeRateProvider implements RateProvider
 {
     /**
      * The HTTP client instance.

@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 class MoneyServiceProvider extends ServiceProvider
 {
     /**
-     * Register any package services.
+     * Register any application services.
      */
     public function register(): void
     {
@@ -21,7 +21,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any package services.
+     * Bootstrap any application services.
      */
     public function boot(): void
     {
@@ -29,7 +29,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package configurations.
+     * Register application configuration.
      */
     protected function registerConfig(): void
     {
@@ -37,7 +37,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the money scaler.
+     * Register application money scaler.
      */
     protected function registerScaler(): void
     {
@@ -45,7 +45,7 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the money formatter.
+     * Register application money formatter.
      */
     protected function registerFormatter(): void
     {
@@ -53,15 +53,17 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the money converter.
+     * Register application money formatter.
      */
     protected function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, Converter\ArrayConverter::class);
+        $this->app->singleton(Converter\Converter::class, function (Application $app) {
+            return new Converter\ArrayConverter($app->get(RateProvider\RateProvider::class)->getRates());
+        });
     }
 
     /**
-     * Register the default rate provider.
+     * Register application rate provider.
      */
     protected function registerRateProvider(): void
     {
@@ -69,21 +71,28 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the open exchange rate provider.
+     * Register application open exchange rate provider.
      */
     protected function registerOpenExchangeProvider(): void
     {
-        $this->app->bind('open_exchange_rates', RateProvider\Providers\OpenExchangeProvider::class);
+        $this->app->bind('open_exchange_rates', RateProvider\OpenExchangeRateProvider::class);
 
-        $this->app->when(RateProvider\Providers\OpenExchangeProvider::class)
+        $this->app->when(RateProvider\OpenExchangeRateProvider::class)
             ->needs('$appId')
             ->give(function (Application $app) {
                 return $app['config']['money']['rate_providers']['open_exchange_rates']['app_id'];
             });
+
+        $this->app->extend(
+            RateProvider\OpenExchangeRateProvider::class,
+            function (RateProvider\OpenExchangeRateProvider $provider, Application $app) {
+                return new RateProvider\CacheRateProvider($provider, $app->get('cache.store'));
+            }
+        );
     }
 
     /**
-     * Publish any package configurations.
+     * Publish application configuration.
      */
     protected function publishConfig(): void
     {
