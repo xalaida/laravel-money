@@ -5,26 +5,26 @@ namespace Nevadskiy\Money\Scaler;
 class ArrayScaler implements Scaler
 {
     /**
-     * The default scale.
-     *
-     * @var int
-     */
-    private $default;
-
-    /**
      * The custom scales.
      *
      * @var array
      */
-    private $scales;
+    protected $scales;
+
+    /**
+     * The default scale.
+     *
+     * @var int
+     */
+    protected $default;
 
     /**
      * Make a new scaler instance.
      */
-    public function __construct(int $default = 2, array $scales = [])
+    public function __construct(array $scales = [], int $default = 2)
     {
-        $this->default = $default;
         $this->scales = $scales;
+        $this->default = $default;
     }
 
     /**

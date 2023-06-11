@@ -11,7 +11,7 @@ class ArrayConverter implements Converter
      *
      * @var array
      */
-    private $rates;
+    protected $rates;
 
     /**
      * Make a new converter instance.

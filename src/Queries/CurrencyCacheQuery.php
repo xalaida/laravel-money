@@ -87,7 +87,7 @@ class CurrencyCacheQuery implements CurrencyQuery
     /**
      * Build the cache key from segments.
      */
-    private function buildCacheKey(array $segments): string
+    protected function buildCacheKey(array $segments): string
     {
         return collect($segments)->map(function (string $segment) {
             return Str::lower($segment);

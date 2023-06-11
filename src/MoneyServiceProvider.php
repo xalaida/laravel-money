@@ -43,7 +43,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register any package configurations.
      */
-    private function registerConfig(): void
+    protected function registerConfig(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/money.php', 'money');
     }
@@ -51,7 +51,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the currency registry.
      */
-    private function registerRegistry(): void
+    protected function registerRegistry(): void
     {
         $this->app->singleton(CurrencyRegistry::class);
     }
@@ -59,7 +59,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the money scaler.
      */
-    private function registerScaler(): void
+    protected function registerScaler(): void
     {
         $this->app->singletonIf(Scaler\Scaler::class, Scaler\ArrayScaler::class);
     }
@@ -67,7 +67,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the money formatter.
      */
-    private function registerFormatter(): void
+    protected function registerFormatter(): void
     {
         $this->app->singleton(Formatter\Formatter::class, Formatter\IntlFormatter::class);
     }
@@ -75,7 +75,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the money converter.
      */
-    private function registerConverter(): void
+    protected function registerConverter(): void
     {
         $this->app->singleton(Converter\Converter::class, Converter\RegistryConverter::class);
     }
@@ -83,7 +83,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register any package currency queries.
      */
-    private function registerCurrencyQueries(): void
+    protected function registerCurrencyQueries(): void
     {
         $config = $this->app['config']['money']['bindings'][CurrencyQuery::class];
 
@@ -101,7 +101,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the default application currency.
      */
-    private function registerDefaultCurrency(): void
+    protected function registerDefaultCurrency(): void
     {
         $this->app->when($this->app['config']['money']['bindings'][CurrencyQuery::class]['implementation'])
             ->needs('$defaultCurrencyCode')
@@ -117,7 +117,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the open exchange rate provider.
      */
-    private function registerOpenExchangeProvider(): void
+    protected function registerOpenExchangeProvider(): void
     {
         $this->app->bind('open_exchange_rates', RateProvider\Providers\OpenExchangeProvider::class);
 
@@ -131,7 +131,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Register the default rate provider.
      */
-    private function registerDefaultRateProvider(): void
+    protected function registerDefaultRateProvider(): void
     {
         $this->app->singleton(RateProvider\RateProvider::class, $this->app['config']['money']['default_rate_provider']);
     }
@@ -139,7 +139,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Boot any package console commands.
      */
-    private function bootCommands(): void
+    protected function bootCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -152,7 +152,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Boot any package migrations.
      */
-    private function bootMigrations(): void
+    protected function bootMigrations(): void
     {
         if ($this->app['config']['money']['default_migrations']) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -162,7 +162,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Boot package morph map.
      */
-    private function bootMorphMap(): void
+    protected function bootMorphMap(): void
     {
         Relation::morphMap([
             'currencies' => Models\Currency::class,
@@ -172,7 +172,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Publish any package configurations.
      */
-    private function publishConfig(): void
+    protected function publishConfig(): void
     {
         $this->publishes([
             __DIR__.'/../config/money.php' => config_path('money.php')
@@ -182,7 +182,7 @@ class MoneyServiceProvider extends ServiceProvider
     /**
      * Publish any package migrations.
      */
-    private function publishMigrations(): void
+    protected function publishMigrations(): void
     {
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),

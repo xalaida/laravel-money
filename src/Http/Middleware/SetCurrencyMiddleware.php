@@ -18,7 +18,7 @@ final class SetCurrencyMiddleware
      *
      * @var CurrencyQuery
      */
-    private $currencies;
+    protected $currencies;
 
     /**
      * Make a new middleware instance.
@@ -43,7 +43,7 @@ final class SetCurrencyMiddleware
     /**
      * Get a currency instance from the request.
      */
-    private function getCurrencyFromRequest(Request $request): Currency
+    protected function getCurrencyFromRequest(Request $request): Currency
     {
         $currencyCode = $this->parseCurrency($request);
 
@@ -61,7 +61,7 @@ final class SetCurrencyMiddleware
     /**
      * Parse valid currency code from the request.
      */
-    private function parseCurrency(Request $request): ?string
+    protected function parseCurrency(Request $request): ?string
     {
         $code = $request->query('currency');
 

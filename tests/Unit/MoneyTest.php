@@ -4,6 +4,8 @@ namespace Nevadskiy\Money\Tests\Unit;
 
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Registry\CurrencyRegistry;
+use Nevadskiy\Money\Scaler\ArrayScaler;
+use Nevadskiy\Money\Scaler\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyTest extends TestCase
@@ -44,9 +46,7 @@ class MoneyTest extends TestCase
 
     public function test_it_can_determine_major_units_amount(): void
     {
-        $this->app->get(CurrencyRegistry::class)->set('ABC', [
-            'scale' => 3
-        ]);
+        $this->app->instance(Scaler::class, new ArrayScaler(['ABC' => 3]));
 
         $money = new Money(3000, 'ABC');
 
@@ -55,9 +55,7 @@ class MoneyTest extends TestCase
 
     public function test_it_calculates_major_units_correctly_if_scale_is_zero(): void
     {
-        $this->app->get(CurrencyRegistry::class)->set('ABC', [
-            'scale' => 0,
-        ]);
+        $this->app->instance(Scaler::class, new ArrayScaler(['ABC' => 0]));
 
         $money = new Money(150, 'ABC');
 

@@ -12,7 +12,7 @@ class RegistryConverter implements Converter
      *
      * @var CurrencyRegistry
      */
-    private $currencies;
+    protected $currencies;
 
     /**
      * Make a new converter instance.

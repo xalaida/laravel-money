@@ -11,7 +11,7 @@ class RegistryScaler implements Scaler
      *
      * @var CurrencyRegistry
      */
-    private $currencies;
+    protected $currencies;
 
     /**
      * Make a new scaler instance.
