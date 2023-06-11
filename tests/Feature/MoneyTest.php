@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Unit;
+namespace Nevadskiy\Money\Tests\Feature;
 
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\Scaler\ArrayScaler;
