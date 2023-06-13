@@ -277,6 +277,8 @@ class Money implements Castable, JsonSerializable
 
     /**
      * @inheritdoc
+     *
+     * @todo use custom serializer service from DI.
      */
     public function jsonSerialize(): array
     {

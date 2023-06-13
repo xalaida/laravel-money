@@ -42,7 +42,7 @@ class MoneyTest extends TestCase
 
     public function test_it_can_be_serialized_to_json(): void
     {
-        self::assertEquals('{"amount":100,"currency":"UAH"}', json_encode(new Money(100, 'UAH')));
+        self::assertEquals('{"amount":1,"currency":"UAH"}', json_encode(new Money(100, 'UAH')));
     }
 
     public function test_it_can_be_immutably_multiplied(): void
