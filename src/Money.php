@@ -281,7 +281,7 @@ class Money implements Castable, JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'amount' => $this->getAmount(),
+            'amount' => $this->getMajorUnits(),
             'currency' => $this->getCurrency(),
         ];
     }
