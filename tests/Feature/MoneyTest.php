@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\Tests\Feature;
 
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\Scaler\ArrayScaler;
+use Nevadskiy\Money\Scaler\RoundScaler;
 use Nevadskiy\Money\Scaler\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
 
@@ -24,7 +24,7 @@ class MoneyTest extends TestCase
 
     public function test_it_returns_major_units_amount(): void
     {
-        $this->app->instance(Scaler::class, new ArrayScaler(['ABC' => 3]));
+        $this->app->instance(Scaler::class, new RoundScaler(['ABC' => 3]));
 
         $money = new Money(3000, 'ABC');
 
@@ -33,7 +33,7 @@ class MoneyTest extends TestCase
 
     public function test_it_returns_major_units_correctly_if_scale_is_zero(): void
     {
-        $this->app->instance(Scaler::class, new ArrayScaler(['ABC' => 0]));
+        $this->app->instance(Scaler::class, new RoundScaler(['ABC' => 0]));
 
         $money = new Money(150, 'ABC');
 

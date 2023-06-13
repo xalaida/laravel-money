@@ -44,7 +44,7 @@ class MoneyServiceProvider extends ServiceProvider
     protected function registerScaler(): void
     {
         $this->app->singletonIf(Scaler\Scaler::class, function (Application $app) {
-            return new Scaler\ArrayScaler(array_map(static function (array $options) {
+            return new Scaler\RoundScaler(array_map(static function (array $options) {
                 return $options['scale'];
             }, $app->get(IsoCurrencyRegistry::class)->all()));
         });

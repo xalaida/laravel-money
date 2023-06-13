@@ -2,7 +2,7 @@
 
 namespace Nevadskiy\Money\Scaler;
 
-class ArrayScaler implements Scaler
+class RoundScaler implements Scaler
 {
     /**
      * The custom scales.

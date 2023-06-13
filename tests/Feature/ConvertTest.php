@@ -7,7 +7,7 @@ use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\RateProvider\ArrayRateProvider;
 use Nevadskiy\Money\RateProvider\RateProvider;
-use Nevadskiy\Money\Scaler\ArrayScaler;
+use Nevadskiy\Money\Scaler\RoundScaler;
 use Nevadskiy\Money\Scaler\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
 
@@ -48,7 +48,7 @@ class ConvertTest extends TestCase
             'BTC' => 1 / 25000,
         ]));
 
-        $this->app->instance(Scaler::class, new ArrayScaler([
+        $this->app->instance(Scaler::class, new RoundScaler([
             'UAH' => 2,
             'BTC' => 8,
         ]));
@@ -65,7 +65,7 @@ class ConvertTest extends TestCase
             'JPY' => 139.395,
         ]));
 
-        $this->app->instance(Scaler::class, new ArrayScaler([
+        $this->app->instance(Scaler::class, new RoundScaler([
             'USD' => 2,
             'JPY' => 0,
         ]));
