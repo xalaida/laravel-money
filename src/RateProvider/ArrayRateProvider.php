@@ -14,7 +14,7 @@ class ArrayRateProvider implements RateProvider
     /**
      * Make a new provider instance.
      */
-    public function __construct(array $rates)
+    public function __construct(array $rates = [])
     {
         $this->rates = $rates;
     }
