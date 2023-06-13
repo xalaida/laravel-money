@@ -5,6 +5,7 @@ namespace Nevadskiy\Money;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\RateProvider\RateProviderManager;
+use Nevadskiy\Money\Registry\IsoCurrencyRegistry;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -42,7 +43,11 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerScaler(): void
     {
-        $this->app->singletonIf(Scaler\Scaler::class, Scaler\ArrayScaler::class);
+        $this->app->singletonIf(Scaler\Scaler::class, function (Application $app) {
+            return new Scaler\ArrayScaler(array_map(static function (array $options) {
+                return $options['scale'];
+            }, $app->get(IsoCurrencyRegistry::class)->all()));
+        });
     }
 
     /**
@@ -50,7 +55,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerFormatter(): void
     {
-        $this->app->singleton(Formatter\Formatter::class, Formatter\IntlFormatter::class);
+        $this->app->singletonIf(Formatter\Formatter::class, Formatter\IntlFormatter::class);
     }
 
     /**
@@ -58,7 +63,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, Converter\BaseCurrencyConverter::class);
+        $this->app->singletonIf(Converter\Converter::class, Converter\BaseCurrencyConverter::class);
 
         $this->app->extend(Converter\Converter::class, function (Converter\Converter $converter, Application $app) {
             return new Converter\FallbackConverter($converter, $app->get('config')['money']['fallback_currency']);
@@ -70,7 +75,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerRateProvider(): void
     {
-        $this->app->singleton(RateProvider\RateProvider::class, RateProviderManager::class);
+        $this->app->singletonIf(RateProvider\RateProvider::class, RateProviderManager::class);
     }
 
     /**

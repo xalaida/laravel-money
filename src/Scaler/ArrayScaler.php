@@ -32,6 +32,8 @@ class ArrayScaler implements Scaler
      */
     public function toMajorUnits(int $amount, string $currency)
     {
+        // @todo round to real scale.
+
         return $amount / $this->getMajorMultiplier($currency);
     }
 
@@ -40,6 +42,8 @@ class ArrayScaler implements Scaler
      */
     public function fromMajorUnits($amount, string $currency): int
     {
+        // @todo round to zero scale.
+
         return round($amount * $this->getMajorMultiplier($currency), $this->getScale($currency), PHP_ROUND_HALF_DOWN);
     }
 
