@@ -25,7 +25,7 @@ class RateProviderManager extends Manager implements RateProvider
     /**
      * Create an instance of the open currency exchange rate provider.
      */
-    protected function createArrayDriver(): ArrayRateProvider
+    protected function createArrayDriver(): RateProvider
     {
         return $this->container->make(ArrayRateProvider::class);
     }
@@ -33,7 +33,7 @@ class RateProviderManager extends Manager implements RateProvider
     /**
      * Create an instance of the open currency exchange rate provider.
      */
-    protected function createOpenExchangeRatesDriver(): OpenExchangeRateProvider
+    protected function createOpenExchangeRatesDriver(): RateProvider
     {
         return $this->container->make(OpenExchangeRateProvider::class);
     }
