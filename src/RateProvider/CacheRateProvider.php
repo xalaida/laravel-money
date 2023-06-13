@@ -31,6 +31,7 @@ class CacheRateProvider implements RateProvider
 
     /**
      * @inheritdoc
+     * @todo use PSR cache.
      */
     public function getRates(): array
     {
