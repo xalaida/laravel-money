@@ -27,7 +27,7 @@ class RateProviderManager extends Manager implements RateProvider
      */
     protected function createArrayDriver(): ArrayRateProvider
     {
-        return $this->container->get(ArrayRateProvider::class);
+        return $this->container->make(ArrayRateProvider::class);
     }
 
     /**
@@ -35,6 +35,6 @@ class RateProviderManager extends Manager implements RateProvider
      */
     protected function createOpenExchangeRateDriver(): OpenExchangeRateProvider
     {
-        return $this->container->get(OpenExchangeRateProvider::class);
+        return $this->container->make(OpenExchangeRateProvider::class);
     }
 }
