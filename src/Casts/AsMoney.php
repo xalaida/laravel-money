@@ -10,6 +10,13 @@ use Nevadskiy\Money\Money;
 class AsMoney implements CastsAttributes
 {
     /**
+     * Indicates if it should use major units for storing money.
+     *
+     * @var bool
+     */
+    protected static $useMajorUnits = false;
+
+    /**
      * The currency of the money.
      *
      * @var string|null
@@ -45,6 +52,14 @@ class AsMoney implements CastsAttributes
     }
 
     /**
+     * Specify that cast should use major units for storing money.
+     */
+    public static function useMajorUnits(bool $useMajorUnits = true): void
+    {
+        static::$useMajorUnits = $useMajorUnits;
+    }
+
+    /**
      * @inheritDoc
      */
     public function get($model, string $key, $value, array $attributes): ?Money
@@ -56,6 +71,10 @@ class AsMoney implements CastsAttributes
         $currency = $this->currencyColumn
             ? $attributes[$this->currencyColumn]
             : $this->currency;
+
+        if (static::$useMajorUnits) {
+            return Money::fromMajorUnits($value, $currency);
+        }
 
         return new Money($value, $currency);
     }
@@ -76,7 +95,9 @@ class AsMoney implements CastsAttributes
         // @todo handle currency mismatch.
 
         $columns = [
-            $key => $value->getMinorUnits(),
+            $key => static::$useMajorUnits
+                ? $value->getMajorUnits()
+                : $value->getAmount(),
         ];
 
         if ($this->currencyColumn) {
