@@ -7,15 +7,11 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Nevadskiy\Money\Money;
 
+/**
+ * @example AsMoney::class.':[currency],U,0'
+ */
 class AsMoney implements CastsAttributes
 {
-    /**
-     * Indicates if it should use major units for storing money.
-     *
-     * @var bool
-     */
-    protected static $useMajorUnits = false;
-
     /**
      * The currency of the money.
      *
@@ -31,16 +27,23 @@ class AsMoney implements CastsAttributes
     protected $currencyColumn;
 
     /**
-     * Indicates whether the currency should be converted before saving when does not match.
+     * Indicates if it should use major units for storing money.
      *
      * @var bool
      */
-    protected $convertBeforeSaving;
+    protected $asMajorUnits = true;
+
+    /**
+     * The default amount when prop is null.
+     *
+     * @todo use this.
+     */
+    protected $default;
 
     /**
      * Make a new cast instance.
      */
-    public function __construct(string $currency = null, bool $convertBeforeSaving = false)
+    public function __construct(string $currency = null, string $units = 'u', int $default = null)
     {
         if (Str::startsWith($currency, '[') && Str::endsWith($currency, ']')) {
             $this->currencyColumn = Str::between($currency, '[', ']');
@@ -48,15 +51,8 @@ class AsMoney implements CastsAttributes
             $this->currency = $currency;
         }
 
-        $this->convertBeforeSaving = $convertBeforeSaving;
-    }
-
-    /**
-     * Specify that cast should use major units for storing money.
-     */
-    public static function useMajorUnits(bool $useMajorUnits = true): void
-    {
-        static::$useMajorUnits = $useMajorUnits;
+        $this->asMajorUnits = $units === 'U';
+        $this->default = $default;
     }
 
     /**
@@ -72,7 +68,7 @@ class AsMoney implements CastsAttributes
             ? $attributes[$this->currencyColumn]
             : $this->currency;
 
-        if (static::$useMajorUnits) {
+        if ($this->asMajorUnits) {
             return Money::fromMajorUnits($value, $currency);
         }
 
@@ -95,7 +91,7 @@ class AsMoney implements CastsAttributes
         // @todo handle currency mismatch.
 
         $columns = [
-            $key => static::$useMajorUnits
+            $key => $this->asMajorUnits
                 ? $value->getMajorUnits()
                 : $value->getAmount(),
         ];
