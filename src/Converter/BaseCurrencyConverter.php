@@ -35,7 +35,7 @@ class BaseCurrencyConverter implements Converter
     /**
      * Get a rate between the given currencies.
      *
-     * @todo use base currency.
+     * @todo use base currency & do not call rates when it is base.
      *
      * @return float|int
      */
