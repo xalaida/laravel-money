@@ -29,7 +29,7 @@ class BaseCurrencyConverter implements Converter
     public function convert(Money $money, string $currency): Money
     {
         return Money::fromMajorUnits(
-           $money->getMajorUnits() * $this->getRateBetween($money->getCurrency(), $currency), $currency
+            $money->getMajorUnits() * $this->getRateBetween($money->getCurrency(), $currency), $currency
         );
     }
 
