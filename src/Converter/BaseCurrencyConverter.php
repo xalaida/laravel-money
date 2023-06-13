@@ -2,6 +2,7 @@
 
 namespace Nevadskiy\Money\Converter;
 
+use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\RateProvider\RateProvider;
 
@@ -55,6 +56,12 @@ class BaseCurrencyConverter implements Converter
      */
     protected function getRateToBase(string $currency)
     {
-        return $this->rateProvider->getRates()[$currency];
+        $rates = $this->rateProvider->getRates();
+
+        if (! isset($rates[$currency])) {
+            throw CurrencyRateMissingException::for($currency);
+        }
+
+        return $rates[$currency];
     }
 }

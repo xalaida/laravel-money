@@ -59,6 +59,10 @@ class MoneyServiceProvider extends ServiceProvider
     protected function registerConverter(): void
     {
         $this->app->singleton(Converter\Converter::class, Converter\BaseCurrencyConverter::class);
+
+        $this->app->extend(Converter\Converter::class, function (Converter\Converter $converter, Application $app) {
+            return new Converter\FallbackConverter($converter, $app->get('config')['money']['fallback_currency']);
+        });
     }
 
     /**

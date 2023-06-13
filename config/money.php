@@ -3,11 +3,11 @@
 return [
     'currency' => 'USD',
 
+    'fallback_currency' => 'USD',
+
     'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 
     // @todo >>>
-
-    'fallback_currency' => 'USD', // Currency to fallback when impossible to convert...
 
     'rate_providers' => [
         'cache' => [
