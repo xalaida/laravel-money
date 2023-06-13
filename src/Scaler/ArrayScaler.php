@@ -21,7 +21,7 @@ class ArrayScaler implements Scaler
     /**
      * Make a new scaler instance.
      */
-    public function __construct(array $scales = [], int $default = 2)
+    public function __construct(array $scales = [], int $default = 0)
     {
         $this->scales = $scales;
         $this->default = $default;
