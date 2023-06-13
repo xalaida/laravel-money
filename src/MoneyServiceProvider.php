@@ -81,7 +81,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->app->when(RateProvider\OpenExchangeRateProvider::class)
             ->needs('$appId')
             ->give(function (Application $app) {
-                return $app['config']['money']['rate_providers']['open_exchange_rates']['app_id'];
+                return $app->get('config')['money']['rate_providers']['open_exchange_rates']['app_id'];
             });
 
         $this->app->extend(
