@@ -9,6 +9,8 @@ return [
 
     // @todo >>>
 
+    'currencies' => 'iso',
+
     'rate_providers' => [
         'cache' => [
             'driver' => 'cache',
