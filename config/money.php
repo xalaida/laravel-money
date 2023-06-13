@@ -3,7 +3,7 @@
 return [
     'currency' => 'USD',
 
-    'rate_provider' => 'open_exchange_rates',
+    'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 
     'rate_providers' => [
         'open_exchange_rates' => [

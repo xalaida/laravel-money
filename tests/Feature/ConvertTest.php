@@ -2,9 +2,11 @@
 
 namespace Nevadskiy\Money\Tests\Feature;
 
-use Nevadskiy\Money\Converter\ArrayConverter;
+use Nevadskiy\Money\Converter\BaseCurrencyConverter;
 use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Money;
+use Nevadskiy\Money\RateProvider\ArrayRateProvider;
+use Nevadskiy\Money\RateProvider\RateProvider;
 use Nevadskiy\Money\Scaler\ArrayScaler;
 use Nevadskiy\Money\Scaler\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
@@ -13,7 +15,7 @@ class ConvertTest extends TestCase
 {
     public function test_it_can_be_converted_to_another_currency(): void
     {
-        $this->app->instance(Converter::class, new ArrayConverter([
+        $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'USD' => 1.0,
             'UAH' => 36.916908,
         ]));
@@ -28,7 +30,7 @@ class ConvertTest extends TestCase
     {
         Money::setDefaultCurrency('USD');
 
-        $this->app->instance(Converter::class, new ArrayConverter([
+        $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'USD' => 1.0,
             'UAH' => 36.916908,
         ]));
@@ -41,7 +43,7 @@ class ConvertTest extends TestCase
 
     public function test_it_can_be_converted_into_money_to_another_currency_with_big_scale(): void
     {
-        $this->app->instance(Converter::class, new ArrayConverter([
+        $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'UAH' => 36.916908,
             'BTC' => 1 / 25000,
         ]));
@@ -58,7 +60,7 @@ class ConvertTest extends TestCase
 
     public function test_it_can_be_converted_to_another_currency_with_zero_scale(): void
     {
-        $this->app->instance(Converter::class, new ArrayConverter([
+        $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'USD' => 1.0,
             'JPY' => 139.395,
         ]));

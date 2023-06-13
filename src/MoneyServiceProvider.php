@@ -4,6 +4,7 @@ namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Nevadskiy\Money\RateProvider\RateProviderManager;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -57,9 +58,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerConverter(): void
     {
-        $this->app->singleton(Converter\Converter::class, function (Application $app) {
-            return new Converter\ArrayConverter($app->get(RateProvider\RateProvider::class)->getRates());
-        });
+        $this->app->singleton(Converter\Converter::class, Converter\BaseCurrencyConverter::class);
     }
 
     /**
@@ -67,7 +66,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerRateProvider(): void
     {
-        $this->app->singleton(RateProvider\RateProvider::class, $this->app['config']['money']['rate_provider']);
+        $this->app->singleton(RateProvider\RateProvider::class, RateProviderManager::class);
     }
 
     /**
@@ -75,8 +74,6 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerOpenExchangeProvider(): void
     {
-        $this->app->bind('open_exchange_rates', RateProvider\OpenExchangeRateProvider::class);
-
         $this->app->when(RateProvider\OpenExchangeRateProvider::class)
             ->needs('$appId')
             ->give(function (Application $app) {

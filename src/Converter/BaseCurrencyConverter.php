@@ -3,24 +3,23 @@
 namespace Nevadskiy\Money\Converter;
 
 use Nevadskiy\Money\Money;
+use Nevadskiy\Money\RateProvider\RateProvider;
 
-class ArrayConverter implements Converter
+class BaseCurrencyConverter implements Converter
 {
     /**
-     * The currency exchange rates.
+     * The rate provider instance.
      *
-     * @var array
+     * @var RateProvider
      */
-    protected $rates;
+    protected $rateProvider;
 
     /**
      * Make a new converter instance.
-     *
-     * @todo use rate provider as dependency.
      */
-    public function __construct(array $rates)
+    public function __construct(RateProvider $rateProvider)
     {
-        $this->rates = $rates;
+        $this->rateProvider = $rateProvider;
     }
 
     /**
@@ -36,8 +35,9 @@ class ArrayConverter implements Converter
     /**
      * Get a rate between the given currencies.
      *
-     * @return float|int
      * @todo use base currency.
+     *
+     * @return float|int
      */
     protected function getRateBetween(string $sourceCurrency, string $targetCurrency)
     {
@@ -49,12 +49,12 @@ class ArrayConverter implements Converter
     }
 
     /**
-     * Get rate of the currency.
+     * Get rate to the base currency.
      *
      * @return float|int
      */
     protected function getRateToBase(string $currency)
     {
-        return $this->rates[$currency];
+        return $this->rateProvider->getRates()[$currency];
     }
 }
