@@ -12,7 +12,6 @@ class IntlFormatter implements Formatter
      */
     public function format(Money $money, string $locale): string
     {
-        // @todo get currency list.
         return $this->getNumberFormatter($locale)->formatCurrency($money->getMajorUnits(), $money->getCurrency());
     }
 
