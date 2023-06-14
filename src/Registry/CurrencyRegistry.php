@@ -2,27 +2,25 @@
 
 namespace Nevadskiy\Money\Registry;
 
-class CurrencyRegistry
+interface CurrencyRegistry
 {
-    protected $currencies = [];
+    /**
+     * Register the given currency with options.
+     */
+    public function set(string $currency, array $options = []): void;
 
-    public function set(string $currency, array $options = [])
-    {
-        $this->currencies[$currency] = $options;
-    }
+    /**
+     * Get options of the currency.
+     */
+    public function get(string $currency): array;
 
-    public function get(string $currency): array
-    {
-        return $this->currencies[$currency];
-    }
+    /**
+     * Determine whether the given currency has been registered.
+     */
+    public function has(string $currency): bool;
 
-    public function has(string $currency): bool
-    {
-        return isset($this->currencies[$currency]);
-    }
-
-    public function all(): array
-    {
-        return $this->currencies;
-    }
+    /**
+     * Get the currency list.
+     */
+    public function all(): array;
 }
