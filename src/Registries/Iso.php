@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Registry;
+namespace Nevadskiy\Money\Registries;
 
 class Iso
 {

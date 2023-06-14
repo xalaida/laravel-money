@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\RateProvider;
+namespace Nevadskiy\Money\RateProviders;
 
 use Illuminate\Support\Manager;
 

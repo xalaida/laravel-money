@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Scaler;
+namespace Nevadskiy\Money\Scalers;
 
 interface Scaler
 {

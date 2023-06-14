@@ -3,10 +3,10 @@
 namespace Nevadskiy\Money\Tests\Feature;
 
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\RateProvider\ArrayRateProvider;
-use Nevadskiy\Money\RateProvider\RateProvider;
-use Nevadskiy\Money\Scaler\RoundScaler;
-use Nevadskiy\Money\Scaler\Scaler;
+use Nevadskiy\Money\RateProviders\ArrayRateProvider;
+use Nevadskiy\Money\RateProviders\RateProvider;
+use Nevadskiy\Money\Scalers\RoundScaler;
+use Nevadskiy\Money\Scalers\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
 
 class ConvertTest extends TestCase

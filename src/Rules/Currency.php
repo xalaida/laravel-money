@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Nevadskiy\Money\Registry\Iso;
+use Nevadskiy\Money\Registries\Iso;
 
 class Currency implements Rule
 {

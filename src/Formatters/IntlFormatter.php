@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Formatter;
+namespace Nevadskiy\Money\Formatters;
 
 use Nevadskiy\Money\Money;
 use NumberFormatter;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Tests\Feature\Cast;
+namespace Nevadskiy\Money\Tests\Feature\Casts;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;

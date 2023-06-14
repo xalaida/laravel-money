@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\Converter;
+namespace Nevadskiy\Money\Converters;
 
 use Nevadskiy\Money\Money;
 

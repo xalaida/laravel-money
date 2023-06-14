@@ -4,8 +4,8 @@ namespace Nevadskiy\Money\Tests\Feature;
 
 use Nevadskiy\Money\Exceptions\CurrencyScaleMissingException;
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\Scaler\RoundScaler;
-use Nevadskiy\Money\Scaler\Scaler;
+use Nevadskiy\Money\Scalers\RoundScaler;
+use Nevadskiy\Money\Scalers\Scaler;
 use Nevadskiy\Money\Tests\TestCase;
 
 class MoneyScaleTest extends TestCase

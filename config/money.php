@@ -1,6 +1,6 @@
 <?php
 
-use Nevadskiy\Money\Registry\Iso;
+use Nevadskiy\Money\Registries\Iso;
 
 return [
     'currency' => env('MONEY_CURRENCY', 'USD'),

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nevadskiy\Money\RateProvider;
+namespace Nevadskiy\Money\RateProviders;
 
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Http\Client\Factory as Http;

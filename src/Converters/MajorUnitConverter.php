@@ -1,9 +1,9 @@
 <?php
 
-namespace Nevadskiy\Money\Converter;
+namespace Nevadskiy\Money\Converters;
 
 use Nevadskiy\Money\Money;
-use Nevadskiy\Money\RateProvider\RateProvider;
+use Nevadskiy\Money\RateProviders\RateProvider;
 
 class MajorUnitConverter implements Converter
 {

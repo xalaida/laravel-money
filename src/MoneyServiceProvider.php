@@ -3,11 +3,7 @@
 namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use Nevadskiy\Money\RateProvider\RateProviderManager;
-use Nevadskiy\Money\Registry\CurrencyRegistry;
-use Nevadskiy\Money\Registry\CurrencyRegistryManager;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -46,8 +42,8 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerCurrencyRegistry(): void
     {
-        $this->app->singletonIf(Registry\CurrencyRegistry::class, function (Application $app) {
-            return new CurrencyRegistry(
+        $this->app->singletonIf(Registries\CurrencyRegistry::class, function (Application $app) {
+            return new Registries\CurrencyRegistry(
                 $app->get('config')['money']['currencies'] ?? []
             );
         });
@@ -58,9 +54,9 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerScaler(): void
     {
-        $this->app->singletonIf(Scaler\Scaler::class, function (Application $app) {
-            return new Scaler\RoundScaler(
-                $app->get(Registry\CurrencyRegistry::class)->pluck('scale')
+        $this->app->singletonIf(Scalers\Scaler::class, function (Application $app) {
+            return new Scalers\RoundScaler(
+                $app->get(Registries\CurrencyRegistry::class)->pluck('scale')
             );
         });
     }
@@ -70,7 +66,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerFormatter(): void
     {
-        $this->app->singletonIf(Formatter\Formatter::class, Formatter\IntlFormatter::class);
+        $this->app->singletonIf(Formatters\Formatter::class, Formatters\IntlFormatter::class);
     }
 
     /**
@@ -78,10 +74,10 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerConverter(): void
     {
-        $this->app->singletonIf(Converter\Converter::class, Converter\MajorUnitConverter::class);
+        $this->app->singletonIf(Converters\Converter::class, Converters\MajorUnitConverter::class);
 
-        $this->app->extend(Converter\Converter::class, function (Converter\Converter $converter, Application $app) {
-            return new Converter\FallbackConverter($converter, $app->get('config')['money']['fallback_currency']);
+        $this->app->extend(Converters\Converter::class, function (Converters\Converter $converter, Application $app) {
+            return new Converters\FallbackConverter($converter, $app->get('config')['money']['fallback_currency']);
         });
     }
 
@@ -90,7 +86,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerRateProvider(): void
     {
-        $this->app->singletonIf(RateProvider\RateProvider::class, RateProviderManager::class);
+        $this->app->singletonIf(RateProviders\RateProvider::class, RateProviders\RateProviderManager::class);
     }
 
     /**
@@ -98,7 +94,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerOpenExchangeProvider(): void
     {
-        $this->app->when(RateProvider\OpenExchangeRateProvider::class)
+        $this->app->when(RateProviders\OpenExchangeRateProvider::class)
             ->needs('$appId')
             ->give(function (Application $app) {
                 return $app->get('config')['money']['rate_providers']['open_exchange_rates']['app_id'];

@@ -5,10 +5,10 @@ namespace Nevadskiy\Money;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Nevadskiy\Money\Casts\AsMoney;
-use Nevadskiy\Money\Converter\Converter;
+use Nevadskiy\Money\Converters\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
-use Nevadskiy\Money\Formatter\Formatter;
-use Nevadskiy\Money\Scaler\Scaler;
+use Nevadskiy\Money\Formatters\Formatter;
+use Nevadskiy\Money\Scalers\Scaler;
 use JsonSerializable;
 
 class Money implements Castable, JsonSerializable
