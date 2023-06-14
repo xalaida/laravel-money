@@ -63,7 +63,7 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerConverter(): void
     {
-        $this->app->singletonIf(Converter\Converter::class, Converter\BaseCurrencyConverter::class);
+        $this->app->singletonIf(Converter\Converter::class, Converter\MajorUnitConverter::class);
 
         $this->app->extend(Converter\Converter::class, function (Converter\Converter $converter, Application $app) {
             return new Converter\FallbackConverter($converter, $app->get('config')['money']['fallback_currency']);
@@ -88,13 +88,6 @@ class MoneyServiceProvider extends ServiceProvider
             ->give(function (Application $app) {
                 return $app->get('config')['money']['rate_providers']['open_exchange_rates']['app_id'];
             });
-
-        $this->app->extend(
-            RateProvider\OpenExchangeRateProvider::class,
-            function (RateProvider\OpenExchangeRateProvider $provider, Application $app) {
-                return new RateProvider\CacheRateProvider($provider, $app->get('cache.store'));
-            }
-        );
     }
 
     /**
