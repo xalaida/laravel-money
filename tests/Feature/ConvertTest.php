@@ -16,7 +16,7 @@ class ConvertTest extends TestCase
         $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'USD' => 1.0,
             'UAH' => 36.916908,
-        ]));
+        ], 'USD'));
 
         $money = Money::fromMajorUnits(100, 'USD')->convert('UAH');
 
@@ -44,7 +44,7 @@ class ConvertTest extends TestCase
         $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'UAH' => 36.916908,
             'BTC' => 1 / 25000,
-        ]));
+        ], 'USD'));
 
         $this->app->instance(Scaler::class, new RoundScaler([
             'UAH' => 2,
@@ -61,7 +61,7 @@ class ConvertTest extends TestCase
         $this->app->instance(RateProvider::class, new ArrayRateProvider([
             'USD' => 1.0,
             'JPY' => 139.395,
-        ]));
+        ], 'USD'));
 
         $this->app->instance(Scaler::class, new RoundScaler([
             'USD' => 2,
