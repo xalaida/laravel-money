@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\Converters;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\RateProviders\RateProvider;
 
-class MajorUnitConverter implements Converter
+class RateConverter implements Converter
 {
     /**
      * The rate provider instance.
