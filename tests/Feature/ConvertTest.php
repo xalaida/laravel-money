@@ -2,8 +2,6 @@
 
 namespace Nevadskiy\Money\Tests\Feature;
 
-use Nevadskiy\Money\Converter\BaseCurrencyConverter;
-use Nevadskiy\Money\Converter\Converter;
 use Nevadskiy\Money\Money;
 use Nevadskiy\Money\RateProvider\ArrayRateProvider;
 use Nevadskiy\Money\RateProvider\RateProvider;
@@ -72,6 +70,6 @@ class ConvertTest extends TestCase
 
         $money = new Money(50, 'USD');
 
-        static::assertSame(70, $money->convert('JPY')->getAmount());
+        static::assertSame(69, $money->convert('JPY')->getAmount());
     }
 }

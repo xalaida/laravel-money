@@ -39,7 +39,7 @@ class MoneyScaleTest extends TestCase
 
         $money = new Money(3000, 'ABC');
 
-        static::assertSame(3, $money->getMajorUnits());
+        static::assertSame(3.000, $money->getMajorUnits());
     }
 
     public function test_it_returns_major_units_correctly_if_scale_is_zero(): void

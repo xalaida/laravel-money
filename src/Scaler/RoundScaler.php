@@ -26,9 +26,15 @@ class RoundScaler implements Scaler
      */
     public function toMajorUnits(int $amount, string $currency)
     {
-        // @todo round to real scale.
+        $scale = $this->getScale($currency);
 
-        return $amount / $this->getMajorMultiplier($currency);
+        $majorUnits = round($amount / $this->getMajorMultiplier($currency), $scale, PHP_ROUND_HALF_DOWN);
+
+        if ($scale === 0) {
+            return (int) $majorUnits;
+        }
+
+        return $majorUnits;
     }
 
     /**
@@ -36,9 +42,7 @@ class RoundScaler implements Scaler
      */
     public function fromMajorUnits($amount, string $currency): int
     {
-        // @todo round to zero scale.
-
-        return round($amount * $this->getMajorMultiplier($currency), $this->getScale($currency), PHP_ROUND_HALF_DOWN);
+        return $amount * $this->getMajorMultiplier($currency);
     }
 
     /**
