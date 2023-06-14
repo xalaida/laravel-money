@@ -72,4 +72,26 @@ class ConvertTest extends TestCase
 
         static::assertSame(69, $money->convert('JPY')->getAmount());
     }
+
+    public function test_it_can_be_converted_to_fallback_currency_when_missing(): void
+    {
+        config(['money.fallback_currency' => 'UAH']);
+
+        $this->app->instance(RateProvider::class, new ArrayRateProvider([
+            'USD' => 1,
+            'UAH' => 25,
+        ], 'USD'));
+
+        $this->app->instance(Scaler::class, new RoundScaler([
+            'USD' => 2,
+            'UAH' => 2,
+        ]));
+
+        $original = new Money(500, 'USD');
+
+        $money = $original->convert('JPY');
+
+        static::assertSame('UAH', $money->getCurrency());
+        static::assertSame(12500, $money->getAmount());
+    }
 }
