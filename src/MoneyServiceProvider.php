@@ -5,7 +5,6 @@ namespace Nevadskiy\Money;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\RateProvider\RateProviderManager;
-use Nevadskiy\Money\Registry\IsoCurrencyRegistry;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -15,6 +14,7 @@ class MoneyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerConfig();
+        $this->registerCurrencyRegistry();
         $this->registerScaler();
         $this->registerFormatter();
         $this->registerConverter();
@@ -39,14 +39,22 @@ class MoneyServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register application currency registry.
+     */
+    protected function registerCurrencyRegistry(): void
+    {
+        $this->app->singletonIf(Registry\CurrencyRegistry::class, Registry\IsoCurrencyRegistry::class);
+    }
+
+    /**
      * Register application money scaler.
      */
     protected function registerScaler(): void
     {
         $this->app->singletonIf(Scaler\Scaler::class, function (Application $app) {
-            return new Scaler\RoundScaler(array_map(static function (array $options) {
-                return $options['scale'];
-            }, $app->get(IsoCurrencyRegistry::class)->all()));
+            return new Scaler\RoundScaler(
+                $app->get(Registry\CurrencyRegistry::class)->pluck('scale')
+            );
         });
     }
 

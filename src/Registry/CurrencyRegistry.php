@@ -23,4 +23,9 @@ interface CurrencyRegistry
      * Get the currency list.
      */
     public function all(): array;
+
+    /**
+     * Pluck an array of values with the given option for each currency.
+     */
+    public function pluck(string $option): array;
 }

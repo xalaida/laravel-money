@@ -60,6 +60,16 @@ class IsoCurrencyRegistry implements CurrencyRegistry
     }
 
     /**
+     * @inheritdoc
+     */
+    public function pluck(string $option): array
+    {
+        return array_map(static function (array $options) use ($option) {
+            return $options[$option];
+        }, $this->all());
+    }
+
+    /**
      * Get ISO 4217 currency list.
      *
      * @see https://en.wikipedia.org/wiki/ISO_4217
