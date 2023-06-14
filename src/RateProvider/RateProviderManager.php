@@ -23,7 +23,7 @@ class RateProviderManager extends Manager implements RateProvider
     }
 
     /**
-     * Create an instance of the open currency exchange rate provider.
+     * Make the "array" rate provider.
      */
     protected function createArrayDriver(): RateProvider
     {
@@ -31,7 +31,7 @@ class RateProviderManager extends Manager implements RateProvider
     }
 
     /**
-     * Create an instance of the open currency exchange rate provider.
+     * Make the "Open Exchange Rates" rate provider.
      */
     protected function createOpenExchangeRatesDriver(): RateProvider
     {
