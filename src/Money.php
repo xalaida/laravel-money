@@ -220,7 +220,13 @@ class Money implements Castable, JsonSerializable
      */
     public function convertUsing(Converter $converter, string $currency = null): self
     {
-        return $converter->convert($this, $currency ?? static::getDefaultCurrency());
+        $currency = $currency ?? static::getDefaultCurrency();
+
+        if ($currency === $this->getCurrency()) {
+            return clone $this;
+        }
+
+        return $converter->convert($this, $currency);
     }
 
     /**
