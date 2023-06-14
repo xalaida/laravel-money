@@ -16,6 +16,7 @@ class MoneyServiceProvider extends ServiceProvider
         $this->registerCurrencyRegistry();
         $this->registerScaler();
         $this->registerFormatter();
+        $this->registerSerializer();
         $this->registerConverter();
         $this->registerRateProvider();
         $this->registerOpenExchangeProvider();
@@ -67,6 +68,14 @@ class MoneyServiceProvider extends ServiceProvider
     protected function registerFormatter(): void
     {
         $this->app->singletonIf(Formatters\Formatter::class, Formatters\IntlFormatter::class);
+    }
+
+    /**
+     * Register application money serializer.
+     */
+    protected function registerSerializer(): void
+    {
+        $this->app->singletonIf(Serializers\Serializer::class, Serializers\ArraySerializer::class);
     }
 
     /**

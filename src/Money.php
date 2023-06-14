@@ -10,6 +10,7 @@ use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Formatters\Formatter;
 use Nevadskiy\Money\Scalers\Scaler;
 use JsonSerializable;
+use Nevadskiy\Money\Serializers\Serializer;
 
 class Money implements Castable, JsonSerializable
 {
@@ -262,7 +263,7 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Get the money scaler instance.
+     * Get the money scaler service.
      */
     protected static function getScaler(): Scaler
     {
@@ -270,7 +271,7 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Get the money formatter instance.
+     * Get the money formatter service.
      */
     protected static function getFormatter(): Formatter
     {
@@ -278,11 +279,19 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Get the money converter instance.
+     * Get the money converter service.
      */
     protected static function getConverter(): Converter
     {
         return resolve(Converter::class);
+    }
+
+    /**
+     * Get the money serializer service.
+     */
+    protected static function getSerializer(): Serializer
+    {
+        return resolve(Serializer::class);
     }
 
     /**
@@ -295,15 +304,10 @@ class Money implements Castable, JsonSerializable
 
     /**
      * @inheritdoc
-     *
-     * @todo use custom serializer service.
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
-        return [
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-        ];
+        return static::getSerializer()->serialize($this);
     }
 
     /**
