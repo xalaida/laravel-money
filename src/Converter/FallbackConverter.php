@@ -5,9 +5,6 @@ namespace Nevadskiy\Money\Converter;
 use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
 use Nevadskiy\Money\Money;
 
-/**
- * @todo move to rate providers.
- */
 class FallbackConverter implements Converter
 {
     /**
