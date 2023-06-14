@@ -11,10 +11,6 @@ use Nevadskiy\Money\Formatter\Formatter;
 use Nevadskiy\Money\Scaler\Scaler;
 use JsonSerializable;
 
-/**
- * @todo add aliases for subtract...
- * @todo add aliases for add...
- */
 class Money implements Castable, JsonSerializable
 {
     /**
@@ -114,7 +110,7 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Add the given money to the money instance.
+     * Add the given money to the current money.
      */
     public function plus(Money $money, bool $convert = false): self
     {
@@ -127,7 +123,15 @@ class Money implements Castable, JsonSerializable
     }
 
     /**
-     * Subtract the given money from the money instance.
+     * Alias to add the given money to the current money.
+     */
+    public function add(Money $money, bool $convert = false): self
+    {
+        return $this->plus($money, $convert);
+    }
+
+    /**
+     * Subtract the given money from the current money.
      */
     public function minus(Money $money, bool $convert = false): self
     {
@@ -137,6 +141,14 @@ class Money implements Castable, JsonSerializable
 
         // @todo do not convert when same currency.
         return $this->setAmount($this->getAmount() - $money->convert($this->getCurrency())->getAmount());
+    }
+
+    /**
+     * Alias to subtract the given money from the current money.
+     */
+    public function subtract(Money $money, bool $convert = false): self
+    {
+        return $this->minus($money, $convert);
     }
 
     public function plusPercentage(float $percentage): self
