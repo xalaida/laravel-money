@@ -5,6 +5,8 @@ return [
 
     'fallback_currency' => env('MONEY_FALLBACK_CURRENCY', 'USD'),
 
+    'currencies' => 'iso',
+
     'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 
     'rate_providers' => [

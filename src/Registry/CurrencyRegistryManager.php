@@ -15,7 +15,7 @@ class CurrencyRegistryManager extends Manager
     }
 
     /**
-     * Make the ISO 4217 currency registry.
+     * Make the "ISO 4217" currency registry.
      */
     protected function createIsoDriver(): CurrencyRegistry
     {
@@ -23,10 +23,18 @@ class CurrencyRegistryManager extends Manager
     }
 
     /**
-     * Make the "open exchange rates" currency registry.
+     * Make the "Open Exchange Rates" currency registry.
      */
     protected function createOpenExchangeRatesDriver(): CurrencyRegistry
     {
         return OpenExchangeRatesCurrencies::make();
+    }
+
+    /**
+     * Make the "Stripe" currency registry.
+     */
+    protected function createStripeDriver(): CurrencyRegistry
+    {
+        return StripeCurrencies::make();
     }
 }
