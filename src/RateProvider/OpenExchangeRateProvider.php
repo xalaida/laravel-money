@@ -2,9 +2,12 @@
 
 namespace Nevadskiy\Money\RateProvider;
 
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Http\Client\Factory as Http;
-use Illuminate\Http\Client\RequestException;
 
+/**
+ * @todo refactor by using separate http client psr interface + psr cache decorator on top of that.
+ */
 class OpenExchangeRateProvider extends BaseCurrencyRateProvider
 {
     /**
@@ -15,6 +18,13 @@ class OpenExchangeRateProvider extends BaseCurrencyRateProvider
     protected $http;
 
     /**
+     * The cache instance.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
      * The application ID.
      *
      * @var string
@@ -22,11 +32,19 @@ class OpenExchangeRateProvider extends BaseCurrencyRateProvider
     protected $appId;
 
     /**
+     * The latest exchange rates response.
+     *
+     * @var array
+     */
+    protected $response;
+
+    /**
      * Make a new provider instance.
      */
-    public function __construct(Http $http, string $appId)
+    public function __construct(Http $http, Cache $cache, string $appId)
     {
         $this->http = $http;
+        $this->cache = $cache;
         $this->appId = $appId;
     }
 
@@ -35,7 +53,7 @@ class OpenExchangeRateProvider extends BaseCurrencyRateProvider
      */
     protected function getRates(): array
     {
-        return $this->fetch()['rates'];
+        return $this->getResponse()['rates'];
     }
 
     /**
@@ -43,17 +61,29 @@ class OpenExchangeRateProvider extends BaseCurrencyRateProvider
      */
     protected function getBaseCurrency(): string
     {
-        return $this->fetch()['base'];
+        return $this->getResponse()['base'];
     }
 
     /**
-     * Fetch the currency rates.
-     *
-     * @throws RequestException
+     * Fetch currency exchange rates.
      */
-    protected function fetch(): array
+    protected function getResponse(): array
     {
-        return $this->http->get($this->url())->throw()->json();
+        if (! $this->response) {
+            $this->response = $this->fetch();
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Fetch currency exchange rates.
+     */
+    protected function fetch()
+    {
+        return $this->cache->remember(self::class, now()->addDay(), function () {
+            return $this->http->get($this->url())->throw()->json();
+        });
     }
 
     /**
