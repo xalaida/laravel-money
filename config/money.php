@@ -1,11 +1,13 @@
 <?php
 
+use Nevadskiy\Money\Registry\Iso;
+
 return [
     'currency' => env('MONEY_CURRENCY', 'USD'),
 
     'fallback_currency' => env('MONEY_FALLBACK_CURRENCY', 'USD'),
 
-    'currencies' => 'iso',
+    'currencies' => Iso::currencies(),
 
     'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 

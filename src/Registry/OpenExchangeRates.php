@@ -2,16 +2,8 @@
 
 namespace Nevadskiy\Money\Registry;
 
-class OpenExchangeRatesCurrencies
+class OpenExchangeRates
 {
-    /**
-     * Make a new registry instance.
-     */
-    public static function make(): CurrencyRegistry
-    {
-        return new CurrencyRegistry(static::currencies());
-    }
-
     /**
      * Get ISO 4217 currency list.
      *
