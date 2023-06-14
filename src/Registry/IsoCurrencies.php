@@ -2,71 +2,14 @@
 
 namespace Nevadskiy\Money\Registry;
 
-class IsoCurrencyRegistry implements CurrencyRegistry
+class IsoCurrencies
 {
-    /**
-     * The registered currency list.
-     */
-    protected $currencies = [];
-
     /**
      * Make a new registry instance.
      */
-    public function __construct()
+    public static function make(): CurrencyRegistry
     {
-        $this->currencies = static::currencies();
-    }
-
-    /**
-     * Exclude the given currencies from the registry.
-     */
-    public function except(array $currencies): void
-    {
-        foreach ($currencies as $currency) {
-            unset($this->currencies[$currency]);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function set(string $currency, array $options = []): void
-    {
-        $this->currencies[$currency] = $options;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function get(string $currency): array
-    {
-        return $this->currencies[$currency];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function has(string $currency): bool
-    {
-        return isset($this->currencies[$currency]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function all(): array
-    {
-        return $this->currencies;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function pluck(string $option): array
-    {
-        return array_map(static function (array $options) use ($option) {
-            return $options[$option];
-        }, $this->all());
+        return new CurrencyRegistry(static::currencies());
     }
 
     /**

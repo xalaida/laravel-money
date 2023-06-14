@@ -3,8 +3,10 @@
 namespace Nevadskiy\Money;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Nevadskiy\Money\RateProvider\RateProviderManager;
+use Nevadskiy\Money\Registry\CurrencyRegistryManager;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -43,7 +45,9 @@ class MoneyServiceProvider extends ServiceProvider
      */
     protected function registerCurrencyRegistry(): void
     {
-        $this->app->singletonIf(Registry\CurrencyRegistry::class, Registry\IsoCurrencyRegistry::class);
+        $this->app->singletonIf(Registry\CurrencyRegistry::class, function (Application $app) {
+            return $app->make(CurrencyRegistryManager::class)->driver();
+        });
     }
 
     /**

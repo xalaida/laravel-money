@@ -3,7 +3,7 @@
 namespace Nevadskiy\Money\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Nevadskiy\Money\Registry\IsoCurrencyRegistry;
+use Nevadskiy\Money\Registry\IsoCurrencies;
 
 class Currency implements Rule
 {
@@ -27,8 +27,8 @@ class Currency implements Rule
     /**
      * Get the currency registry.
      */
-    protected static function getRegistry(): IsoCurrencyRegistry
+    protected static function getRegistry(): IsoCurrencies
     {
-        return resolve(IsoCurrencyRegistry::class);
+        return resolve(IsoCurrencies::class);
     }
 }
