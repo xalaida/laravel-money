@@ -9,9 +9,9 @@ class RateProviderManager extends Manager implements RateProvider
     /**
      * @inheritdoc
      */
-    public function getRates(): array
+    public function getRate(string $sourceCurrency, string $targetCurrency): float
     {
-        return $this->driver()->getRates();
+        return $this->driver()->getRate($sourceCurrency, $targetCurrency);
     }
 
     /**

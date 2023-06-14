@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\RateProvider;
 
 use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
 
-abstract class BaseCurrencyRateProvider implements NewRateProvider
+abstract class BaseCurrencyRateProvider implements RateProvider
 {
     /**
      * Get all rates of the provider.

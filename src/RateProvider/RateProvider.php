@@ -2,12 +2,14 @@
 
 namespace Nevadskiy\Money\RateProvider;
 
+use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
+
 interface RateProvider
 {
     /**
-     * Get the collection of rates.
+     * Get exchange rate between the given currencies.
      *
-     * @returns array<string, float>
+     * @throws CurrencyRateMissingException
      */
-    public function getRates(): array;
+    public function getRate(string $sourceCurrency, string $targetCurrency): float;
 }

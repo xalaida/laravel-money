@@ -5,7 +5,7 @@ namespace Nevadskiy\Money\RateProvider;
 use Illuminate\Http\Client\Factory as Http;
 use Illuminate\Http\Client\RequestException;
 
-class OpenExchangeRateProvider implements RateProvider
+class OpenExchangeRateProvider extends BaseCurrencyRateProvider
 {
     /**
      * The HTTP client instance.
@@ -33,9 +33,17 @@ class OpenExchangeRateProvider implements RateProvider
     /**
      * @inheritDoc
      */
-    public function getRates(): array
+    protected function getRates(): array
     {
         return $this->fetch()['rates'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getBaseCurrency(): string
+    {
+        return $this->fetch()['base'];
     }
 
     /**
