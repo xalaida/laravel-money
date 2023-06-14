@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Tests\Feature\Cast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Nevadskiy\Money\Casts\AsMoney;
+use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Tests\TestCase;
 use Nevadskiy\Money\Money;
 
@@ -30,8 +31,6 @@ class CustomCurrencyMoneyCastTest extends TestCase
         parent::tearDown();
     }
 
-    // @todo test when currency mismatch (default with money)
-
     /**
      * @test
      */
@@ -48,6 +47,18 @@ class CustomCurrencyMoneyCastTest extends TestCase
         static::assertInstanceOf(Money::class, $product->cost);
         static::assertSame(100, $product->cost->getAmount());
         static::assertSame('UAH', $product->cost->getCurrency());
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_exception_when_currencies_do_not_match(): void
+    {
+        $this->expectException(CurrencyMismatchException::class);
+
+        $product = new DefaultCurrencyMoneyCastProduct();
+        $product->cost = new Money(100, 'USD');
+        $product->save();
     }
 
     /**

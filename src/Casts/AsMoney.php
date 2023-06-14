@@ -5,6 +5,7 @@ namespace Nevadskiy\Money\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
 use Nevadskiy\Money\Money;
 
 /**
@@ -88,8 +89,6 @@ class AsMoney implements CastsAttributes
             throw new InvalidArgumentException('The given value is not a Money instance.');
         }
 
-        // @todo handle currency mismatch.
-
         $columns = [
             $key => $this->asMajorUnits
                 ? $value->getMajorUnits()
@@ -102,6 +101,18 @@ class AsMoney implements CastsAttributes
             ]);
         }
 
+        if ($this->getCurrency() !== $value->getCurrency()) {
+            throw new CurrencyMismatchException();
+        }
+
         return $columns;
+    }
+
+    /**
+     * Get the currency of the cast.
+     */
+    protected function getCurrency(): string
+    {
+        return $this->currency ?? Money::getDefaultCurrency();
     }
 }
