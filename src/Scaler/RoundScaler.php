@@ -2,6 +2,8 @@
 
 namespace Nevadskiy\Money\Scaler;
 
+use Nevadskiy\Money\Exceptions\CurrencyScaleMissingException;
+
 class RoundScaler implements Scaler
 {
     /**
@@ -12,19 +14,11 @@ class RoundScaler implements Scaler
     protected $scales;
 
     /**
-     * The default scale.
-     *
-     * @var int
-     */
-    protected $default;
-
-    /**
      * Make a new scaler instance.
      */
-    public function __construct(array $scales = [], int $default = 0)
+    public function __construct(array $scales = [])
     {
         $this->scales = $scales;
-        $this->default = $default;
     }
 
     /**
@@ -60,6 +54,10 @@ class RoundScaler implements Scaler
      */
     protected function getScale(string $currency)
     {
-        return $this->scales[$currency] ?? $this->default;
+        if (! isset($this->scales[$currency])) {
+            throw CurrencyScaleMissingException::for($currency);
+        }
+
+        return $this->scales[$currency];
     }
 }
