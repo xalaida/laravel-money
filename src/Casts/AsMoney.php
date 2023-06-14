@@ -119,15 +119,17 @@ class AsMoney implements CastsAttributes
     /**
      * Make a new money instance from the minor units.
      */
-    protected function newFromMinorUnits(int $amount, string $currency): Money
+    protected function newFromMinorUnits(int $amount, string $currency = null): Money
     {
         return new Money($amount, $currency);
     }
 
     /**
      * Make a new money instance from the major units.
+     *
+     * @param int|float $amount
      */
-    protected function newFromMajorUnits(int $amount, string $currency): Money
+    protected function newFromMajorUnits($amount, string $currency = null): Money
     {
         return Money::fromMajorUnits($amount, $currency);
     }
