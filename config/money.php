@@ -1,29 +1,19 @@
 <?php
 
-use Nevadskiy\Money\Queries;
+use Nevadskiy\Money\Registries\Iso;
 
 return [
-    // TODO: make it optional.
-    'default_currency_code' => 'USD',
+    'currency' => env('MONEY_CURRENCY', 'USD'),
 
-    'default_rate_provider' => 'open_exchange_rates',
+    'fallback_currency' => env('MONEY_FALLBACK_CURRENCY', 'USD'),
+
+    'currencies' => Iso::currencies(),
+
+    'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 
     'rate_providers' => [
         'open_exchange_rates' => [
-            'app_id' => env('OPEN_EXCHANGE_RATE_APP_ID', ''),
-        ],
-    ],
-
-    'default_migrations' => true,
-
-    // TODO: simplify that.
-    'bindings' => [
-        Queries\CurrencyQuery::class => [
-            'implementation' => Queries\CurrencyEloquentQuery::class,
-
-            'decorators' => [
-                Queries\CurrencyCacheQuery::class,
-            ],
+            'app_id' => env('OPEN_EXCHANGE_RATE_APP_ID'),
         ],
     ],
 ];

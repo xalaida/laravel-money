@@ -3,44 +3,55 @@
 namespace Nevadskiy\Money\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Nevadskiy\Money\Queries\CurrencyQuery;
-use Nevadskiy\Money\ValueObjects\Money;
+use Nevadskiy\Money\Exceptions\CurrencyMismatchException;
+use Nevadskiy\Money\Money;
 
 /**
- * TODO: probably refactor using relation (requires one more model definition: relation to 'priceCurrency')
- * # Props:
- *  - cleaner cast class (can be used directly in the model $casts prop)
- *  - cleaner model class (clear price currency relation)
- *  - no extra dependencies in the money cast.
- *
- * # Cons:
- *  - extra definition for relation in model class
- *  - relation probably not useful in that case since it does not have logic (but probably can have it if user overrides it)
+ * @example AsMoney::class.':[currency],U,0'
  */
 class AsMoney implements CastsAttributes
 {
     /**
-     * The column name of the money amount.
+     * The currency of the money.
      *
-     * @var null|string
+     * @var string|null
      */
-    protected $amountColumnName;
+    protected $currency;
 
     /**
-     * The column name of the money currency.
+     * Indicates whether the currency should be taken from the column.
      *
-     * @var null|string
+     * @var string|null
      */
-    protected $currencyKeyColumnName;
+    protected $currencyColumn;
+
+    /**
+     * Indicates if it should use major units for storing money.
+     *
+     * @var bool
+     */
+    protected $asMajorUnits = true;
+
+    /**
+     * The default attribute amount.
+     */
+    protected $default;
 
     /**
      * Make a new cast instance.
      */
-    public function __construct(array $arguments = [])
+    public function __construct(string $currency = null, string $units = 'u', int $default = null)
     {
-        $this->amountColumnName = $arguments[0] ?? null;
-        $this->currencyKeyColumnName = $arguments[1] ?? null;
+        if (Str::startsWith($currency, '[') && Str::endsWith($currency, ']')) {
+            $this->currencyColumn = Str::between($currency, '[', ']');
+        } else {
+            $this->currency = $currency;
+        }
+
+        $this->asMajorUnits = $units === 'U';
+        $this->default = $default;
     }
 
     /**
@@ -48,80 +59,78 @@ class AsMoney implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
-        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
-        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
+        $value = $value ?? $this->default;
 
-        if ($this->isNullableAttributes($attributes, $amountColumnName, $currencyKeyColumnName)) {
+        if (is_null($value)) {
             return null;
         }
 
-        return new Money(
-            $attributes[$amountColumnName],
-            resolve(CurrencyQuery::class)->getById($attributes[$currencyKeyColumnName])
-        );
+        $currency = $this->currencyColumn
+            ? $attributes[$this->currencyColumn]
+            : $this->currency;
+
+        if ($this->asMajorUnits) {
+            return $this->newFromMajorUnits($value, $currency);
+        }
+
+        return $this->newFromMinorUnits($value, $currency);
     }
 
     /**
      * @inheritDoc
      */
-    public function set($model, string $key, $value, array $attributes): array
+    public function set($model, string $key, $value, array $attributes): ?array
     {
         if (null === $value) {
-            return [];
+            return null;
         }
 
-        $this->assertValueIsMoneyInstance($value);
-
-        $amountColumnName = $this->amountColumnName ?: $this->getAmountColumnName($key);
-        $currencyKeyColumnName = $this->currencyKeyColumnName ?: $this->getCurrencyKeyColumnName($key);
-
-        return [
-            $amountColumnName => $value->getMinorUnits(),
-            $currencyKeyColumnName => $value->getCurrency()->getKey(),
-        ];
-    }
-
-    /**
-     * Assert that the given value is a money instance.
-     *
-     * @param mixed $value
-     */
-    protected function assertValueIsMoneyInstance($value): void
-    {
         if (! $value instanceof Money) {
             throw new InvalidArgumentException('The given value is not a Money instance.');
         }
-    }
 
-    /**
-     * Determine whether the money attributes is nullable.
-     */
-    protected function isNullableAttributes(array $attributes, string $amountColumnName, string $currencyKeyColumnName): bool
-    {
-        if (! isset($attributes[$amountColumnName])) {
-            return true;
+        $columns = [
+            $key => $this->asMajorUnits
+                ? $value->getMajorUnits()
+                : $value->getAmount(),
+        ];
+
+        if ($this->currencyColumn) {
+            return array_merge($columns, [
+                $this->currencyColumn => $value->getCurrency(),
+            ]);
         }
 
-        if (! isset($attributes[$currencyKeyColumnName])) {
-            return true;
+        if ($this->getCurrency() !== $value->getCurrency()) {
+            throw new CurrencyMismatchException();
         }
 
-        return false;
+        return $columns;
     }
 
     /**
-     * Get the amount column name.
+     * Get the currency of the cast.
      */
-    protected function getAmountColumnName(string $key): string
+    protected function getCurrency(): string
     {
-        return "{$key}_amount";
+        return $this->currency ?? Money::getDefaultCurrency();
     }
 
     /**
-     * Get the currency key column name.
+     * Make a new money instance from the minor units.
      */
-    protected function getCurrencyKeyColumnName(string $key): string
+    protected function newFromMinorUnits(int $amount, string $currency = null): Money
     {
-        return "{$key}_currency_id";
+        return new Money($amount, $currency);
+    }
+
+    /**
+     * Make a new money instance from the major units.
+     *
+     * @param int|float $amount
+     */
+    protected function newFromMajorUnits($amount, string $currency = null): Money
+    {
+        return Money::fromMajorUnits($amount, $currency);
     }
 }

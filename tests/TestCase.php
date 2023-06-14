@@ -11,13 +11,17 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     /**
-     * Setup the test environment.
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+        config(['app.locale' => 'uk']);
+
+        config(['money.currency' => 'UAH']);
+
+        Model::unguard();
     }
 
     /**
@@ -27,7 +31,9 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function getPackageProviders($app): array
     {
-        return [MoneyServiceProvider::class];
+        return [
+            MoneyServiceProvider::class
+        ];
     }
 
     /**
