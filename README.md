@@ -69,3 +69,7 @@ protected $casts = [
     'cost' => AsMoney::class.':[currency]',
 ];
 ```
+
+## To Do List
+
+- [ ] use Symfony\Polyfill\Intl\Icu\Currencies for default registry
