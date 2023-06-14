@@ -12,28 +12,9 @@ composer require nevadskiy/laravel-money
 
 ## Documentation
 
-### Money cast with default currency
+### Using money cast in the model
 
-```php
-Schema::create('products', function (Blueprint $table) {
-    $table->bigInteger('cost')->unsigned();
-});
-```
-
-```php
-use Nevadskiy\Money\Casts\AsMoney;
-
-/**
- * The attributes that should be cast.
- *
- * @var array
- */
-protected $casts = [
-    'cost' => AsMoney::class,
-];
-```
-
-### Money cast with specific currency
+Any field can be cast into `Money` instance. To make it castable, add the following code to your model:
 
 ```php
 use Nevadskiy\Money\Casts\AsMoney;
