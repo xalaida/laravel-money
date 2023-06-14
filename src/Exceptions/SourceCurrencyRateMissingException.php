@@ -4,7 +4,7 @@ namespace Nevadskiy\Money\Exceptions;
 
 use RuntimeException;
 
-class CurrencyRateMissingException extends RuntimeException
+class SourceCurrencyRateMissingException extends RuntimeException
 {
     /**
      * The currency of the exception.

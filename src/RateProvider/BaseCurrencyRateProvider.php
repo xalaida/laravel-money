@@ -2,7 +2,8 @@
 
 namespace Nevadskiy\Money\RateProvider;
 
-use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
+use Nevadskiy\Money\Exceptions\SourceCurrencyRateMissingException;
+use Nevadskiy\Money\Exceptions\TargetCurrencyRateMissingException;
 
 abstract class BaseCurrencyRateProvider implements RateProvider
 {
@@ -28,27 +29,41 @@ abstract class BaseCurrencyRateProvider implements RateProvider
 
         // @todo cover this with test.
         if ($sourceCurrency === $this->getBaseCurrency()) {
-            return $this->getRateToBase($targetCurrency);
+            return $this->getTargetToBaseRate($targetCurrency);
         }
 
         // @todo cover this with test.
         if ($targetCurrency === $this->getBaseCurrency()) {
-            return 1 / $this->getRateToBase($sourceCurrency);
+            return 1 / $this->getSourceToBaseRate($sourceCurrency);
         }
 
         // @todo cover this with test.
-        return $this->getRateToBase($targetCurrency) / $this->getRateToBase($sourceCurrency);
+        return $this->getTargetToBaseRate($targetCurrency) / $this->getSourceToBaseRate($sourceCurrency);
     }
 
     /**
      * Get rate to the base currency.
      */
-    protected function getRateToBase(string $currency): float
+    protected function getTargetToBaseRate(string $currency): float
     {
         $rates = $this->getRates();
 
         if (! isset($rates[$currency])) {
-            throw CurrencyRateMissingException::for($currency);
+            throw TargetCurrencyRateMissingException::for($currency);
+        }
+
+        return $rates[$currency];
+    }
+
+    /**
+     * Get rate to the base currency.
+     */
+    protected function getSourceToBaseRate(string $currency): float
+    {
+        $rates = $this->getRates();
+
+        if (! isset($rates[$currency])) {
+            throw SourceCurrencyRateMissingException::for($currency);
         }
 
         return $rates[$currency];

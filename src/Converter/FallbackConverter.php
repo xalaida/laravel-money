@@ -2,7 +2,7 @@
 
 namespace Nevadskiy\Money\Converter;
 
-use Nevadskiy\Money\Exceptions\CurrencyRateMissingException;
+use Nevadskiy\Money\Exceptions\TargetCurrencyRateMissingException;
 use Nevadskiy\Money\Money;
 
 class FallbackConverter implements Converter
@@ -37,7 +37,7 @@ class FallbackConverter implements Converter
     {
         try {
             return $this->converter->convert($money, $currency);
-        } catch (CurrencyRateMissingException $e) {
+        } catch (TargetCurrencyRateMissingException $e) {
             return $this->converter->convert($money, $this->fallbackCurrency);
         }
     }
