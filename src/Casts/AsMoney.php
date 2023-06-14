@@ -35,9 +35,7 @@ class AsMoney implements CastsAttributes
     protected $asMajorUnits = true;
 
     /**
-     * The default amount when prop is null.
-     *
-     * @todo use this.
+     * The default attribute amount.
      */
     protected $default;
 
@@ -61,6 +59,8 @@ class AsMoney implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes): ?Money
     {
+        $value = $value ?? $this->default;
+
         if (is_null($value)) {
             return null;
         }

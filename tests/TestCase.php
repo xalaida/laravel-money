@@ -20,6 +20,8 @@ abstract class TestCase extends OrchestraTestCase
         config(['app.locale' => 'uk']);
 
         config(['money.currency' => 'UAH']);
+
+        Model::unguard();
     }
 
     /**
