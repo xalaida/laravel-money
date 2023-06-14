@@ -4,6 +4,9 @@ namespace Nevadskiy\Money\Registry;
 
 class IsoCurrencyRegistry
 {
+    /**
+     * Get all currency list.
+     */
     public function all(): array
     {
         return [
