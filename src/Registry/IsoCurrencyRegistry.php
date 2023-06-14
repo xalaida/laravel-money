@@ -18,6 +18,16 @@ class IsoCurrencyRegistry implements CurrencyRegistry
     }
 
     /**
+     * Exclude the given currencies from the registry.
+     */
+    public function except(array $currencies): void
+    {
+        foreach ($currencies as $currency) {
+            unset($this->currencies[$currency]);
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function set(string $currency, array $options = []): void
