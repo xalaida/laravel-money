@@ -70,10 +70,10 @@ class AsMoney implements CastsAttributes
             : $this->currency;
 
         if ($this->asMajorUnits) {
-            return Money::fromMajorUnits($value, $currency);
+            return $this->newFromMajorUnits($value, $currency);
         }
 
-        return new Money($value, $currency);
+        return $this->newFromMinorUnits($value, $currency);
     }
 
     /**
@@ -114,5 +114,21 @@ class AsMoney implements CastsAttributes
     protected function getCurrency(): string
     {
         return $this->currency ?? Money::getDefaultCurrency();
+    }
+
+    /**
+     * Make a new money instance from the minor units.
+     */
+    protected function newFromMinorUnits(int $amount, string $currency): Money
+    {
+        return new Money($amount, $currency);
+    }
+
+    /**
+     * Make a new money instance from the major units.
+     */
+    protected function newFromMajorUnits(int $amount, string $currency): Money
+    {
+        return Money::fromMajorUnits($amount, $currency);
     }
 }
