@@ -1,36 +1,15 @@
 <?php
 
 return [
-    'currency' => 'USD',
+    'currency' => env('MONEY_CURRENCY', 'USD'),
 
-    'fallback_currency' => 'USD',
+    'fallback_currency' => env('MONEY_FALLBACK_CURRENCY', 'USD'),
 
     'rate_provider' => env('MONEY_RATE_PROVIDER', 'array'),
 
-    // @todo >>>
-
-    'currencies' => 'iso',
-
     'rate_providers' => [
-        'cache' => [
-            'driver' => 'cache',
-            'provider' => 'open_exchange_rates',
-            'ttl' => 60 * 24
-        ],
-
-        'array' => [
-            'driver' => 'array',
-            'rates' => [
-                'USD' => 1.0,
-                'EUR' => 0.92515185,
-            ],
-        ],
-
         'open_exchange_rates' => [
             'app_id' => env('OPEN_EXCHANGE_RATE_APP_ID'),
-            'driver' => 'open_exchange_rates',
-            'cache' => true,
-            'ttl' => 60 * 24,
         ],
     ],
 ];
