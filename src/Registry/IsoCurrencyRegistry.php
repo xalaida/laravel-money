@@ -14,7 +14,7 @@ class IsoCurrencyRegistry implements CurrencyRegistry
      */
     public function __construct()
     {
-        $this->currencies = static::iso();
+        $this->currencies = static::currencies();
     }
 
     /**
@@ -74,7 +74,7 @@ class IsoCurrencyRegistry implements CurrencyRegistry
      *
      * @see https://en.wikipedia.org/wiki/ISO_4217
      */
-    protected static function iso(): array
+    public static function currencies(): array
     {
         return [
             'AED' => ['scale' => 2],
