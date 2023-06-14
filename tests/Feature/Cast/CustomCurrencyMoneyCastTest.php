@@ -56,7 +56,7 @@ class CustomCurrencyMoneyCastTest extends TestCase
     {
         $this->expectException(CurrencyMismatchException::class);
 
-        $product = new DefaultCurrencyMoneyCastProduct();
+        $product = new CustomCurrencyMoneyCastProduct();
         $product->cost = new Money(100, 'USD');
         $product->save();
     }

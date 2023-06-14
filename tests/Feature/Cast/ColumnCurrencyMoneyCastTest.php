@@ -30,8 +30,6 @@ class ColumnCurrencyMoneyCastTest extends TestCase
         parent::tearDown();
     }
 
-    // @todo test when currency mismatch (default with money)
-
     /**
      * @test
      */
@@ -47,8 +45,6 @@ class ColumnCurrencyMoneyCastTest extends TestCase
         static::assertSame(100, $product->cost->getAmount());
         static::assertSame('UAH', $product->cost->getCurrency());
     }
-
-    // @todo cast using money class with castUsing hook.
 
     /**
      * Set up the database schema.
